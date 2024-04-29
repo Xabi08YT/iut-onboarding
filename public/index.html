@@ -30,7 +30,9 @@
 
 <script rel="text/js">
   let switchBetweenViews = () => {
-    let adminRQ = (this.location.href === "http://localhost:8888/admin" || this.location.href === "http://127.0.0.1:8888/admin" || this.location.hred === "https://iut-onboardin.netlify.app/admin");
+    let base = this.location.origin;
+    let currentURL = new URL(this.location.href);
+    let adminRQ = (currentURL.toString() === new URL("/admin",base).toString());
     if (adminRQ) {
       document.getElementById("app").style.visibility = "hidden";
       document.getElementById("admin").style.visibility = "visible";

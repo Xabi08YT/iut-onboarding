@@ -1,4 +1,6 @@
 import { createApp } from "vue";
-import App from "./App.vue";
+import Onboarding from "./Onboarding/Onboarding.vue";
+import Dashboard from "./AdminDashboard/Dashboard.vue";
 
-createApp(App).mount("#app");
+createApp(Onboarding).mount("#app");
+createApp(Dashboard).mount("#admin");

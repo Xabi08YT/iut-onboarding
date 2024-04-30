@@ -19,27 +19,9 @@
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
         Please enable it to continue.</strong>
   </noscript>
-  <div id="app" onmousemove="switchBetweenViews()"></div>
+  <div id="app"></div>
   <!-- built files will be auto injected -->
   <div id="admin"></div>
+  <script src="../src/main.js"></script>
 </body>
-
 </html>
-
-<script rel="text/js">
-  let switchBetweenViews = () => {
-    let base = this.location.origin;
-    let currentURL = new URL(this.location.href);
-    let adminRQ = (currentURL.toString() === new URL("/admin",base).toString());
-    if (adminRQ) {
-      document.getElementById("app").style.visibility = "hidden";
-      document.getElementById("admin").style.visibility = "visible";
-    }
-  }
-</script>
-
-<style>
-  #admin {
-    visibility: hidden;
-  }
-</style>

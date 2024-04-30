@@ -50,8 +50,8 @@ async function fetchMenu(URL) {
     if(plat.includes("Plat")) {
       plat = plat.toUpperCase();
     }
-
-    tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1));
+    
+    tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1))
   });
 
   return tabPlats;
@@ -62,33 +62,7 @@ async function fetchMenu(URL) {
  * @return Un objet contennant les plats des restaurants crous
  */
 const getAllRestaurantsMenus = async () => {
-  //Definition des variables
-  let sirtaki;
-  let space;
-  let sirtakiEnabled = true;
-  let spaceEnabled = true;
-
-  //Tentative de récupération du menu
-  try {
-    sirtaki = fetchMenu(SIRTAKI_URL);
-  } catch(error) {
-    // Si échec, marquer la carte comme désactivée.
-    console.log("Unable to retreive Menu for Sirtaki. Error: "+error);
-    sirtakiEnabled = false;
-  }
-
-  //IDEM
-  try {
-    space = fetchMenu(SPACE_URL);
-  } catch(error) {
-    console.log("Unable to retreive Menu for Space. Error: " + error);
-    spaceEnabled = false;
-  }
-  
-  //Retour des informations suite à l'exécution
   return {
-    sirtakiEnabled: sirtakiEnabled,
-    spaceEnabled: spaceEnabled,
     sirtaki: await fetchMenu(SIRTAKI_URL),
     space: await fetchMenu(SPACE_URL),
   };

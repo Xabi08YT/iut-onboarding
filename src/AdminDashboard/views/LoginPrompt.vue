@@ -1,6 +1,5 @@
 <template>
-    <div class="view-content">
-      <Background />
+    <div class="view-login" v-show="isActive">
       <form id="adminLogin">
         <h1>Connexion</h1>
         <input id="username" type="text" placeholder="  Identifiant" required>
@@ -29,22 +28,20 @@
 </template>
 
 <script>
-import Background from "../components/Background.vue";
+//import Background from "../components/Background.vue";
 
 export default {
-  data() {
-    return {
-      msg: "OK",
-    };
+  props: {
+    isActive: Boolean,
   },
-  components: {
+  /*components: {
     Background
-  }
+  }*/
 };
 </script>
 
 <style>
-.view-content {
+.view-login {
   width: 100vw;
   height: 100vh;
   vertical-align: center;
@@ -53,6 +50,7 @@ export default {
 #adminLogin {
   position: absolute;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   border-radius: 54px;
   border-style: solid;
@@ -61,6 +59,7 @@ export default {
   height: 360px;
   width: 360px;
   margin-top: 20vh;
+  left: 38%
 }
 
 #adminLogin h1 {

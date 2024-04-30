@@ -1,6 +1,6 @@
 <template>
-    <div class="view-content">
-        <TopBar />
+    <div class="view-content" v-show="isActive">
+      <TopBar />
     </div>
 </template>
 
@@ -8,10 +8,8 @@
 import TopBar from "./TopBar.vue";
 
 export default {
-  data() {
-    return {
-      msg: "Hello world!",
-    };
+  props: {
+    isActive: Boolean,
   },
   components: {
     TopBar,

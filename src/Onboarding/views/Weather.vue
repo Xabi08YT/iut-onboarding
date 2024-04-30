@@ -1,5 +1,5 @@
 <template>
-  <div class="view-container" v-show="isActive">
+  <div id="meteo" class="view-container" v-show="isActive">
     <h1 class="view-title">Météo</h1>
     <div class="view-content">
       <WeatherCard />
@@ -19,4 +19,3 @@ export default {
   },
 };
 </script>
-

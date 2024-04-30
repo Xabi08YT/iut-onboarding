@@ -1,6 +1,6 @@
 <template>
   <div class="view-container" v-show="isActive">
-    <div class="view-content">
+    <div class="view-content" id="maintainer">
         <img class="image" src="../assets/maintainer_ad.png" alt="Maintainer" />
     </div>
   </div>
@@ -19,5 +19,8 @@ export default {
 .view-content > img {
   height: 900px;
 }
-</style>
 
+#maintainer {
+  margin-top: 55px;
+}
+</style>

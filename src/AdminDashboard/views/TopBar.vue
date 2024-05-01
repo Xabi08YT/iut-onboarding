@@ -4,10 +4,16 @@
         <h1>Onboarding Admin</h1>
         <nav>
           <ul>
-            <li v-on:click="this.$parent.show('home')">Home</li>
-            <li v-on:click="this.$parent.show('none')">none</li>
+            <li v-on:click="this.$parent.show('home')"><img src="../assets/home-house-svgrepo-com.svg" class="icon"><p class="texticon">Accueil</p></li>
+            <li v-on:click="this.$parent.show('publish')"><img src="../assets/ad-announcement-megaphone-svgrepo-com.svg" class="icon"><p class="texticon">Publier</p></li>
+            <li v-on:click="this.$parent.show('alert')"><img src="../assets/alert-error-svgrepo-com.svg" class="icon"><p class="texticon">Alertes</p></li>
+            <li v-on:click="this.$parent.show('slides')"><img src="../assets/photo-image-picture-svgrepo-com.svg" class="icon"><p class="texticon">Slides</p></li>
+            <li v-on:click="this.$parent.show('access')"><img src="../assets/security-shield-alt-svgrepo-com.svg" class="icon"><p class="texticon">Accès</p></li>
           </ul>
         </nav>
+        <div id="rightTopComponents">
+          <p>Coucou</p>
+        </div>
     </div>
 </template>
 
@@ -20,10 +26,11 @@ export default {
 </script>
 <style>
 #dashboardTop {
+  position: absolute;
   display: flex;
   justify-content: left;
   width: 100%;
-  height: 10%;
+  box-shadow: 0 4px 2px 0px lightgray;
 }
 
 .bigicon {
@@ -39,13 +46,46 @@ export default {
 }
 
 #dashboardTop nav {
-  margin-top: 23px;
-  margin-left: 30px;
+  margin-top: 18px;
   font-style: "Poppins", sans-serif;
   font-weight: bold;
   font-size: 20px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+#dashboardTop nav ul {
+  display: flex;
+  flex-direction: row;
+}
+
+#dashboardTop nav ul li {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  transition: 0.3s;
+}
+
+#dashboardTop nav ul li:hover {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  transition: 0.3s;
+  cursor: pointer;
+  filter: invert(26%) sepia(74%) saturate(3994%) hue-rotate(146deg) brightness(91%) contrast(102%);
+}
+
+#dashboardTop nav ul li p.texticon {
+  margin-top: 8px;
+  margin-left: 3px;
+}
+
+#rightTopComponents {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 </style>

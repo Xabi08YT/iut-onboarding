@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 // const students = require('../students.json').default;
-import students from '../students.json'
+import students from '../whitelist.json'
 
 // eslint-disable-next-line no-unused-vars
 export const handler = async (event, context) => {

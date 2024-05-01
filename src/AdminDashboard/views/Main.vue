@@ -1,10 +1,12 @@
 <template>
     <div class="view-content" v-show="isActive">
       <TopBar />
-      <Home
-        v-if="Object.keys(views).includes('home')"
-        :showing="currentView == 'home'"
-      />
+      <div id="dashboardcontent">
+        <Home
+          v-if="Object.keys(views).includes('home')"
+          :showing="currentView == 'home'"
+        />
+      </div>
     </div>
 </template>
 
@@ -39,4 +41,7 @@ export default {
 </script>
 
 <style>
+#dashboardcontent {
+  margin-top: 68px;
+}
 </style>

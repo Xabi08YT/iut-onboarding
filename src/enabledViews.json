@@ -1,0 +1,9 @@
+{
+    "menu": true,
+    "planning": true,
+    "transport": true,
+    "weather": true,
+    "discord": false,
+    "maintainer": true,
+    "announcement": true
+}

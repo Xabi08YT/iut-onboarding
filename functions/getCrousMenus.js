@@ -43,14 +43,14 @@ async function fetchMenu(URL) {
     plat = plat.replace('****','');
     plat = plat.replace('****','');
     //Fix - - formatting problem for sirtaki
-    if(URL == SIRTAKI_URL) {
+    if(URL === SIRTAKI_URL) {
       plat = plat.replace('-','');
     }
 
     if(plat.includes("Plat")) {
       plat = plat.toUpperCase();
     }
-    
+
     tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1))
   });
 
@@ -66,7 +66,7 @@ const getAllRestaurantsMenus = async () => {
     sirtaki: await fetchMenu(SIRTAKI_URL),
     space: await fetchMenu(SPACE_URL),
   };
-}
+};
 
 export const handler = async () => {
   try {

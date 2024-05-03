@@ -20,16 +20,26 @@ export default {
     return {
       sirtakiMenu: undefined,
       spaceMenu: undefined,
+      refresh: undefined,
     };
   },
   components: {
     MenuCard,
   },
-  mounted() {
-    setTimeout(api.getAllRestaurantsMenus().then((res) => {
-      this.sirtakiMenu = res.sirtaki;
-      this.spaceMenu = res.space;
-    }),3600000);
+  methods: {
+    refreshMenus() {
+      api.getAllRestaurantsMenus().then((res) => {
+        this.sirtakiMenu = res.sirtaki;
+        this.spaceMenu = res.space;
+      });
+    }
   },
+  mounted() {
+    this.refreshMenus();
+    this.refresh = setTimeout(this.refreshMenus,3600000);
+  },
+  unmounted() {
+    clearInterval(this.refresh);
+  }
 };
 </script>

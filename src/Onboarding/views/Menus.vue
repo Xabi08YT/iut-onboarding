@@ -26,10 +26,10 @@ export default {
     MenuCard,
   },
   mounted() {
-    api.getAllRestaurantsMenus().then((res) => {
+    setTimeout(api.getAllRestaurantsMenus().then((res) => {
       this.sirtakiMenu = res.sirtaki;
       this.spaceMenu = res.space;
-    });
+    }),3600000);
   },
 };
 </script>

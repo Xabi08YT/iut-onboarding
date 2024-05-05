@@ -13,7 +13,7 @@ import FinishedSetup from "./components/Finished.vue";
 export default {
   data() {
     return {
-      currentView: "dbc"
+      currentView: "finished"
     };
   },
   components: {
@@ -38,6 +38,7 @@ export default {
   background-color: #FFFFFF;
   border-radius: 21px;
   width: 800px;
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.25);
 }
 
 .setupContent h1 {

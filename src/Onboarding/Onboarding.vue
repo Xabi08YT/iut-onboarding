@@ -31,6 +31,10 @@
       v-if="Object.keys(views).includes('announcement')"
       :isActive="currentView == 'announcement'"
     />
+    <TeacherAnnouncement
+      v-if="Object.keys(views).includes('tannouncement')"
+      :isActive="currentView == 'tannouncement'"
+    />
     <LoadingBar :view="views[currentView]" />
     <TransitionOverlay ref="loading" />
   </div>
@@ -51,6 +55,7 @@ import MaintainerProposal from "./views/MaintainerProposal.vue";
 
 import "./stylesheets/reset.css";
 import Announcement from "./views/Announcement.vue";
+import TeacherAnnouncement from "./views/TeacherAnnouncement.vue";
 
 import enabledViews from "../enabledViews.json";
 
@@ -122,6 +127,10 @@ export default {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
           allowed: () => true,
         },
+        tannouncement: {
+          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
+          allowed: () => true,
+        }
       },
     };
   },
@@ -208,6 +217,7 @@ export default {
     Discord,
     MaintainerProposal,
     Announcement,
+    TeacherAnnouncement,
   },
 };
 </script>

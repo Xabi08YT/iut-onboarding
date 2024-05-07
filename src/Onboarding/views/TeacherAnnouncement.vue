@@ -3,7 +3,7 @@
         <h1 class="view-title">Annonce des enseignants</h1>
         <div class="announcment" id="Profs">
             <h2>Votez pour le nom officiel du recueil des meilleurs argumentaires <br/> concernant les applications à utiliser au quotidien !</h2>
-            <img src="../dataTeacher/assets/QRCodeSurvey.svg" id="ProfQR">
+            <img src="../../dataTeacher/assets/QRCodeSurvey.svg" id="ProfQR">
         </div>
     </div>
 </template>

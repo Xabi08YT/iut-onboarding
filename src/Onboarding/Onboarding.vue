@@ -123,10 +123,6 @@ export default {
             return enabledViews["announcment"];
           },
         },
-        announcement: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
-          allowed: () => true,
-        },
         tannouncement: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
           allowed: () => true,

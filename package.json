@@ -1,49 +1,76 @@
 {
-    "name": "iut-onboarding",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+  "name": "iut-onboarding",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.4.38",
+    "@xabi08yt/iutgradignanhpscheduler": "~1.0.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "node-fetch": "^3.3.2",
+    "ora": "^8.1.0",
+    "prompt-password": "^1.2.0",
+    "puppeteer": "^23.2.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
     },
-    "dependencies": {
-        "cheerio": "1.0.0-rc.10",
-        "core-js": "^3.6.5",
-        "vue": "^3.3.4",
-        "vue3-circle-progress": "^1.0.7"
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
     },
-    "devDependencies": {
-	"@xabi08yt/iutgradignanhpscheduler": "~1.0.2",
-        "@vue/cli-plugin-babel": "~4.5.0",
-        "@vue/cli-plugin-eslint": "~4.5.0",
-        "@vue/cli-service": "~4.5.0",
-        "@vue/compiler-sfc": "^3.0.0",
-        "babel-eslint": "^10.1.0",
-        "eslint": "^6.7.2",
-        "eslint-plugin-vue": "^7.0.0",
-        "node-fetch": "^2.6.6",
-        "ora": "^6.0.1",
-        "prompt-password": "^1.2.0",
-        "puppeteer": "^13.1.2"
-    },
-    "eslintConfig": {
-        "root": true,
-        "env": {
-            "node": true
-        },
-        "extends": [
-            "plugin:vue/vue3-essential",
-            "eslint:recommended"
-        ],
-        "parserOptions": {
-            "parser": "babel-eslint"
-        },
-        "rules": {}
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not dead"
-    ]
+    "rules": {
+      "vue/multi-word-component-names": [
+        "error",
+        {
+          "ignores": [
+            "Background",
+            "Announcement",
+            "Discord",
+            "Menus",
+            "Transport",
+            "Weather"
+          ]
+        }
+      ]
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "dependencies": {
+    "@types/jest": "^27.5.2",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@xabi08yt/iutgradignanhpscheduler": "~1.0.2",
+    "axios": "^0.24.0",
+    "babel": "^6.23.0",
+    "cheerio": "^1.0.0",
+    "core-js": "^3.38.1",
+    "filehound": "^1.17.6",
+    "fs": "^0.0.1-security",
+    "ical.js": "^1.5.0",
+    "jest": "^27.5.1",
+    "supertest": "^6.3.4",
+    "ts-jest": "^27.1.5",
+    "typescript": "^4.9.5",
+    "vue": "^3.4.38",
+    "vue-loader": "^17.4.2",
+    "vue3-circle-progress": "^1.0.7"
+  }
 }

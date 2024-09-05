@@ -11,14 +11,19 @@
         "cheerio": "1.0.0-rc.10",
         "core-js": "^3.6.5",
         "vue": "^3.3.4",
+        "vue-router": "^4.3.2",
         "vue3-circle-progress": "^1.0.7"
     },
     "devDependencies": {
+<<<<<<< HEAD
 	"@xabi08yt/iutgradignanhpscheduler": "~1.0.2",
+=======
+>>>>>>> c1f0b5b (Started code sorting and prepared base for  Admin dashboard)
         "@vue/cli-plugin-babel": "~4.5.0",
         "@vue/cli-plugin-eslint": "~4.5.0",
         "@vue/cli-service": "~4.5.0",
         "@vue/compiler-sfc": "^3.0.0",
+        "@xabi08yt/iutgradignanhpscheduler": "~1.0.0",
         "babel-eslint": "^10.1.0",
         "eslint": "^6.7.2",
         "eslint-plugin-vue": "^7.0.0",

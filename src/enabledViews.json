@@ -5,5 +5,5 @@
     "weather": true,
     "discord": false,
     "maintainer": true,
-    "announcement": true
+    "announcement": false
 }

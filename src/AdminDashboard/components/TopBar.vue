@@ -6,7 +6,7 @@
           <ul>
             <li v-on:click="this.$parent.show('home')"><img src="../assets/home-house-svgrepo-com.svg" class="icon"><p class="texticon">Accueil</p></li>
             <li v-on:click="this.$parent.show('publish')"><img src="../assets/ad-announcement-megaphone-svgrepo-com.svg" class="icon"><p class="texticon">Publier</p></li>
-            <li v-on:click="this.$parent.show('alert')"><img src="../assets/alert-error-svgrepo-com.svg" class="icon"><p class="texticon">Alertes</p></li>
+            <li v-on:click="this.$parent.show('alerts')"><img src="../assets/alert-error-svgrepo-com.svg" class="icon"><p class="texticon">Alertes</p></li>
             <li v-on:click="this.$parent.show('slides')"><img src="../assets/photo-image-picture-svgrepo-com.svg" class="icon"><p class="texticon">Slides</p></li>
             <li v-on:click="this.$parent.show('access')"><img src="../assets/security-shield-alt-svgrepo-com.svg" class="icon"><p class="texticon">Accès</p></li>
           </ul>

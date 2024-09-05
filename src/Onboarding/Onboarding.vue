@@ -62,6 +62,8 @@ import Announcement from "./views/Announcement.vue";
 import TeacherAnnouncement from "./views/TeacherAnnouncement.vue";
 import WelcomeAmericans from "./views/WelcomeMessage.vue";
 
+import enabledViews from "../enabledViews.json";
+
 const DEVELOPEMENT_MODE = false;
 
 export default {
@@ -82,38 +84,45 @@ export default {
             // 6h to 17h30
             const currentTime =
             new Date().getHours() * 60 + new Date().getMinutes();
-            return currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30;
+            return currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30 && enabledViews["planning"];
           }
         },
         transport: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : this.getTimeForBusesAndWeather(),
-          allowed: () => true,
+          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
+          allowed: () => {
+            return enabledViews["transport"];
+          },
         },
         weather: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7 * 1000,
-          allowed: () => true,
+          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
+          allowed: () => {
+            return enabledViews["weather"];
+          },
         },
         menus: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
           allowed: () => {
             // 6h to 14h
             let currentHour = new Date().getHours();
-            return currentHour >= 6 && currentHour < 14;
+            return currentHour >= 6 && currentHour < 14 && enabledViews["menu"];
           },
         },
-        /* Enable this at the start of each year (The QR code has to be updated)
+        /* Enable this at the start of each year (The QR code has to be updated)*/
         discord: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 30,
-          allowed: () => true,
-        },*/
+          allowed: () => {
+            return enabledViews["discord"];
+          },
+        },
         /* Enable when looking for new maintainers */
         maintainer: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
-          allowed: () => true && !this.isEndOfDay(),
+          allowed: () => true && !this.isEndOfDay() && enabledViews["maintainer"],
         },
+        /* Enable when the Student Bureau needs to make an announcement */
         announcement: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
-          allowed: () => false && !this.isEndOfDay(),
+          allowed: () => false && !this.isEndOfDay() && enabledViews["announcment"],
         },
         tannouncement: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,

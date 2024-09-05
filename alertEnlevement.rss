@@ -1,0 +1,23 @@
+<rss version="2.0">
+<channel>
+<title>Justice : alerte-enlèvement</title>
+<link>http://www.alerte-enlevement.gouv.fr</link>
+<description>
+Ce fil informe les internautes lors de l'activation du dispositif "alerte-enlèvement"
+</description>
+<language>fr</language>
+<copyright>Ministère de la Justice</copyright>
+<pubDate>Fri, 14 Oct 2016 00:00:00 +0200</pubDate>
+<lastBuildDate>Fri, 14 Oct 2016 04:18:01 +0200</lastBuildDate>
+<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+<atom:link href="http://www.justice.gouv.fr/rss/alerte_enlevement.xml" rel="self" type="application/rss+xml"/>
+<image>
+<url>http://www.justice.gouv.fr/rss/logo_ministere.gif</url>
+<title>Justice : alerte-enlèvement</title>
+<link>http://www.alerte-enlevement.gouv.fr</link>
+<width>78</width>
+<height>85</height>
+<description>Logo du ministère de la Justice</description>
+</image>
+</channel>
+</rss>

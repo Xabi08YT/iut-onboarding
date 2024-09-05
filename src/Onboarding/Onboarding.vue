@@ -289,3 +289,4 @@ export default {
   border-radius: 30px;
 }
 </style>
+ 

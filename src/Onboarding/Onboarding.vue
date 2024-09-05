@@ -35,13 +35,10 @@
       v-if="Object.keys(views).includes('tannouncement')"
       :isActive="currentView == 'tannouncement'"
     />
-<<<<<<< HEAD
     <WelcomeAmericans
       v-if="Object.keys(views).includes('welcAmericans')"
       :isActive="currentView == 'welcAmericans'"
     />
-=======
->>>>>>> 94f3c8c (Added Teacher's announcement for tomorrow. (#110))
     <LoadingBar :view="views[currentView]" />
     <TransitionOverlay ref="loading" />
   </div>
@@ -63,10 +60,7 @@ import MaintainerProposal from "./views/MaintainerProposal.vue";
 import "./stylesheets/reset.css";
 import Announcement from "./views/Announcement.vue";
 import TeacherAnnouncement from "./views/TeacherAnnouncement.vue";
-<<<<<<< HEAD
 import WelcomeAmericans from "./views/WelcomeMessage.vue";
-=======
->>>>>>> 94f3c8c (Added Teacher's announcement for tomorrow. (#110))
 
 import enabledViews from "../enabledViews.json";
 
@@ -134,15 +128,9 @@ export default {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
           allowed: () => false && !this.isEndOfDay(),
         },
-<<<<<<< HEAD
         welcAmericans: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
           allowed: () => true && !this.isEndOfDay(),
-=======
-        tannouncement: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
-          allowed: () => true,
->>>>>>> 94f3c8c (Added Teacher's announcement for tomorrow. (#110))
         }
       },
     };

@@ -51,8 +51,8 @@ async function fetchMenu(URL) {
     if(plat.includes("Plat")) {
       plat = plat.toUpperCase();
     }
-
-    tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1));
+    
+    tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1))
   });
 
   return tabPlats;

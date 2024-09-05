@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import Onboarding from "./Onboarding/Onboarding.vue";
 import Dashboard from "./AdminDashboard/Dashboard.vue";
 
-createApp(Onboarding).mount("#app");
 let interval = setInterval(selfRefresh,30000);
 
 let selfRefresh = async () => {
@@ -12,4 +11,9 @@ let selfRefresh = async () => {
     window.location.reload();
   }
 };
-createApp(Dashboard).mount("#admin");
+
+if(new URL(window.location.href).pathname !== "/admin")
+  createApp(Onboarding).mount("#app");
+else {
+  createApp(Dashboard).mount("#admin");
+}

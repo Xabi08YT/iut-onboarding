@@ -146,11 +146,11 @@ export default {
             return currentHour >= 6 && currentHour < 14;
           },
         },
-        /* Enable this at the start of each year (The QR code has to be updated)
+        /* Enable this at the start of each year (The QR code has to be updated)*/
         discord: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 30,
           allowed: () => true,
-        },*/
+        },
         /* Enable when looking for new maintainers */
         maintainer: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,

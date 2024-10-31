@@ -25,5 +25,6 @@ import {Button} from "../components/ui/button";
 <style scoped>
 #login {
   background-image: url("/assets/bg.jpeg");
+  background-size: cover;
 }
 </style>

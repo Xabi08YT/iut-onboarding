@@ -71,28 +71,28 @@
 </template>
 
 <script>
-import DateAndHourHeader from "./components/DateHourHeader.vue";
-import TransitionOverlay from "./components/TransitionOverlay.vue";
-import Background from "./components/Background.vue";
-import LoadingBar from "./components/LoadingBar.vue";
+import DateAndHourHeader from "../components/DateHourHeader.vue";
+import TransitionOverlay from "../components/TransitionOverlay.vue";
+import Background from "../components/Background.vue";
+import LoadingBar from "../components/LoadingBar.vue";
 
-import Menus from "./views/Menus.vue";
-import Transport from "./views/Transport.vue";
-import Weather from "./views/Weather.vue";
-import Planning from "./views/NextPlannings.vue";
-import Discord from "./views/Discord.vue";
-import MaintainerProposal from "./views/MaintainerProposal.vue";
+import Menus from "../views/Menus.vue";
+import Transport from "../views/Transport.vue";
+import Weather from "../views/Weather.vue";
+import Planning from "../views/NextPlannings.vue";
+import Discord from "../views/Discord.vue";
+import MaintainerProposal from "../views/MaintainerProposal.vue";
 
-import "./stylesheets/reset.css";
-import Announcement from "./views/Announcement.vue";
-import Announcement2 from "./views/Announcement2.vue";
-import TeacherAnnouncement from "./views/TeacherAnnouncement.vue";
-import WelcomeAmericans from "./views/WelcomeMessage.vue";
-import Lundi from "./views/Lundi.vue";
-import Mardi from "./views/Mardi.vue";
-import Mercredi from "./views/Mercredi.vue";
-import Jeudi from "./views/Jeudi.vue";
-import Vendredi from "./views/Vendredi.vue";
+import "../stylesheets/reset.css";
+import Announcement from "../views/Announcement.vue";
+import Announcement2 from "../views/Announcement2.vue";
+import TeacherAnnouncement from "../views/TeacherAnnouncement.vue";
+import WelcomeAmericans from "../views/WelcomeMessage.vue";
+import Lundi from "../views/Lundi.vue";
+import Mardi from "../views/Mardi.vue";
+import Mercredi from "../views/Mercredi.vue";
+import Jeudi from "../views/Jeudi.vue";
+import Vendredi from "../views/Vendredi.vue";
 
 const DEVELOPEMENT_MODE = false;
 

@@ -2,7 +2,14 @@
 export default {
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/google-fonts', '@nuxtjs/tailwindcss', 'shadcn-nuxt'],
+  modules: [
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/tailwindcss',
+    'shadcn-nuxt',
+    'nuxt-lucide-icons'
+  ],
+
+  css: ['./stylesheets/global.css'],
 
   googleFonts: {
     display: 'swap',

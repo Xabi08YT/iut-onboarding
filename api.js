@@ -1,13 +1,18 @@
 import ICAL from "ical.js";
-import { useFetch } from "nuxt/app";
+import {createClient} from "@libsql/client";
 
 const TBM_URL = "https://gateway-apim.infotbm.com/maas-web/web/v1/timetables/stops/stop_area:";
 const WEATHER_URL_NEXT_12_HOURS =
-  "https://api.weatherapi.com/v1/forecast.json?key=72687f6b06f94afa9f7103056220603&q=Gradignan&aqi=no&lang=fr&hour=";
+    "https://api.weatherapi.com/v1/forecast.json?key=72687f6b06f94afa9f7103056220603&q=Gradignan&aqi=no&lang=fr&hour=";
 const CURRENT_WEATHER_URL =
-  "https://api.weatherapi.com/v1/current.json?key=72687f6b06f94afa9f7103056220603&q=Gradignan&aqi=no&lang=fr";
-const HYPERPLANNING_URL = 
-  "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/Edt.ics?version=2024.0.9.0"
+    "https://api.weatherapi.com/v1/current.json?key=72687f6b06f94afa9f7103056220603&q=Gradignan&aqi=no&lang=fr";
+const HYPERPLANNING_URL =
+    "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/Edt.ics?version=2024.0.9.0";
+
+const turso = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
 
 export const fetchTBM = async (stopId) => {
   try {
@@ -16,7 +21,7 @@ export const fetchTBM = async (stopId) => {
     const str = new window.DOMParser().parseFromString(text, "text/html");
     const data = await str.body.firstChild.data;
     const json = await JSON.parse(data);
-    const interesting = await json.nextDepartures.slice(0,4);
+    const interesting = await json.nextDepartures.slice(0, 4);
     return interesting;
   } catch (e) {
     throw `Erreur de récupération des données TBM (arrêt: ${stopId}) : ${e}`;
@@ -79,7 +84,7 @@ export const getTBMLineWaitInterval = async (stopId, lineId) => {
   } catch (e) {
     throw `Erreur de récupération des wait interval TBM (ligne: ${lineId}, arrêt: ${stopId}) : ${e}`;
   }
-};  
+};
 
 export const getAllRestaurantsMenus = async () => {
   try {
@@ -91,39 +96,39 @@ export const getAllRestaurantsMenus = async () => {
 };
 
 const transformDesc = (desc) => {
-  if(desc.length === 0) {
-    return ;
+  if (desc.length === 0) {
+    return;
   }
-  let stage1 = desc.replaceAll("<br/>",";");
-  let stage2 = stage1.split(";")
-  let stage3 = []
-  for(let i of stage2) {
+  let stage1 = desc.replaceAll("<br/>", ";");
+  let stage2 = stage1.split(";");
+  let stage3 = [];
+  for (let i of stage2) {
     stage3.push(i.split(":"));
   }
 
   let stage4 = {};
-  for(let t of stage3) {
+  for (let t of stage3) {
     let key = t[0];
-    key = key.replaceAll("é","e");
-    key = key.replaceAll(" ","");
-    key = key.replaceAll("è","e");
+    key = key.replaceAll("é", "e");
+    key = key.replaceAll(" ", "");
+    key = key.replaceAll("è", "e");
     stage4[key] = t[1];
   }
 
-  if(stage4.Salle !== undefined) {
+  if (stage4.Salle !== undefined) {
     stage4.Salle = stage4.Salle.split(" ")[1];
   } else {
     stage4.Salle = "";
   }
 
   return stage4;
-}
+};
 
 const sameDay = (d1, d2) => {
   return d1.getFullYear() === d2.getFullYear() &&
-  d1.getMonth() === d2.getMonth() &&
-  d1.getDate() === d2.getDate();
-}
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
+};
 
 export const getNextCourse = (icalID) => {
   let res = $fetch(`/api/hp/Edt.ics?version=2024.0.9.0&icalsecurise=${icalID}`).then((tmp) => {
@@ -133,56 +138,60 @@ export const getNextCourse = (icalID) => {
     let found = false;
     let i = 0;
     const events = result[2];
-    
+
     // Variables pour la boucle afin d'éviter les répétitions
     let e;
     let tstart;
     let tend;
     let currentTime = new Date();
-    while(!found && i < events.length) {
+    while (!found && i < events.length) {
       e = events[i][1];
       tstart = new Date(e[4][3]);
       tend = new Date(e[5][3]);
 
       /*
-      On affiche le cours jusqu'à 30 mn avant sa fin, si on est entre 12 et 14h, alors on affiche celui après la pause
-      */
+            On affiche le cours jusqu'à 30 mn avant sa fin, si on est entre 12 et 14h, alors on affiche celui après la pause
+            */
 
-      if(sameDay(currentTime,tstart) && currentTime.getTime() > tstart.getTime() - 30 * 60000 && currentTime.getTime() < tend.getTime() - 30 * 60000) {
+      if (sameDay(currentTime, tstart) && currentTime.getTime() > tstart.getTime() - 30 * 60000 && currentTime.getTime() < tend.getTime() - 30 * 60000) {
         found = true;
-      } else if(sameDay(currentTime,tstart) && currentTime <= tstart && currentTime.getHours() < 14 && currentTime.getMinutes() < 35 && tstart.getHours() == 14 && currentTime.getHours() >= 12) {
+      } else if (sameDay(currentTime, tstart) && currentTime <= tstart && currentTime.getHours() < 14 && currentTime.getMinutes() < 35 && tstart.getHours() == 14 && currentTime.getHours() >= 12) {
         found = true;
-      } else if(sameDay(currentTime,tstart) && currentTime <= tstart && currentTime.getHours() < 8 && currentTime.getMinutes() < 0 && tstart.getHours() == 8) {
+      } else if (sameDay(currentTime, tstart) && currentTime <= tstart && currentTime.getHours() < 8 && currentTime.getMinutes() < 0 && tstart.getHours() == 8) {
         found = true;
       }
 
       ++i;
     }
 
-    const final = transformDesc(e[e.length-1][3]);
+    const final = transformDesc(e[e.length - 1][3]);
     return (JSON.stringify(final));
-  }).catch((e) => {throw e;});
+  }).catch((e) => {
+    throw e;
+  });
   return res;
-}
+};
 
 export const getAllNextCourses = async (icals) => {
   let promos = [];
   let classes = [];
   let But3_done = false;
-  for(let promo of Object.keys(icals)) {
+  for (let promo of Object.keys(icals)) {
     if (
       promo === "info_but3_ALT" ||
-      (promo === "info_but3_FI" && !But3_done)
+            (promo === "info_but3_FI" && !But3_done)
     ) {
       promos.push("info_but3");
     }
-    for(let c of icals[promo].classes) {
-      let promises = []
+    for (let c of icals[promo].classes) {
+      let promises = [];
       promises.push(getNextCourse(c.classIcal));
       try {
         promises.push(getNextCourse(c.groups.prime));
-        promises.push(getNextCourse(c.groups.seconde))
-      } catch(e) {};
+        promises.push(getNextCourse(c.groups.seconde));
+      } catch (e) {
+      }
+      ;
       await Promise.all(promises).then(data => {
         classes.push({
           promotion: promo,
@@ -197,6 +206,10 @@ export const getAllNextCourses = async (icals) => {
         });
       });
     }
-  };
+  }
   return classes;
-}
+};
+
+let getSlidesParameters = async () => {
+  turso.execute("");
+};

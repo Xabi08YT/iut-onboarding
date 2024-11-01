@@ -77,33 +77,13 @@ export const getTBMLineWaitInterval = async (stopId, lineId) => {
   } catch (e) {
     throw `Erreur de récupération des wait interval TBM (ligne: ${lineId}, arrêt: ${stopId}) : ${e}`;
   }
-};  
+};
 
-const transformDesc = (desc) => {
-  if(desc.length === 0) {
-    return ;
+export const getAllRestaurantsMenus = async () => {
+  try {
+    const result = await fetch(".netlify/functions/getCrousMenus");
+    return await result.json();
+  } catch (e) {
+    throw `Erreur de récupération des menus CROUS : ${e}`;
   }
-  let stage1 = desc.replaceAll("<br/>",";");
-  let stage2 = stage1.split(";")
-  let stage3 = []
-  for(let i of stage2) {
-    stage3.push(i.split(":"));
-  }
-
-  let stage4 = {};
-  for(let t of stage3) {
-    let key = t[0];
-    key = key.replaceAll("é","e");
-    key = key.replaceAll(" ","");
-    key = key.replaceAll("è","e");
-    stage4[key] = t[1];
-  }
-
-  if(stage4.Salle !== undefined) {
-    stage4.Salle = stage4.Salle.split(" ")[1];
-  } else {
-    stage4.Salle = "";
-  }
-
-  return stage4;
 };

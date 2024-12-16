@@ -157,7 +157,7 @@ export default {
         /* Enable when looking for new maintainers */
         maintainer: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 10,
-          allowed: () => false && !this.isEndOfDay(),
+          allowed: () => true && !this.isEndOfDay(),
         },
         announcement: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,

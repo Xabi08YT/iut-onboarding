@@ -1,10 +1,8 @@
 <script setup>
 import {defineComponent, onMounted, onUnmounted, reactive} from "vue";
-import * as api from "../api";
 import PlanningCard from "../components/PlanningCard.vue";
 import icals from "../icals.json";
 import {HyperplanningScheduler} from "@xabi08yt/iutgradignanhpscheduler";
-
 
 const edt = reactive({info_but1: [], info_but2: [], info_but3: []});
 const delay = 1000 * 60 * 5; // Refresh toutes les 5 minutes
@@ -14,7 +12,7 @@ let refreshInterval = undefined;
 let promos;
 let proxyUrl = "/api/hp/";
 let classes = [];
-let version = "2024.0.9.0"
+let version = "2024.0.9.0";
 
 const props = defineProps({
   isActive: Boolean,

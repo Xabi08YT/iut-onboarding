@@ -53,7 +53,7 @@ let generateGroupsSchedulers = () => {
       classes.push({
         promotion: promo,
         className: c.className,
-        classIcal: new HyperplanningScheduler(c.classIcal, {proxyUrl,version}),
+        classIcal: new HyperplanningScheduler(c.classIcal, {proxyUrl, version}),
         groups: c.groups
           ? {
             prime: new HyperplanningScheduler(c.groups.prime, {
@@ -138,10 +138,12 @@ let getAllPlannings = async () => {
             ],
             room: [
               primeEvent
-                ? primeEvent.locations[0].split(" ")[0]
+                ? primeEvent.locations
+                  ? primeEvent.locations[0].split(" ")[0] : ""
                 : undefined,
               secondeEvent
-                ? secondeEvent.locations[0].split(" ")[0]
+                ? secondeEvent.locations
+                  ? secondeEvent.locations[0].split(" ")[0] : ""
                 : undefined,
             ],
           });
@@ -168,10 +170,12 @@ let getAllPlannings = async () => {
             ],
             room: [
               primeEvent
-                ? primeEvent.locations[0].split(" ")[0]
+                ? primeEvent.locations
+                  ? primeEvent.locations[0].split(" ")[0] : ""
                 : undefined,
               secondeEvent
-                ? secondeEvent.locations[0].split(" ")[0]
+                ? secondeEvent.locations
+                  ? secondeEvent.locations[0].split(" ")[0] : ""
                 : undefined,
             ],
           });
@@ -201,10 +205,12 @@ let getAllPlannings = async () => {
             ],
             room: [
               primeEvent
-                ? primeEvent.locations[0].split(" ")[0]
+                ? primeEvent.locations
+                  ? primeEvent.locations[0].split(" ")[0] : ""
                 : undefined,
               secondeEvent
-                ? secondeEvent.locations[0].split(" ")[0]
+                ? secondeEvent.locations
+                  ? secondeEvent.locations[0].split(" ")[0] : ""
                 : undefined,
             ],
           });

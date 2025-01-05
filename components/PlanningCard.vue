@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import robot from "@/public/assets/robot.png";
 export default {
   props: {
     data: {
@@ -52,7 +53,7 @@ export default {
   },
   data() {
     return {
-      noClassLogo: "/assets/robot.png",
+      noClassLogo: robot,
     };
   },
   methods: {

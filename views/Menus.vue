@@ -29,21 +29,23 @@ export default {
   },
   methods: {
     refresh() {
-      fetch("api/getCrousMenus").then((res) => {
-        return res.json(); 
+      fetch("api/getCrousMenus").then(async (res) => {
+        let rq =  await res.json();
+        let data = JSON.parse(rq.body);
+        return data;
       }).then((data) => {
-      this.sirtakiMenu = data.sirtaki;
-      this.spaceMenu = data.space;
+        this.sirtakiMenu = data.sirtaki;
+        this.spaceMenu = data.space;
 
-      //Activation des cartes à désactiver
-      this.sirtakiEnabled = data.sirtakiEnabled;
-      this.spaceEnabled = data.spaceEnabled;
+        //Activation des cartes à désactiver
+        this.sirtakiEnabled = data.sirtakiEnabled;
+        this.spaceEnabled = data.spaceEnabled;
 
-      //Si aucun menu n'est récupérer, afficher une erreur.
-      if (!data.spaceEnabled && !data.sirtakiEnabled) {
-        document.getElementById("MenuViewTitle").innerHTML = "Erreur lors de la récupération des menus.";
-      }
-    });
+        //Si aucun menu n'est récupérer, afficher une erreur.
+        if (!data.spaceEnabled && !data.sirtakiEnabled) {
+          document.getElementById("MenuViewTitle").innerHTML = "Erreur lors de la récupération des menus.";
+        }
+      });
     }
   },
   mounted() {

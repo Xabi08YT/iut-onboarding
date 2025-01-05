@@ -100,28 +100,28 @@ export default {
         ],
         waves: [
           {
-            svg: "/assets/wave2.svg",
+            svg: wave2,
             posStyle: "bottom: 0",
             transition: "slide-bottom",
             show: false,
             class: "full-width opaque",
           },
           {
-            svg: "/assets/wave1.svg",
+            svg: wave1,
             posStyle: "bottom: 0;",
             transition: "slide-bottom",
             show: false,
             class: "full-width opaque",
           },
           {
-            svg: "/assets/wave3.svg",
+            svg: wave3,
             posStyle: "top: 0;",
             transition: "slide-top",
             show: false,
             class: "full-width opaque",
           },
           {
-            svg: "/assets/wave4.svg",
+            svg: wave4,
             posStyle: "top: 0;",
             transition: "slide-top",
             show: false,

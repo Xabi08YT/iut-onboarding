@@ -145,7 +145,7 @@ export default {
           allowed: () => {
             // 6h to 14h
             let currentHour = new Date().getHours();
-            return currentHour >= 6 && currentHour < 14 || true;
+            return currentHour >= 6 && currentHour < 14;
           },
         },
         /* Enable this at the start of each year (The QR code has to be updated)*/

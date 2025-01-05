@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import qrCode from "../public/assets/asso/qrcode.png";
+import qrCode from "../public/assets/jeudi.png";
 import logoDiscord from "../public/assets/logo_discord.png";
 
 export default {

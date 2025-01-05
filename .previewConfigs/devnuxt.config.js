@@ -6,7 +6,7 @@ export default {
   
     app: {
       baseURL: '/preview/info/'
-    }
+    },
   
     googleFonts: {
       display: 'swap',

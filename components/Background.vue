@@ -28,7 +28,7 @@ export default {
       decorations: {
         circles: [
           {
-            svg: "/assets/circle.svg",
+            svg: require("../public/assets/circle.svg"),
             posStyle: "left: 500px; width: 100px",
             transition: "slide-left",
             show: false,

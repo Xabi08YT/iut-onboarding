@@ -17,22 +17,22 @@ jobs:
           port: ${{ secrets.PORT }}
           envs: PR_NUMBER
           script: |
-            echo "----------> Removing previous preview data...          <----------"
+            echo "Removing previous preview data..."
             rm -rf preview-info
-            echo "----------> Cloning preview...                         <----------"
+            echo "Cloning preview..."
             git clone https://github.com/Xabi08YT/iut-onboarding.git preview-info
-            echo "----------> Using correct folder...                    <----------"
+            echo "Using correct folder..."
             cd preview-info
-            echo "----------> Switching to right PR...                   <----------"
+            echo "Switching to right PR..."
             git fetch origin pull/$PR_NUMBER/head:PREVIEW
             git switch PREVIEW
-            echo "----------> Copying .env file...                       <----------"
+            echo "Copying .env file..."
             cp ../../.env.info ../.env
-            echo "----------> Building container image...                <----------"
+            echo "Building container image..."
             podman build -t onboarding-info-preview:latest .
-            echo "----------> Using preview podman configs...            <----------"
+            echo "Using preview podman configs..."
             cd .previewConfigs
-            echo "----------> Shutting down and deleting old previews... <----------"
+            echo "Shutting down and deleting old previews..."
             podman-compose down
-            echo "----------> Bringing up new preview...                 <----------"
+            echo "Bringing up new preview..."
             podman-compose up -d

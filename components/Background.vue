@@ -20,16 +20,16 @@
 
 <script>
 import circle from "../public/assets/circle.svg";
-import path1 from "../assets/path1.svg";
-import path2 from "../assets/path2.svg";
-import path3 from "../assets/path3.svg";
-import snow1 from "/assets/snow1.svg";
-import snow2 from "/assets/snow2.svg";
-import snow3 from "/assets/snow3.svg";
-import wave1 from "/assets/wave1.svg";
-import wave2 from "/assets/wave2.svg";
-import wave3 from "/assets/wave3.svg";
-import wave4 from "/assets/wave4.svg";
+import path1 from "../public/assets/path1.svg";
+import path2 from "../public/assets/path2.svg";
+import path3 from "../public/assets/path3.svg";
+import snow1 from "../public/assets/snow1.svg";
+import snow2 from "../public/assets/snow2.svg";
+import snow3 from "../public/assets/snow3.svg";
+import wave1 from "../public/assets/wave1.svg";
+import wave2 from "../public/assets/wave2.svg";
+import wave3 from "../public/assets/wave3.svg";
+import wave4 from "../public/assets/wave4.svg";
 
 export default {
   data() {

@@ -28,6 +28,9 @@ jobs:
             git switch PREVIEW
             echo "Copying .env file..."
             cp ../../.env.info ../.env
+            echo "Using preview config for nuxt..."
+            rm nuxt.config.js
+            cp .previewConfigs/devnuxt.config.js ./nuxt.config.js
             echo "Building container image..."
             podman build -t onboarding-info-preview:latest .
             echo "Using preview podman configs..."

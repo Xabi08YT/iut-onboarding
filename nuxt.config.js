@@ -4,6 +4,10 @@ export default {
   devtools: { enabled: true },
   modules: ['@nuxtjs/google-fonts'],
 
+  app: {
+    baseURL: '/info/'
+  }
+
   googleFonts: {
     display: 'swap',
     outputDir: 'assets/fonts/',

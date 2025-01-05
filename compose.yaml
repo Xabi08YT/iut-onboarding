@@ -1,0 +1,12 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  previewInfo:
+    container_name: info
+    image: onboarding-info:latest
+    restart: unless-stopped
+    networks:
+      proxy:
+        ipv4_address: 10.89.1.251

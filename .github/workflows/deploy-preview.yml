@@ -28,7 +28,7 @@ jobs:
             git fetch origin pull/$PR_NUMBER/head:PREVIEW
             git switch PREVIEW
             echo "Copying .env file..."
-            cp ../../.env.info ../.env
+            cp ../.env.info .env
             echo "Using preview config for nuxt..."
             rm nuxt.config.js
             cp .previewConfigs/devnuxt.config.js ./nuxt.config.js

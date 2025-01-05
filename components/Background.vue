@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import circle from "../public/assets/circle.svg";
+
 export default {
   data() {
     return {
@@ -28,7 +30,7 @@ export default {
       decorations: {
         circles: [
           {
-            svg: require("../public/assets/circle.svg"),
+            svg: circle,
             posStyle: "left: 500px; width: 100px",
             transition: "slide-left",
             show: false,

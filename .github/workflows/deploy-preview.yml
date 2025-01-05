@@ -26,7 +26,6 @@ jobs:
             echo "Switching to right PR..."
             git fetch origin pull/$PR_NUMBER/head:PREVIEW
             git switch PREVIEW
-            git pull
             echo "Using preview podman configs..."
             cd previewConfigs
             echo "Building container image..."

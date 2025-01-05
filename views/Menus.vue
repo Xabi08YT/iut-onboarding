@@ -10,7 +10,6 @@
 
 <script>
 import MenuCard from "../components/MenuCard.vue";
-import * as api from "../api";
 
 export default {
   props: {
@@ -30,19 +29,23 @@ export default {
   },
   methods: {
     refresh() {
-      api.getAllRestaurantsMenus().then((res) => {
-      this.sirtakiMenu = res.sirtaki;
-      this.spaceMenu = res.space;
+      fetch("api/getCrousMenus").then(async (res) => {
+        let rq =  await res.json();
+        let data = JSON.parse(rq.body);
+        return data;
+      }).then((data) => {
+        this.sirtakiMenu = data.sirtaki;
+        this.spaceMenu = data.space;
 
-      //Activation des cartes à désactiver
-      this.sirtakiEnabled = res.sirtakiEnabled;
-      this.spaceEnabled = res.spaceEnabled;
+        //Activation des cartes à désactiver
+        this.sirtakiEnabled = data.sirtakiEnabled;
+        this.spaceEnabled = data.spaceEnabled;
 
-      //Si aucun menu n'est récupérer, afficher une erreur.
-      if (!res.spaceEnabled && !res.sirtakiEnabled) {
-        document.getElementById("MenuViewTitle").innerHTML = "Erreur lors de la récupération des menus.";
-      }
-    });
+        //Si aucun menu n'est récupérer, afficher une erreur.
+        if (!data.spaceEnabled && !data.sirtakiEnabled) {
+          document.getElementById("MenuViewTitle").innerHTML = "Erreur lors de la récupération des menus.";
+        }
+      });
     }
   },
   mounted() {

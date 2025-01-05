@@ -1,0 +1,49 @@
+name: Deploy preview over SSH
+on: [pull_request]
+jobs:
+  deploy:
+    name: Deploy preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          envs: PR_NUMBER
+          script: |
+            echo "Removing previous preview data..."
+            rm -rf preview-info
+            podman image rm 
+            echo "Cloning preview..."
+            git clone https://github.com/Xabi08YT/iut-onboarding.git preview-info
+            echo "Using correct folder..."
+            cd preview-info
+            echo "Switching to right PR..."
+            git fetch origin pull/$PR_NUMBER/head:PREVIEW
+            git switch PREVIEW
+            echo "Copying .env file..."
+            cp ../../.env.info ../.env
+            echo "Using preview config for nuxt..."
+            rm nuxt.config.js
+            cp .previewConfigs/devnuxt.config.js ./nuxt.config.js
+            echo "Building container image..."
+            podman build -t onboarding-info-preview:latest .
+            if [[ $? -ne 0 ]] ; then
+              echo "Failed, Cleaning up..."
+              podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f
+              exit 1
+            fi
+            echo "Using preview podman configs..."
+            cd .previewConfigs
+            echo "Shutting down and deleting old previews..."
+            podman-compose down
+            echo "Bringing up new preview..."
+            podman-compose up -d
+            echo "Cleaning up..."
+            podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f

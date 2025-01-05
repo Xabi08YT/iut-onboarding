@@ -79,15 +79,6 @@ export const getTBMLineWaitInterval = async (stopId, lineId) => {
   }
 };
 
-export const getAllRestaurantsMenus = async () => {
-  try {
-    const result = await fetch(".netlify/functions/getCrousMenus");
-    return await result.json();
-  } catch (e) {
-    throw `Erreur de récupération des menus CROUS : ${e}`;
-  }
-};
-
 const transformDesc = (desc) => {
   if(desc.length === 0) {
     return ;

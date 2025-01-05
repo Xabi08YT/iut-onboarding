@@ -4,6 +4,10 @@ export default {
   devtools: { enabled: true },
   modules: ['@nuxtjs/google-fonts'],
 
+  app: {
+    baseURL: '/info/'
+  },
+
   googleFonts: {
     display: 'swap',
     outputDir: 'assets/fonts/',
@@ -18,7 +22,7 @@ export default {
   },
 
   routeRules: {
-    "/api/hp/**": {
+    "api/hp/**": {
       proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
     }
   }

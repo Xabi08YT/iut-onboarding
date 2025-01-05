@@ -1,0 +1,36 @@
+name: Deploy over SSH
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          script: |
+            echo "Using correct folder..."
+            cd info
+            echo "Pulling changes..."
+            git pull
+            echo "Building container image..."
+            podman build -t onboarding-info:latest .
+            if [[ $? -ne 0 ]] ; then
+              echo "Failed, Cleaning up..."
+              podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f
+              exit 1
+            fi
+            echo "Shutting down and deleting old containers..."
+            podman-compose down
+            echo "Bringing up new containers with the latest released code..."
+            podman-compose up -d
+            echo "Cleaning up..."
+            podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f

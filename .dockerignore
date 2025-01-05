@@ -1,0 +1,11 @@
+.previewConfigs
+.eslintrc.js
+.gitignore
+CONTRIBUTING.md
+netlify.toml
+RASPBERRY.md
+README.md
+.github
+node_modules
+compose.yaml
+DOCKERFILE

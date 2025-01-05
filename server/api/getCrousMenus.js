@@ -41,18 +41,17 @@ async function fetchMenu(URL) {
       return;
 
     //To remove **** in the sirtaki menu
-    plat = plat.replace('****','');
-    plat = plat.replace('****','');
+    plat = plat.replaceAll('*','');
 
     //Fix: "<br>" in Space Campus menu
 
-    plat = plat.replace('<br>','');
-    plat = plat.replace('</br>','');
-    plat = plat.replace('<br/>','');
+    plat = plat.replaceAll('<br>','');
+    plat = plat.replaceAll('</br>','');
+    plat = plat.replaceAll('<br/>','');
 
     //Fix - - formatting problem for sirtaki
     if(URL == SIRTAKI_URL) {
-      plat = plat.replace('-','');
+      plat = plat.replaceAll('-','');
     }
 
     if(plat.includes("Plat")) {
@@ -113,11 +112,14 @@ export async function getAllRestaurantsMenus() {
   };
 }
 
-export const handler = async () => {
-  try {
-    const menus = await getAllRestaurantsMenus();
-    return { statusCode: 200, body: JSON.stringify(menus) };
-  } catch (error) {
-    return { statusCode: 500, body: JSON.stringify(error) };
+
+export default defineEventHandler(async (event) => {
+  if (event.req.method === 'GET') {
+    try {
+      const menus = await getAllRestaurantsMenus();
+      return { statusCode: 200, body: JSON.stringify(menus) };
+    } catch (error) {
+      return { statusCode: 500, body: JSON.stringify(error) };
+    }
   }
-};
+});

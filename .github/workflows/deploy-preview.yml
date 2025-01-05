@@ -41,4 +41,4 @@ jobs:
             echo "Bringing up new preview..."
             podman-compose up -d
             echo "Cleaning up..."
-            podman image ls -a | grep '<none>' | awk '{print $3}' | xargs sudo podman rmi -f
+            podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f

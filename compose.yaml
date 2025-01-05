@@ -3,7 +3,7 @@ networks:
     external: true
 
 services:
-  previewInfo:
+  Info:
     container_name: info
     image: onboarding-info:latest
     restart: unless-stopped

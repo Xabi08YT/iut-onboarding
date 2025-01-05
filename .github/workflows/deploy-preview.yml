@@ -34,6 +34,11 @@ jobs:
             cp .previewConfigs/devnuxt.config.js ./nuxt.config.js
             echo "Building container image..."
             podman build -t onboarding-info-preview:latest .
+            if [[ $? -ne 0 ]] ; then
+              echo "Failed, Cleaning up..."
+              podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f
+              exit 1
+            fi
             echo "Using preview podman configs..."
             cd .previewConfigs
             echo "Shutting down and deleting old previews..."

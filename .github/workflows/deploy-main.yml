@@ -23,6 +23,11 @@ jobs:
             git pull
             echo "Building container image..."
             podman build -t onboarding-info:latest .
+            if [[ $? -ne 0 ]] ; then
+              echo "Failed, Cleaning up..."
+              podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f
+              exit 1
+            fi
             echo "Shutting down and deleting old containers..."
             podman-compose down
             echo "Bringing up new containers with the latest released code..."

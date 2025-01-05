@@ -10,7 +10,7 @@ const delay = 1000 * 60 * 5; // Refresh toutes les 5 minutes
 let currentHourRangeStr = "";
 let refreshInterval = undefined;
 let promos;
-let proxyUrl = `${nuxt.$route.path}/api/hp/`;
+let proxyUrl = `${useRequestURL()}/info/api/hp/`;
 let classes = [];
 let version = "2024.0.9.0";
 

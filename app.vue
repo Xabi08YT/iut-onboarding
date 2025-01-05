@@ -27,20 +27,18 @@
       v-if="Object.keys(views).includes('menus')"
       :isActive="currentView == 'menus'"
     />
-    <client-only>
-      <Planning
-        v-if="Object.keys(views).includes('planning')"
-        :isActive="currentView == 'planning'"
-      />
-      <Transport
-        v-if="Object.keys(views).includes('transport')"
-        :isActive="currentView == 'transport'"
-      />
-      <Weather
-        v-if="Object.keys(views).includes('weather')"
-        :isActive="currentView == 'weather'"
-      />
-    </client-only>
+    <Planning
+      v-if="Object.keys(views).includes('planning')"
+      :isActive="currentView == 'planning'"
+    />
+    <Transport
+      v-if="Object.keys(views).includes('transport')"
+      :isActive="currentView == 'transport'"
+    />
+    <Weather
+      v-if="Object.keys(views).includes('weather')"
+      :isActive="currentView == 'weather'"
+    />
     <Discord
       v-if="Object.keys(views).includes('discord')"
       :isActive="currentView == 'discord'"

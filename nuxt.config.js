@@ -11,6 +11,10 @@ export default {
 
   css: ['./stylesheets/global.css'],
 
+  app: {
+    baseURL: '/info/'
+  },
+
   googleFonts: {
     display: 'swap',
     outputDir: 'assets/fonts/',
@@ -25,7 +29,7 @@ export default {
   },
 
   routeRules: {
-    "/api/hp/**": {
+    "api/hp/**": {
       proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
     }
   },

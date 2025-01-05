@@ -19,6 +19,18 @@
 </template>
 
 <script>
+import circle from "../public/assets/circle.svg";
+import path1 from "../public/assets/path1.svg";
+import path2 from "../public/assets/path2.svg";
+import path3 from "../public/assets/path3.svg";
+import snow1 from "../public/assets/snow1.svg";
+import snow2 from "../public/assets/snow2.svg";
+import snow3 from "../public/assets/snow3.svg";
+import wave1 from "../public/assets/wave1.svg";
+import wave2 from "../public/assets/wave2.svg";
+import wave3 from "../public/assets/wave3.svg";
+import wave4 from "../public/assets/wave4.svg";
+
 export default {
   data() {
     return {
@@ -28,35 +40,35 @@ export default {
       decorations: {
         circles: [
           {
-            svg: "/assets/circle.svg",
+            svg: circle,
             posStyle: "left: 500px; width: 100px",
             transition: "slide-left",
             show: false,
             class: "full-height",
           },
           {
-            svg: "/assets/circle.svg",
+            svg: circle,
             posStyle: "top: 10px; left: 100px; width: 300px",
             transition: "slide-top",
             show: false,
             class: "full-width",
           },
           {
-            svg: "/assets/circle.svg",
+            svg: circle,
             posStyle: "right: 100px; width: 200px",
             transition: "slide-right",
             show: false,
             class: "full-height",
           },
           {
-            svg: "/assets/circle.svg",
+            svg: circle,
             posStyle: "bottom: 10px; right: 100px; width: 300px",
             transition: "slide-bottom",
             show: false,
             class: "full-width",
           },
           {
-            svg: "/assets/circle.svg",
+            svg: circle,
             posStyle: "bottom: 100px; left: 50px; width: 60px",
             transition: "slide-bottom",
             show: false,
@@ -65,21 +77,21 @@ export default {
         ],
         lines: [
           {
-            svg: "/assets/path1.svg",
+            svg: path1,
             posStyle: "left: -300px;",
             transition: "slide-left",
             show: false,
             class: "full-height",
           },
           {
-            svg: "/assets/path2.svg",
+            svg: path2,
             posStyle: "right: -300px; bottom: -50vh;",
             transition: "slide-right",
             show: false,
             class: "full-height",
           },
           {
-            svg: "/assets/path3.svg",
+            svg: path3,
             posStyle: "right: -300px;",
             transition: "slide-right",
             show: false,
@@ -88,28 +100,28 @@ export default {
         ],
         waves: [
           {
-            svg: "/assets/wave2.svg",
+            svg: wave2,
             posStyle: "bottom: 0",
             transition: "slide-bottom",
             show: false,
             class: "full-width opaque",
           },
           {
-            svg: "/assets/wave1.svg",
+            svg: wave1,
             posStyle: "bottom: 0;",
             transition: "slide-bottom",
             show: false,
             class: "full-width opaque",
           },
           {
-            svg: "/assets/wave3.svg",
+            svg: wave3,
             posStyle: "top: 0;",
             transition: "slide-top",
             show: false,
             class: "full-width opaque",
           },
           {
-            svg: "/assets/wave4.svg",
+            svg: wave4,
             posStyle: "top: 0;",
             transition: "slide-top",
             show: false,
@@ -118,21 +130,21 @@ export default {
         ],
         snow: [
           {
-            svg: "/assets/snow1.svg",
+            svg: snow1,
             posStyle: "height: 40vh; position: absolute; left: 0; top: 0;",
             transition: "slide-left",
             show: false,
             class: "snow",
           },
           {
-            svg: "/assets/snow2.svg",
+            svg: snow2,
             posStyle: "right: 0; bottom: 0;",
             transition: "slide-right",
             show: false,
             class: "snow",
           },
           {
-            svg: "/assets/snow3.svg",
+            svg: snow3,
             posStyle: "right: 0; top: 0;",
             transition: "slide-top",
             show: false,

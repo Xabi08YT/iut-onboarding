@@ -114,7 +114,7 @@ export async function getAllRestaurantsMenus() {
 }
 
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   if (event.req.method === 'GET') {
     try {
       const menus = await getAllRestaurantsMenus();

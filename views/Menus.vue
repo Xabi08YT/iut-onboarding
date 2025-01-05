@@ -30,16 +30,17 @@ export default {
   methods: {
     refresh() {
       fetch("api/getCrousMenus").then((res) => {
-      res = res.json();
-      this.sirtakiMenu = res.sirtaki;
-      this.spaceMenu = res.space;
+        return res.json(); 
+      }).then((data) => {
+      this.sirtakiMenu = data.sirtaki;
+      this.spaceMenu = data.space;
 
       //Activation des cartes à désactiver
-      this.sirtakiEnabled = res.sirtakiEnabled;
-      this.spaceEnabled = res.spaceEnabled;
+      this.sirtakiEnabled = data.sirtakiEnabled;
+      this.spaceEnabled = data.spaceEnabled;
 
       //Si aucun menu n'est récupérer, afficher une erreur.
-      if (!res.spaceEnabled && !res.sirtakiEnabled) {
+      if (!data.spaceEnabled && !data.sirtakiEnabled) {
         document.getElementById("MenuViewTitle").innerHTML = "Erreur lors de la récupération des menus.";
       }
     });

@@ -10,7 +10,6 @@
 
 <script>
 import MenuCard from "../components/MenuCard.vue";
-import * as api from "../backend/getCrousMenus.js";
 
 export default {
   props: {

@@ -19,6 +19,7 @@ jobs:
           script: |
             echo "Removing previous preview data..."
             rm -rf preview-info
+            podman image rm 
             echo "Cloning preview..."
             git clone https://github.com/Xabi08YT/iut-onboarding.git preview-info
             echo "Using correct folder..."
@@ -39,3 +40,5 @@ jobs:
             podman-compose down
             echo "Bringing up new preview..."
             podman-compose up -d
+            echo "Cleaning up..."
+            podman image ls -a | grep '<none>' | awk '{print $3}' | xargs sudo podman rmi -f

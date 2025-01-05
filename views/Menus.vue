@@ -30,7 +30,8 @@ export default {
   },
   methods: {
     refresh() {
-      api.getAllRestaurantsMenus().then((res) => {
+      fetch("api/getCrousMenus").then((res) => {
+      res = res.json();
       this.sirtakiMenu = res.sirtaki;
       this.spaceMenu = res.space;
 

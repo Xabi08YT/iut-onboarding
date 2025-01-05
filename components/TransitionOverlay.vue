@@ -5,13 +5,16 @@
 </template>
 
 <script>
+import logoIUT from "..public/assets/logo_iut.png";
+import logoGP from "..public/assets/gitpoule.png"
+
 export default {
   data() {
     return {
       active: false,
       duration: 3000,
-      logoIut: "/assets/logo_iut_noel.png",
-      logoGP: "/assets/gitpoule.png",
+      logoIut: logoIUT,
+      logoGP: logoGP,
       currentLogo: null
     };
   },

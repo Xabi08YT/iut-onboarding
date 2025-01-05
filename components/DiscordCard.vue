@@ -10,11 +10,14 @@
 </template>
 
 <script>
+import qrCode from "../public/assets/asso/qrcode.png";
+import logoDiscord from "../public/assets/logo_discord.png";
+
 export default {
   data() {
     return {
-      qrCode: "/assets/asso/qrcode.png",
-      logoDiscord: "/assets/logo_discord.png"
+      qrCode: qrCode,
+      logoDiscord: logoDiscord
     };
   }
 };

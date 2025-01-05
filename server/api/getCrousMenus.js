@@ -113,11 +113,14 @@ export async function getAllRestaurantsMenus() {
   };
 }
 
-export const handler = async () => {
-  try {
-    const menus = await getAllRestaurantsMenus();
-    return { statusCode: 200, body: JSON.stringify(menus) };
-  } catch (error) {
-    return { statusCode: 500, body: JSON.stringify(error) };
+
+export default defineEventHandler((event) => {
+  if (event.req.method === 'GET') {
+    try {
+      const menus = await getAllRestaurantsMenus();
+      return { statusCode: 200, body: JSON.stringify(menus) };
+    } catch (error) {
+      return { statusCode: 500, body: JSON.stringify(error) };
+    }
   }
-};
+});

@@ -22,7 +22,7 @@ export default {
   },
 
   routeRules: {
-    "/info/api/hp/**": {
+    "/info/hp/**": {
       proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
     }
   }

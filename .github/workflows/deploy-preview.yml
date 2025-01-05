@@ -1,0 +1,35 @@
+name: Deploy preview over SSH
+on: [pull_request]
+jobs:
+  deploy:
+    name: Deploy preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          envs: PR_NUMBER
+          script: |
+            echo "Removing previous preview data..."
+            rm -rf preview-info
+            echo "Cloning preview..."
+            git clone https://github.com/Xabi08YT/iut-onboarding.git preview-info
+            echo "Using correct folder..."
+            cd preview-info
+            echo "Switching to right PR..."
+            gh pr checkout $PR_NUMBER
+            echo "Using preview podman configs..."
+            cd previewConfigs
+            echo "Building container image..."
+            podman build -t onboarding-info-preview:latest .
+            echo "Shutting down and deleting old previews..."
+            podman-compose down
+            echo "Bringing up new preview..."
+            podman-compose up -d

@@ -1,4 +1,4 @@
-name: Deploy through SSH
+name: Deploy over SSH
 on: 
   push:
     branches:

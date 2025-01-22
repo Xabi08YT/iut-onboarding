@@ -2,7 +2,12 @@
 export default {
     compatibilityDate: '2024-04-03',
     devtools: { enabled: true },
-    modules: ['@nuxtjs/google-fonts'],
+    modules: [
+        '@nuxtjs/google-fonts',
+        '@nuxtjs/tailwindcss',
+        'shadcn-nuxt',
+        'nuxt-lucide-icons'
+    ],
   
     app: {
       baseURL: '/preview/info/'
@@ -25,5 +30,17 @@ export default {
       "/api/hp/**": {
         proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
       }
+    },
+
+    shadcn: {
+        /**
+         * Prefix for all the imported component
+         */
+        prefix: "",
+        /**
+         * Directory that the component lives in.
+         * @default "./components/ui"
+         */
+        componentDir: "./components/ui"
     }
   };

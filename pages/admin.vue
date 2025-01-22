@@ -1,19 +1,21 @@
 <script setup>
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../components/ui/card";
+import background from "../assets/bg.jpeg";
 </script>
 
 <template>
-  <div id="container" class="w-screen h-screen flex p-[25px] justify-center items-center">
-    <Card class="mr-[25px] w-1/2 h-full">
+  <div id="container" class="w-screen min-h-screen lg:h-screen flex flex-col lg:flex-row p-[25px] justify-center items-center">
+    <Card class="my-[25px] mx-0 min-w-1/2 min-h-[400px] lg:my-0 lg:mr-[40px] lg:w-1/2 lg:h-full">
       <CardHeader>
         <CardTitle>Slides actives</CardTitle>
         <CardDescription>Ici vous pouvez editer les slides activées et leur temps d'apparition.</CardDescription>
       </CardHeader>
       <CardContent>
+
       </CardContent>
     </Card>
-    <div class="h-full flex flex-col justify-center items-center w-1/2">
-      <Card class="mb-[25px] h-[50%] w-full">
+    <div class="flex flex-col justify-center items-center lg:w-1/2 h-full my-0 py-0">
+      <Card class="mx-0 lg:mb-[25px] min-w-full min-h-[500px] lg:min-h-0  lg:h-1/2 mb-[25px]">
         <CardHeader>
           <CardTitle>Editeur d'annonces</CardTitle>
           <CardDescription>Ici vous pouvez ajouter, supprimer ou éditer des annonces à afficher.</CardDescription>
@@ -21,7 +23,7 @@ import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} f
         <CardContent>
         </CardContent>
       </Card>
-      <Card class="h-[50%] w-full">
+      <Card class="mx-0 min-w-full min-h-[500px] lg:min-h-0 lg:h-1/2">
         <CardHeader>
           <CardTitle>Administration des utilisateurs</CardTitle>
           <CardDescription>Ici vous ajouter, editer et supprimer des utilisateurs</CardDescription>

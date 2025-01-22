@@ -1,6 +1,10 @@
 <script setup>
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../components/ui/card";
 import background from "../assets/bg.jpeg";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../components/ui/table";
+import {ScrollArea} from "../components/ui/scroll-area";
+import {Switch} from "../components/ui/switch";
+import {Input} from "../components/ui/input";
 </script>
 
 <template>
@@ -11,7 +15,79 @@ import background from "../assets/bg.jpeg";
         <CardDescription>Ici vous pouvez editer les slides activées et leur temps d'apparition.</CardDescription>
       </CardHeader>
       <CardContent>
-
+        <ScrollArea class="h-[250px] sm:h-[400px] md:h-[500px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead class="text-center">Nom</TableHead>
+                <TableHead class="text-center">Temps (s)</TableHead>
+                <TableHead class="text-center">Actif</TableHead>
+              </TableRow>
+            </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Test</TableCell>
+                  <TableCell><Input type="number"/></TableCell>
+                  <TableCell><Switch/></TableCell>
+                </TableRow>
+              </TableBody>
+          </Table>
+        </ScrollArea>
       </CardContent>
     </Card>
     <div class="flex flex-col justify-center items-center lg:w-1/2 h-full my-0 py-0">

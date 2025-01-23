@@ -37,7 +37,7 @@ async function fetchMenu(URL) {
     if (plat.includes(":") || plat.includes("(") || plat.length === 0)
       return;
       // Sans les "Entrées diverses" et "Desserts divers" et sans les salades car on aime pas la salade
-    if (plat.includes("Entrées") || plat.includes("Desserts") || plat.includes("Salade"))
+    if (plat.toLowerCase().includes("entrées") || plat.toLowerCase().includes("desserts") || plat.toLowerCase().includes("salade"))
       return;
 
     //To remove **** in the sirtaki menu

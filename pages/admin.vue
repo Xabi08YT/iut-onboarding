@@ -6,6 +6,15 @@ import {ScrollArea} from "../components/ui/scroll-area";
 import {Switch} from "../components/ui/switch";
 import {Input} from "../components/ui/input";
 
+/**
+ * Make a deep clone from and object
+ * @param o object to clone
+ * @returns {any} cloned object
+ */
+const deepObjectClone = (o) => {
+  return JSON.parse(JSON.stringify(o));
+};
+
 const slides = ref([
   {
     id: 0,
@@ -93,14 +102,14 @@ const slides = ref([
   }
 ]);
 
-let _tmp = JSON.parse(JSON.stringify(slides.value));
+let _tmp = deepObjectClone(slides.value);
 let compareSlidesUser = ref([..._tmp]);
 
 watch(compareSlidesUser.value, () => {
   for(let s of compareSlidesUser.value) {
     if(!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
       console.log(s);
-      slides.value[s.id] = JSON.parse(JSON.stringify(s));
+      slides.value[s.id] = deepObjectClone(s);
     }
   }
 });

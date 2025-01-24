@@ -6,7 +6,7 @@ export default {
     "@nuxtjs/google-fonts",
     "@nuxtjs/tailwindcss",
     "shadcn-nuxt",
-    "nuxt-lucide-icons"
+    "nuxt-lucide-icons",
   ],
 
   css: ["./stylesheets/global.css"],
@@ -31,7 +31,10 @@ export default {
   routeRules: {
     "api/hp/**": {
       proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
-    }
+    },
+    "/admin/**": { ssr: false },
+    // Add cors headers
+    "/api/v1/**": { cors: true },
   },
 
   shadcn: {

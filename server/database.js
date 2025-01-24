@@ -55,7 +55,7 @@ export async function getUsers() {
 export async function createUser(data) {
   let user = data;
   user.id = null;
-  client.$connect();npm r
+  client.$connect();
   client.$disconnect();
 }
 

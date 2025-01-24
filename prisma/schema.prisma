@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id       Int    @id @default(autoincrement())
-  uname    String @unique
+  username String @unique
   password String
   role     Json
 }

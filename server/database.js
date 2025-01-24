@@ -1,16 +1,23 @@
-import Prisma from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
+import {PrismaClient} from "@prisma/client";
+import * as bcrypt from "bcrypt";
 
 const client = new PrismaClient();
+const saltRounds = process.env.SALT_ROUNDS ? process.env.SALT_ROUNDS : 10;
+const salt = bcrypt.genSaltSync(saltRounds);
 
 /**
  * Check if the username is correct or not
  * @param username username of the user
  * @param password password of this same user
  */
-export function login(username, password) {
+export async function login(username, password) {
   client.$connect();
+  let user = await client.user.findFirst({where: {username}});
   client.$disconnect();
+  if(!user) {
+    return {ok: false, user:null};
+  }
+  return {ok:bcrypt.compare(password,user[0].password),user};
 }
 
 /**
@@ -19,7 +26,7 @@ export function login(username, password) {
  */
 export async function getSlides() {
   client.$connect();
-  let results = await client.Slides.findAll();
+  let results = await client.slide.findMany();
   client.$disconnect();
   return results;
 }
@@ -31,7 +38,7 @@ export async function getSlides() {
  */
 export async function updateSlide(data) {
   client.$connect();
-  await client.Slides.update({
+  await client.slide.update({
     where: {id: data.id},
     data,
   });
@@ -44,7 +51,9 @@ export async function updateSlide(data) {
  */
 export async function getUsers() {
   client.$connect();
+  let results = await client.user.findMany();
   client.$disconnect();
+  return results;
 }
 
 /**
@@ -53,9 +62,10 @@ export async function getUsers() {
  * @returns {Promise<void>}
  */
 export async function createUser(data) {
-  let user = data;
-  user.id = null;
+  data.id = null;
+  data.password = await bcrypt.hash(data.password);
   client.$connect();
+  client.user.create({data});
   client.$disconnect();
 }
 
@@ -65,8 +75,9 @@ export async function createUser(data) {
  * @returns {Promise<void>}
  */
 export async function updateUser(data) {
+  data.password = await bcrypt.hash(data.password, salt);
   client.$connect();
-  await client.Slide.update({
+  await client.slide.update({
     where: {id: data.id},
     data,
   });
@@ -80,6 +91,7 @@ export async function updateUser(data) {
  */
 export async function deleteUser(id) {
   client.$connect();
+  await client.user.delete({where: {id}});
   client.$disconnect();
 }
 
@@ -89,7 +101,9 @@ export async function deleteUser(id) {
  */
 export async function getEvents() {
   client.$connect();
+  let results = await client.event.findMany();
   client.$disconnect();
+  return results;
 }
 
 /**
@@ -98,7 +112,9 @@ export async function getEvents() {
  * @returns null
  */
 export async function createEvent(data) {
+  data.id = null;
   client.$connect();
+  client.event.create({data});
   client.$disconnect();
 }
 
@@ -109,7 +125,7 @@ export async function createEvent(data) {
  */
 export async function updateEvent(data) {
   client.$connect();
-  await client.Event.update({
+  await client.event.update({
     where: {id: data.id},
     data,
   });
@@ -123,5 +139,6 @@ export async function updateEvent(data) {
  */
 export async function deleteEvent(id) {
   client.$connect();
+  client.event.delete({where: {id}});
   client.$disconnect();
 }

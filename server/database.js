@@ -1,8 +1,10 @@
 import {PrismaClient} from "@prisma/client";
 import * as bcrypt from "bcrypt";
+import * as dotenv from "dotenv";
 
+let cfg = dotenv.config();
 const client = new PrismaClient();
-const saltRounds = process.env.SALT_ROUNDS ? process.env.SALT_ROUNDS : 10;
+const saltRounds = cfg.parsed.SALT_ROUNDS ? cfg.parsed.SALT_ROUNDS : 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
 /**

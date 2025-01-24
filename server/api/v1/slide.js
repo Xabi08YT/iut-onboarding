@@ -1,20 +1,9 @@
 /**
  * @openapi
- * /handler:
- *   put:
- *     description: "Update an existing slide."
- *     responses:
- *       200:
- *         description: "Slide updated successfully."
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Slide updated successfully."
+ * /slide:
  *   get:
+ *     tags:
+ *      - Slide management
  *     description: "Retrieve a list of slides."
  *     responses:
  *       200:
@@ -35,6 +24,23 @@
  *                   active:
  *                     type: boolean
  *                     example: true
+ *   put:
+ *     tags:
+ *       - Slide management
+ *     security:
+ *       - JWT: []
+ *     description: "Update an existing slide."
+ *     responses:
+ *       200:
+ *         description: "Slide updated successfully."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Slide updated successfully."
  *   default:
  *     description: "Handle unsupported HTTP methods."
  *     responses:

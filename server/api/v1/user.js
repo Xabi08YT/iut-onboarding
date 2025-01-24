@@ -1,46 +1,63 @@
-  /**
-   * @openapi
-   * /event:
-   *    get:
-   *      description: "Get a list containing all the users that are currently stored in the database"
-   *      responses:
-   *        200:
-   *          description: "Return a JSON array containing every user stored in the database"
-   *        401:
-   *          description: "user token has expired"
-   *        403:
-   *          description: "insufficiant access"
-   *    post:
-   *      description: "Create and save a new user to the database"
-   *      responses:
-   *        201:
-   *          description: "the object has been saved"
-   *        401:
-   *          description: "user token has expired"
-   *        403:
-   *          description: "insufficiant access"
-   *    put:
-   *      description: "Modify an existing user"
-   *      responses:
-   *        200:
-   *          description: "Event modified"
-   *        401:
-   *          description: "user token has expired"
-   *        403:
-   *          description: "insufficiant access"
-   *        410:
-   *          description: "This event does not exist."
-   *    delete:
-   *      description: "Deletes a user"
-   *        200:
-   *          description: "Event deleted"
-   *        401:
-   *          description: "user token has expired"
-   *        403:
-   *          description: "insufficiant access"
-   *        410:
-   *          description: "This user does not exist"
-   */
+/**
+ * @openapi
+ * /user:
+ *   get:
+ *     tags:
+ *      - User management
+ *     security:
+ *      - JWT: []
+ *     description: "Get a list containing all the users that are currently stored in the database"
+ *     responses:
+ *       200:
+ *         description: "Returns a JSON array containing every user stored in the database"
+ *       401:
+ *         description: "User token has expired"
+ *       403:
+ *         description: "Insufficient access"
+ *   post:
+ *     tags:
+ *      - User management
+ *     security:
+ *      - JWT: []
+ *     description: "Create and save a new user to the database"
+ *     responses:
+ *       201:
+ *         description: "The object has been saved"
+ *       401:
+ *         description: "User token has expired"
+ *       403:
+ *         description: "Insufficient access"
+ *   put:
+ *     tags:
+ *      - User management
+ *     security:
+ *      - JWT: []
+ *     description: "Modify an existing user"
+ *     responses:
+ *       200:
+ *         description: "User modified successfully"
+ *       401:
+ *         description: "User token has expired"
+ *       403:
+ *         description: "Insufficient access"
+ *       410:
+ *         description: "This user does not exist."
+ *   delete:
+ *     tags:
+ *      - User management
+ *     security:
+ *      - JWT: []
+ *     description: "Delete an existing user"
+ *     responses:
+ *       200:
+ *         description: "User deleted successfully"
+ *       401:
+ *         description: "User token has expired"
+ *       403:
+ *         description: "Insufficient access"
+ *       410:
+ *         description: "This user does not exist."
+ */
 function handler(req) {
   try {
     switch(req.method) {

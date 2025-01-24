@@ -1,7 +1,24 @@
 /**
  * @openapi
- * /handler:
+ * /session:
+ *   get:
+ *     tags:
+ *      - Session management
+ *     description: "Check resource validity."
+ *     responses:
+ *       200:
+ *         description: "Resource is valid."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 valid:
+ *                   type: boolean
+ *                   example: true
  *   post:
+ *     tags:
+ *      - Session management
  *     description: "Create a new resource and return a welcome message."
  *     responses:
  *       201:
@@ -15,6 +32,10 @@
  *                   type: string
  *                   example: "Welcome !"
  *   put:
+ *     tags:
+ *      - Session management
+ *     security:
+ *      - JWT: []
  *     description: "Modify a resource and confirm the modification."
  *     responses:
  *       200:
@@ -28,6 +49,10 @@
  *                   type: string
  *                   example: "Token modified successfully."
  *   delete:
+ *     tags:
+ *      - Session management
+ *     security:
+ *      - JWT: []
  *     description: "Delete a resource and return a goodbye message."
  *     responses:
  *       200:
@@ -40,19 +65,6 @@
  *                 message:
  *                   type: string
  *                   example: "Goodbye !"
- *   get:
- *     description: "Check resource validity."
- *     responses:
- *       200:
- *         description: "Resource is valid."
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 valid:
- *                   type: boolean
- *                   example: true
  *   default:
  *     description: "Handle unsupported HTTP methods."
  *     responses:

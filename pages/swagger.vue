@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { SwaggerUIBundle } from "swagger-ui-dist";
+import {onMounted} from "vue";
 
-setTimeout(async () => {
+onMounted(async () => {
+  let specs = await fetch(`/info/api/v1/doc`);
+  specs = await specs.json();
+  console.log(specs);
   SwaggerUIBundle({
     dom_id: "#swagger-ui",
-    spec: await fetch("/api/v1/doc"),
+    spec: specs,
   });
 });
 </script>

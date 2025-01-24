@@ -2,11 +2,17 @@
  * @openapi
  * /event:
  *   get:
+ *     tags:
+ *      - Event management
  *     description: "Get a list containing all the events that are currently stored in the database"
  *     responses:
  *       200:
  *         description: "Return a JSON array containing every event stored in the database"
  *   post:
+ *     tags:
+ *      - Event management
+ *     security:
+ *      - JWT: []
  *     description: "Create and save a new event to the database"
  *     responses:
  *       201:
@@ -16,6 +22,10 @@
  *       403:
  *         description: "Insufficient access"
  *   put:
+ *     tags:
+ *      - Event management
+ *     security:
+ *      - JWT: []
  *     description: "Modify an existing event"
  *     responses:
  *       200:
@@ -27,6 +37,10 @@
  *       410:
  *         description: "This event does not exist."
  *   delete:
+ *     tags:
+ *      - Event management
+ *     security:
+ *      - JWT: []
  *     description: "Deletes an existing event"
  *     responses:
  *       200:

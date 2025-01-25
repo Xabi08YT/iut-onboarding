@@ -71,7 +71,13 @@ export async function updateSlide(data) {
  */
 export async function getUsers() {
   client.$connect();
-  let results = await client.user.findMany();
+  let results = await client.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      role: true,
+    }
+  });
   client.$disconnect();
   return results;
 }

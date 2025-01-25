@@ -1,3 +1,5 @@
+import {createUser, deleteUser, getUsers, updateUser} from "~/server/database";
+
 /**
  * @openapi
  * /user:
@@ -58,17 +60,22 @@
  *       410:
  *         description: "This user does not exist."
  */
-function handler(req) {
+async function handler(req) {
+  if(req.method === "GET") {
+    return new Response(JSON.stringify(await getUsers()), {status: 200});
+  }
   try {
+    let data = await readBody(req);
     switch(req.method) {
       case "POST":
+        createUser(data);
         return new Response(JSON.stringify({message:"User created successfully."}), {status: 201});
       case "PUT":
+        updateUser(data);
         return new Response(JSON.stringify({message:null}), {status: 200});
       case "DELETE":
+        deleteUser(data.id);
         return new Response(JSON.stringify({message:null}), {status: 200});
-      case "GET":
-        return new Response(JSON.stringify([{id:1, uname:"xgoity", role:"Maintainer"}]), {status: 200});
       default:
         return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
     }

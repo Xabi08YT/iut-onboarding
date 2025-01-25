@@ -2,6 +2,18 @@
 import {Input} from "../components/ui/input";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../components/ui/card";
 import {Button} from "../components/ui/button";
+
+let username = "";
+let password = "";
+
+const login = async () => {
+  await fetch("/info/api/v1/session", {
+    headers: {"Content-Type": "application/json"}, method: "POST", body: JSON.stringify({
+      username,
+      password
+    })});
+};
+
 </script>
 
 <template>
@@ -12,8 +24,8 @@ import {Button} from "../components/ui/button";
         <CardDescription>Pour continuer, veuillez vous connecter</CardDescription>
       </CardHeader>
       <CardContent class="">
-        <Input type="text" placeholder="username" class="mt-[5px]"/>
-        <Input type="password" placeholder="password" class="mt-[5px]"/>
+        <Input type="text" placeholder="username" class="mt-[5px]" v-model="username"/>
+        <Input type="password" placeholder="password" class="mt-[5px]" v-model="username"/>
       </CardContent>
       <CardFooter>
         <Button class="mt-[5px] w-full">Se connecter</Button>

@@ -1,11 +1,15 @@
 import {PrismaClient} from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
+import NodeCache from "node-cache";
 
-let cfg = dotenv.config();
+const cfg = dotenv.config();
 const client = new PrismaClient();
-const saltRounds = cfg.parsed.SALT_ROUNDS ? cfg.parsed.SALT_ROUNDS : 10;
+const saltRounds = cfg.parsed.SALT_ROUNDS ? parseInt(cfg.parsed.SALT_ROUNDS) : 10;
 const salt = bcrypt.genSaltSync(saltRounds);
+// Setting a cache with a 10 mn TTL for each item
+const cache = new NodeCache({stdTTL: 10 * 60});
+
 
 /**
  * Check if the username is correct or not
@@ -27,10 +31,18 @@ export async function login(username, password) {
  * @returns {Promise<*>} Return all slides
  */
 export async function getSlides() {
-  client.$connect();
-  let results = await client.slide.findMany();
-  client.$disconnect();
-  return results;
+  const cachedData = cache.get("slides");
+
+  if (!cachedData) {
+    client.$connect();
+    let results = await client.slide.findMany();
+    client.$disconnect();
+    cache.set("slides", results);
+    console.log("Used DATABASE");
+    return results;
+  }
+  console.log("Used CACHE");
+  return cachedData;
 }
 
 /**
@@ -45,6 +57,12 @@ export async function updateSlide(data) {
     data,
   });
   client.$disconnect();
+
+  //Updating the cache
+  client.$connect();
+  let results = await client.slide.findMany();
+  client.$disconnect();
+  cache.set("slides", results);
 }
 
 /**
@@ -64,10 +82,9 @@ export async function getUsers() {
  * @returns {Promise<void>}
  */
 export async function createUser(data) {
-  data.id = null;
-  data.password = await bcrypt.hash(data.password);
+  data.password = await bcrypt.hash(data.password, salt);
   client.$connect();
-  client.user.create({data});
+  await client.user.create({data});
   client.$disconnect();
 }
 
@@ -79,8 +96,8 @@ export async function createUser(data) {
 export async function updateUser(data) {
   data.password = await bcrypt.hash(data.password, salt);
   client.$connect();
-  await client.slide.update({
-    where: {id: data.id},
+  await client.user.update({
+    where: {id: parseInt(data.id)},
     data,
   });
   client.$disconnect();
@@ -102,10 +119,16 @@ export async function deleteUser(id) {
  * @returns {Promise<void>} all the events
  */
 export async function getEvents() {
-  client.$connect();
-  let results = await client.event.findMany();
-  client.$disconnect();
-  return results;
+  const cachedData = cache.get("events");
+
+  if (!cachedData || cachedData.length === 0) {
+    client.$connect();
+    let results = await client.event.findMany();
+    client.$disconnect();
+    cache.set("events", results);
+    return results;
+  }
+  return cachedData;
 }
 
 /**

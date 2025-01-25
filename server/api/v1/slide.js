@@ -1,3 +1,5 @@
+import {getSlides, updateSlide} from "~/server/database";
+
 /**
  * @openapi
  * /slide:
@@ -68,13 +70,14 @@
  *                   type: string
  *                   example: "{error message}"
  */
-function handler(req) {
+async function handler(req) {
   try {
     switch(req.method) {
       case "PUT":
+        updateSlide(await readBody(req));
         return new Response(JSON.stringify({message:"Slide updated successfully."}), {status: 200});
       case "GET":
-        return new Response(JSON.stringify([{id: 1, name: "Test", active: true}]), {status: 200});
+        return new Response(JSON.stringify(await getSlides()), {status: 200});
       default:
         return new Response(JSON.stringify({message:"Only PUT an GET methods allowed"}), {status: 405});
     }

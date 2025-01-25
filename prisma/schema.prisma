@@ -32,6 +32,7 @@ model Event {
 
 model Slide {
   id     Int     @id @default(autoincrement())
+  name   String
   active Boolean
   time   Int
 }

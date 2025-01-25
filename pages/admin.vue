@@ -6,6 +6,10 @@ import {ScrollArea} from "../components/ui/scroll-area";
 import {Switch} from "../components/ui/switch";
 import {Input} from "../components/ui/input";
 
+let slides = ref([]);
+let compareSlidesUser = ref([]);
+
+
 /**
  * Make a deep clone from and object
  * @param o object to clone
@@ -15,104 +19,39 @@ const deepObjectClone = (o) => {
   return JSON.parse(JSON.stringify(o));
 };
 
-const slides = ref([
-  {
-    id: 0,
-    name: "Test1",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 1,
-    name: "Test2",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 2,
-    name: "Test3",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 3,
-    name: "Test4",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 4,
-    name: "Test5",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 5,
-    name: "Test6",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 6,
-    name: "Test7",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 7,
-    name: "Test8",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 8,
-    name: "Test9",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 9,
-    name: "Test10",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 10,
-    name: "Test11",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 11,
-    name: "Test12",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 12,
-    name: "Test13",
-    time: 10,
-    active: true,
-  },
-  {
-    id: 13,
-    name: "Test14",
-    time: 10,
-    active: true,
-  }
-]);
+/**
+ * Fill the content related to the slides
+ * @returns {Promise<void>}
+ */
+const initSlides = async () => {
+  let res = await fetch("/info/api/v1/slide");
+  let data = await res.json();
+  slides.value = deepObjectClone(data);
+  compareSlidesUser.value = [...deepObjectClone(slides.value)];
+};
 
-let _tmp = deepObjectClone(slides.value);
-let compareSlidesUser = ref([..._tmp]);
 
-watch(compareSlidesUser.value, () => {
-  for(let s of compareSlidesUser.value) {
-    if(!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
-      console.log(s);
-      slides.value[s.id] = deepObjectClone(s);
+/**
+ * Initializes the page
+ * @returns {Promise<void>}
+ */
+const init = async () => {
+
+  await initSlides();
+
+  watch(compareSlidesUser.value, async () => {
+    for(let s of compareSlidesUser.value) {
+      if(!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
+        slides.value[s.id - 1] = deepObjectClone(s);
+        let res = await fetch("/info/api/v1/slide", {method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(s)});
+        console.log(res);
+      }
     }
-  }
-});
+  });
+};
+
+init();
+
 </script>
 
 <template>
@@ -133,11 +72,11 @@ watch(compareSlidesUser.value, () => {
               </TableRow>
             </TableHeader>
               <TableBody>
-                <TableRow v-for="item in compareSlidesUser" :key="item.id">
+                <TableRow v-for="item in compareSlidesUser" :key="item.id - 1">
                   <TableCell class="text-center">{{ item.name }}</TableCell>
                   <TableCell><Input type="number" v-model=item.time class="text-center" /></TableCell>
                   <TableCell class="text-center"><Switch :checked=item.active @update:checked="(value) => {
-                    compareSlidesUser[item.id].active = value;
+                    compareSlidesUser[item.id - 1].active = value;
                   }" /></TableCell>
                 </TableRow>
               </TableBody>

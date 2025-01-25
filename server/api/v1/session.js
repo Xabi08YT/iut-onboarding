@@ -1,3 +1,5 @@
+import {login} from "~/server/database";
+
 /**
  * @openapi
  * /session:
@@ -92,10 +94,13 @@
  *                   type: string
  *                   example: "Internal Server Error: {error message}"
  */
-function handler(req) {
+async function handler(req) {
+  let data;
   try {
     switch(req.method) {
       case "POST":
+        data = await readBody(req);
+        let res = await login(data.username, data.password);
         return new Response(JSON.stringify({message:"Welcome !"}), {status: 201});
       case "PUT":
         return new Response(JSON.stringify({message: "Token modified successfully."}), {status: 200});

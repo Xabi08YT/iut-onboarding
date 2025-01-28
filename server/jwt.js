@@ -31,6 +31,7 @@ export async function verifyToken(token) {
   } catch (e) {
     // token verification failed
     console.log("Token is invalid");
+    console.error(e);
     return false;
   }
 }

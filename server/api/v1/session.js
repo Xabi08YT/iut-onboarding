@@ -120,19 +120,18 @@ async function handler(req) {
         token = await createToken(res);
         return new Response("", {status: 201, headers: {"Set-Cookie": token}});
       case "PUT":
-        token = exchangeToken(req.headers.cookie);
-        if(await verifyToken(req.headers.cookie) === false || token === -1) {
+        token = exchangeToken(getHeader(req, "cookie"));
+        if(await verifyToken(getHeader(req, "cookie")) === false || token === -1) {
           return new Response(JSON.stringify({message:"Session expired or token is invalid."}), {status: 401});
         }
         return new Response(JSON.stringify({message: "Token modified successfully."}), {status: 200, headers: {"Set-Cookie": token} });
       case "DELETE":
-        if(await verifyToken(req.headers.cookie) === false) {
+        if(await verifyToken(getHeader(req, "cookie")) === false) {
           return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
         }
         return new Response("", {status: 200, headers: {"Set-Cookie": ""}});
       case "GET":
-        console.log(getHeader(req, "cookie"));
-        if(await verifyToken(req.headers.cookie) === false) {
+        if(await verifyToken(getHeader(req, "cookie")) === false) {
           return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
         }
         return new Response("", {status: 200});

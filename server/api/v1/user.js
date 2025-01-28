@@ -1,4 +1,5 @@
 import {createUser, deleteUser, getUsers, updateUser} from "~/server/database";
+import {getRole, verifyToken} from "~/server/jwt";
 
 /**
  * @openapi
@@ -42,8 +43,6 @@ import {createUser, deleteUser, getUsers, updateUser} from "~/server/database";
  *         description: "User token has expired"
  *       403:
  *         description: "Insufficient access"
- *       410:
- *         description: "This user does not exist."
  *   delete:
  *     tags:
  *      - User management
@@ -61,6 +60,14 @@ import {createUser, deleteUser, getUsers, updateUser} from "~/server/database";
  *         description: "This user does not exist."
  */
 async function handler(req) {
+  if(await verifyToken(req.headers.authorization) === false) {
+    return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+  }
+
+  if(!getRole(req.headers.authorization).contains("ADMIN")) {
+    return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
+  }
+
   if(req.method === "GET") {
     return new Response(JSON.stringify(await getUsers()), {status: 200});
   }

@@ -152,9 +152,9 @@ const PROMOTIONS = ["INFO_BUT_S1", "INFO_BUT_S3", "INFO_BUT_S5"];
             ical: url,
             type: group.includes("UT")
               ? "promo"
-              : group.includes("'") || group.includes('"')
-              ? "group"
-              : "class",
+              : group.includes("'") || group.includes("\"")
+                ? "group"
+                : "class",
           });
 
           spinner.text = `${group} ical Id is : ${url}`;
@@ -185,7 +185,7 @@ const PROMOTIONS = ["INFO_BUT_S1", "INFO_BUT_S3", "INFO_BUT_S5"];
   const icals = {};
 
   promos.forEach((promo) => {
-    if (typeof promo == undefined) {
+    if (typeof promo === "undefined") {
       return;
     }
     const promoKey = promo.group.replace(" ", "_").toLowerCase();

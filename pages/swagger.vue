@@ -14,7 +14,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="swagger-ui">Coming soon</div>
+  <div id="swagger-ui">Loading swagger...</div>
 </template>
 
 <style>

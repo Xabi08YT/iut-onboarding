@@ -2,22 +2,37 @@
 import {Input} from "../components/ui/input";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../components/ui/card";
 import {Button} from "../components/ui/button";
+import {toast, Toaster, useToast} from "../components/ui/toast";
 
 let username = "";
 let password = "";
 
 const login = async () => {
-  await fetch("/info/api/v1/session", {
+  let res = await fetch("/info/api/v1/session", {
     headers: {"Content-Type": "application/json"}, method: "POST", body: JSON.stringify({
       username,
       password
     })});
+
+  if(res.ok) {
+    toast({
+      title: "Utilisateur connecté",
+    });
+    return navigateTo("/admin");
+  }
+
+  toast({
+    title: "Une erreur est survenue",
+    description: await res.json().then(data => data.message),
+    variant: "destructive",
+  });
 };
 
 </script>
 
 <template>
   <div class="flex justify-center items-center gap-2 w-screen h-screen" id="login">
+    <Toaster />
     <Card class="max-w-md">
       <CardHeader>
         <CardTitle>Connexion</CardTitle>
@@ -25,10 +40,10 @@ const login = async () => {
       </CardHeader>
       <CardContent class="">
         <Input type="text" placeholder="username" class="mt-[5px]" v-model="username"/>
-        <Input type="password" placeholder="password" class="mt-[5px]" v-model="username"/>
+        <Input type="password" placeholder="password" class="mt-[5px]" v-model="password"/>
       </CardContent>
       <CardFooter>
-        <Button class="mt-[5px] w-full">Se connecter</Button>
+        <Button class="mt-[5px] w-full" @click="login">Se connecter</Button>
       </CardFooter>
     </Card>
   </div>

@@ -19,11 +19,12 @@ const cache = new NodeCache({stdTTL: 10 * 60});
 export async function login(username, password) {
   client.$connect();
   let user = await client.user.findFirst({where: {username}});
+  console.log(user);
   client.$disconnect();
   if(!user) {
     return {ok: false, user:null};
   }
-  return {ok:bcrypt.compare(password,user[0].password),user};
+  return {ok:bcrypt.compare(password,user.password),user};
 }
 
 /**
@@ -51,6 +52,7 @@ export async function getSlides() {
  * @returns {Promise<void>}
  */
 export async function updateSlide(data) {
+  data.time = parseInt(data.time);
   client.$connect();
   await client.slide.update({
     where: {id: data.id},

@@ -5,6 +5,8 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../
 import {ScrollArea} from "../components/ui/scroll-area";
 import {Switch} from "../components/ui/switch";
 import {Input} from "../components/ui/input";
+import {Toaster} from "../components/ui/toast";
+
 
 let slides = ref([]);
 let compareSlidesUser = ref([]);
@@ -36,6 +38,13 @@ const initSlides = async () => {
  * @returns {Promise<void>}
  */
 const init = async () => {
+  let loggedIn =  await fetch("/info/api/v1/session");
+
+  console.log(loggedIn);
+
+  if(!loggedIn.ok) {
+    return navigateTo("/login");
+  }
 
   await initSlides();
 
@@ -56,6 +65,7 @@ init();
 
 <template>
   <div id="container" class="w-screen min-h-screen lg:h-screen flex flex-col lg:flex-row p-[25px] justify-center items-center">
+    <Toaster />
     <Card class="my-[25px] mx-0 min-w-1/2 min-h-[400px] lg:my-0 lg:mr-[40px] lg:w-1/2 lg:h-full">
       <CardHeader>
         <CardTitle>Slides actives</CardTitle>

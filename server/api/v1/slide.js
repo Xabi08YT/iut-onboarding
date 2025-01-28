@@ -1,4 +1,5 @@
 import {getSlides, updateSlide} from "~/server/database";
+import {verifyToken} from "~/server/jwt";
 
 /**
  * @openapi
@@ -74,6 +75,9 @@ async function handler(req) {
   try {
     switch(req.method) {
       case "PUT":
+        if(await verifyToken(req.headers.cookie) === false) {
+          return new Response(JSON.stringify({message: "Session expired"}), {status: 401});
+        }
         updateSlide(await readBody(req));
         return new Response(JSON.stringify({message:"Slide updated successfully."}), {status: 200});
       case "GET":

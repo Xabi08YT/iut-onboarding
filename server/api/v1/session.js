@@ -1,4 +1,5 @@
 import {login} from "~/server/database";
+import {createToken, exchangeToken, verifyToken} from "~/server/jwt";
 
 /**
  * @openapi
@@ -6,10 +7,10 @@ import {login} from "~/server/database";
  *   get:
  *     tags:
  *      - Session management
- *     description: "Check resource validity."
+ *     description: "Check JWT validity."
  *     responses:
  *       200:
- *         description: "Resource is valid."
+ *         description: "JWT is valid."
  *         content:
  *           application/json:
  *             schema:
@@ -18,13 +19,15 @@ import {login} from "~/server/database";
  *                 valid:
  *                   type: boolean
  *                   example: true
+ *       401:
+ *         description: "JWT Expired or missing."
  *   post:
  *     tags:
  *      - Session management
- *     description: "Create a new resource and return a welcome message."
+ *     description: "Create a new JWT."
  *     responses:
  *       201:
- *         description: "Welcome message."
+ *         description: "JWT appplication + message."
  *         content:
  *           application/json:
  *             schema:
@@ -33,12 +36,14 @@ import {login} from "~/server/database";
  *                 message:
  *                   type: string
  *                   example: "Welcome !"
+ *       403:
+ *         description: "Wrong username or password"
  *   put:
  *     tags:
  *      - Session management
  *     security:
  *      - JWT: []
- *     description: "Modify a resource and confirm the modification."
+ *     description: "Replace the current JWT by a newer one IF VALID"
  *     responses:
  *       200:
  *         description: "Token modified successfully."
@@ -50,12 +55,14 @@ import {login} from "~/server/database";
  *                 message:
  *                   type: string
  *                   example: "Token modified successfully."
+ *       401:
+ *         description: "JWT Expired or missing."
  *   delete:
  *     tags:
  *      - Session management
  *     security:
  *      - JWT: []
- *     description: "Delete a resource and return a goodbye message."
+ *     description: "Delete the JWT and return a goodbye message."
  *     responses:
  *       200:
  *         description: "Goodbye message."
@@ -67,6 +74,8 @@ import {login} from "~/server/database";
  *                 message:
  *                   type: string
  *                   example: "Goodbye !"
+ *       401:
+ *         description: "JWT Expired or missing."
  *   default:
  *     description: "Handle unsupported HTTP methods."
  *     responses:
@@ -96,18 +105,37 @@ import {login} from "~/server/database";
  */
 async function handler(req) {
   let data;
+  let res;
+  let token;
   try {
     switch(req.method) {
       case "POST":
         data = await readBody(req);
-        let res = await login(data.username, data.password);
-        return new Response(JSON.stringify({message:"Welcome !"}), {status: 201});
+        console.log(data);
+        res = await login(data.username, data.password);
+        console.log(res);
+        if(res == null ||  !res.ok) {
+          return new Response(JSON.stringify({message: "Incorrect credentials"}), {status: 403});
+        }
+        token = await createToken(res);
+        return new Response("", {status: 201, headers: {"Set-Cookie": token}});
       case "PUT":
-        return new Response(JSON.stringify({message: "Token modified successfully."}), {status: 200});
+        token = exchangeToken(req.headers.cookie);
+        if(await verifyToken(req.headers.cookie) === false || token === -1) {
+          return new Response(JSON.stringify({message:"Session expired or token is invalid."}), {status: 401});
+        }
+        return new Response(JSON.stringify({message: "Token modified successfully."}), {status: 200, headers: {"Set-Cookie": token} });
       case "DELETE":
-        return new Response(JSON.stringify({message: "Goodbye !"}), {status: 200});
+        if(await verifyToken(req.headers.cookie) === false) {
+          return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
+        }
+        return new Response("", {status: 200, headers: {"Set-Cookie": ""}});
       case "GET":
-        return new Response(JSON.stringify({valid: true}), {status: 200});
+        console.log(getHeader(req, "cookie"));
+        if(await verifyToken(req.headers.cookie) === false) {
+          return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
+        }
+        return new Response("", {status: 200});
       default:
         return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
     }

@@ -1,12 +1,19 @@
-import * as jwt from "jsonwebtoken";
-import * as dotenv from "dotenv";
+import * as jose from "jose";
 import * as uuid from "uuid";
+import dotenv from "dotenv";
+import crypto from "crypto";
 
-let cfg = dotenv.config();
+const cfg = dotenv.config();
+const secretKey = crypto.createSecretKey(cfg.parsed.JWT_SECRET, "utf-8");
 
 export async function createToken(data) {
   data.id = uuid.v4();
-  return jwt.sign(data, cfg.JWT_SECRET,{ expiresIn: "10m" });
+  return await new jose.SignJWT(data).setProtectedHeader({alg: "HS256"})
+    .setIssuedAt()
+    .setIssuer(cfg.parsed.JWT_ISSUER)
+    .setAudience(cfg.parsed.JWT_AUDIENCE)
+    .setExpirationTime("10m")
+    .sign(secretKey);
 }
 
 export async function exchangeToken(token) {
@@ -14,9 +21,25 @@ export async function exchangeToken(token) {
 }
 
 export async function verifyToken(token) {
-  return jwt.verify(token, cfg.JWT_SECRET);
+  try {
+    // verify token
+    const { payload, protectedHeader } = await jose.jwtVerify(token, secretKey, {
+      issuer: cfg.parsed.JWT_ISSUER, // issuer
+      audience: cfg.parsed.JWT_AUDIENCE, // audience
+    });
+    return payload;
+  } catch (e) {
+    // token verification failed
+    console.log("Token is invalid");
+    return false;
+  }
 }
 
 export async function getUID(token) {
-  return jwt.verify(token, cfg.JWT_SECRET) ? jwt.verify(token, cfg.JWT_SECRET).uid : -1;
+  return verifyToken(token) ? verifyToken(token).uid : -1;
 }
+
+export async function getRole(token) {
+  return verifyToken(token) ? verifyToken(token).role : -1;
+}
+

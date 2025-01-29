@@ -12,7 +12,7 @@ export async function createToken(data) {
     .setIssuedAt()
     .setIssuer(cfg.parsed.JWT_ISSUER)
     .setAudience(cfg.parsed.JWT_AUDIENCE)
-    .setExpirationTime("10m")
+    .setExpirationTime("30m")
     .sign(secretKey);
 }
 

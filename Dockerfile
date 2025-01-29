@@ -3,4 +3,4 @@ WORKDIR /server
 COPY . /server
 RUN npm ci
 RUN npm run build
-CMD node .output/server/index.mjs
+CMD ["sh","setup.sh","&&","node",".output/server/index.mjs"]

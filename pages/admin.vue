@@ -5,7 +5,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../
 import {ScrollArea} from "../components/ui/scroll-area";
 import {Switch} from "../components/ui/switch";
 import {Input} from "../components/ui/input";
-import {Toaster} from "../components/ui/toast";
+import {toast, Toaster} from "../components/ui/toast";
 
 
 let slides = ref([]);
@@ -49,11 +49,22 @@ const init = async () => {
   await initSlides();
 
   watch(compareSlidesUser.value, async () => {
+    console.log("Change detected");
     for(let s of compareSlidesUser.value) {
       if(!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
         slides.value[s.id - 1] = deepObjectClone(s);
         let res = await fetch("/info/api/v1/slide", {method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(s)});
-        console.log(res);
+        if(res.ok) {
+          toast({
+            title: "Slide updated successfully",
+          });
+        } else {
+          toast({
+            title: "Slide was not updated",
+            description: (await res.json()).message,
+            variant: "destructive",
+          });
+        }
       }
     }
   });
@@ -82,11 +93,11 @@ init();
               </TableRow>
             </TableHeader>
               <TableBody>
-                <TableRow v-for="item in compareSlidesUser" :key="item.id - 1">
+                <TableRow v-for="(item, index) in compareSlidesUser " :key="index" >
                   <TableCell class="text-center">{{ item.name }}</TableCell>
                   <TableCell><Input type="number" v-model=item.time class="text-center" /></TableCell>
                   <TableCell class="text-center"><Switch :checked=item.active @update:checked="(value) => {
-                    compareSlidesUser[item.id - 1].active = value;
+                    compareSlidesUser[index].active = value;
                   }" /></TableCell>
                 </TableRow>
               </TableBody>

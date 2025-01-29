@@ -95,6 +95,40 @@ export default {
   data() {
     return {
       currentView: "planning",
+      slidesParameters: reactive({
+        meme: {
+          time: 10 * 1000,
+          active: true,
+        },
+        transport: {
+          time: 10 * 1000,
+          active: true,
+        },
+        plannings: {
+          time: 10 * 1000,
+          active: true,
+        },
+        weather: {
+          time: 10 * 1000,
+          active: true,
+        },
+        discord: {
+          time: 10 * 1000,
+          active: true,
+        },
+        maintainer: {
+          time: 10 * 1000,
+          active: true,
+        },
+        announcements: {
+          time: 10 * 1000,
+          active: true,
+        },
+        menu: {
+          time: 10 * 1000,
+          active: true,
+        }
+      }),
       views: {
         /*
           To active only one or some views, juste comment here what you dont want to be
@@ -104,24 +138,24 @@ export default {
           The order in the object is the display order
         */
         lundi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 1,
+          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 1,
         },
         mardi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 2,
+          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 2,
         },
         mercredi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 3,
+          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 3,
         },
         jeudi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 4,
+          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 4,
         },
         vendredi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 5,
+          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 5,
         },
         planning: {
           time: () => DEVELOPEMENT_MODE ? 5000 : this.returnTimeForPlanning(),
@@ -129,46 +163,38 @@ export default {
             // 6h to 17h30
             const currentTime =
             new Date().getHours() * 60 + new Date().getMinutes();
-            return currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30;
+            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30;
           }
         },
         transport: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.getTimeForBusesAndWeather(),
-          allowed: () => true,
+          allowed: () => this.slidesParameters.transport.active,
         },
         weather: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 7 * 1000,
-          allowed: () => true,
+          allowed: () => this.slidesParameters.weather.active,
         },
         menus: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
           allowed: () => {
             // 6h to 14h
             let currentHour = new Date().getHours();
-            return currentHour >= 6 && currentHour < 14;
+            return this.slidesParameters.menu.active && currentHour >= 6 && currentHour < 14;
           },
         },
         /* Enable this at the start of each year (The QR code has to be updated)*/
         discord: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => false,
+          allowed: () => this.slidesParameters.discord.active,
         },
         /* Enable when looking for new maintainers */
         maintainer: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 10,
-          allowed: () => true && !this.isEndOfDay(),
+          allowed: () => this.slidesParameters.maintainer.active && !this.isEndOfDay(),
         },
         announcement: {
           time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => false && !this.isEndOfDay(),
-        },
-        tannouncement: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => false && !this.isEndOfDay(),
-        },
-        welcAmericans: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 10,
-          allowed: () => false && !this.isEndOfDay(),
+          allowed: () => this.slidesParameters.announcements.active &&  !this.isEndOfDay(),
         }
       },
     };
@@ -211,8 +237,7 @@ export default {
      */
     changeView() {
       this.currentView = this.getNextViewName();
-      if (
-        this.views[this.currentView].allowed() === false &&
+      if (this.views[this.currentView].allowed() === false &&
         !DEVELOPEMENT_MODE
       ) {
         this.changeView();
@@ -260,10 +285,26 @@ export default {
         return 1000 * 60 * 10; // Forcing for 10 minutes
       return 1000 * 10;
     },
+    /**
+     * Refresh enabled slides and display time of these slides.
+     * @returns {Promise<void>}
+     */
+    async refreshEnabledSlides() {
+      console.log("Refreshing slide parameters...");
+      let res = await fetch(`${useRequestURL()}api/v1/slide`).then(res => res.json());
+      let slides = {};
+      for (let slide of res) {
+        slides[slide.name] = {active: slide.active, time: slide.time};
+      }
+      this.slidesParameters = slides;
+    }
   },
-  mounted() {
+  async mounted() {
+    await this.refreshEnabledSlides();
     this.$refs.background && this.$refs.background.next();
     this.changeView();
+    //refreshing every 30 sec
+    setInterval(this.refreshEnabledSlides, 10 * 1000);
   },
   components: {
     Planning,

@@ -19,7 +19,6 @@ const cache = new NodeCache({stdTTL: 10 * 60});
 export async function login(username, password) {
   client.$connect();
   let user = await client.user.findFirst({where: {username}});
-  console.log(user);
   client.$disconnect();
   if(!user) {
     return {ok: false, user:null};
@@ -36,13 +35,11 @@ export async function getSlides() {
 
   if (!cachedData) {
     client.$connect();
-    let results = await client.slide.findMany();
+    let results = await client.slide.findMany({orderBy: {name: "asc"}});
     client.$disconnect();
     cache.set("slides", results);
-    console.log("Used DATABASE");
     return results;
   }
-  console.log("Used CACHE");
   return cachedData;
 }
 
@@ -78,6 +75,9 @@ export async function getUsers() {
       id: true,
       username: true,
       role: true,
+    },
+    orderBy: {
+      username:"asc",
     }
   });
   client.$disconnect();

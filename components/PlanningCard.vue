@@ -34,7 +34,7 @@
       </div>
       <div v-else style="opacity: 0.5" class="data-container">
         <div class="subject-info">
-          <img style="width: 35%;" :src="noClassLogo" />
+          <img style="width: 35%; margin-left: 33.5%" :src="noClassLogo" />
           <p>Pas cours</p>
         </div>
       </div>
@@ -160,7 +160,6 @@ export default {
 
   display: flex;
   flex-direction: column;
-  align-items: space-evenly;
   justify-content: space-evenly;
 }
 
@@ -173,16 +172,18 @@ export default {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  text-align: center;
 }
 
 .subject-infos > p {
   margin-right: 10px;
   margin-left: 10px;
   line-height: 40px;
+  max-width: 75%;
 }
 
-.subject-infos > p {
-  max-width: 75%;
+.subject-infos > img {
+  justify-self: center;
 }
 
 .room {

@@ -111,9 +111,7 @@ async function handler(req) {
     switch(req.method) {
       case "POST":
         data = await readBody(req);
-        console.log(data);
         res = await login(data.username, data.password);
-        console.log(res);
         if(res == null ||  !res.ok) {
           return new Response(JSON.stringify({message: "Incorrect credentials"}), {status: 403});
         }

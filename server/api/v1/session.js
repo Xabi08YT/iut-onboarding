@@ -120,7 +120,7 @@ async function handler(req) {
         token = await createToken(res);
         return new Response("", {status: 201, headers: {"Set-Cookie": token}});
       case "PUT":
-        token = exchangeToken(getHeader(req, "cookie"));
+        token = await exchangeToken(getHeader(req, "cookie"));
         if(await verifyToken(getHeader(req, "cookie")) === false || token === -1) {
           return new Response(JSON.stringify({message:"Session expired or token is invalid."}), {status: 401});
         }

@@ -78,7 +78,7 @@ async function handler(req) {
         if(await verifyToken(getHeader(req, "cookie")) === false) {
           return new Response(JSON.stringify({message: "Session expired"}), {status: 401});
         }
-        updateSlide(await readBody(req));
+        await updateSlide(await readBody(req));
         return new Response(JSON.stringify({message:"Slide updated successfully."}), {status: 200});
       case "GET":
         return new Response(JSON.stringify(await getSlides()), {status: 200});

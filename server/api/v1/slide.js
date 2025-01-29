@@ -1,5 +1,5 @@
 import {getSlides, updateSlide} from "~/server/database";
-import {verifyToken} from "~/server/jwt";
+import {exchangeToken, verifyToken} from "~/server/jwt";
 
 /**
  * @openapi
@@ -72,6 +72,7 @@ import {verifyToken} from "~/server/jwt";
  *                   example: "{error message}"
  */
 async function handler(req) {
+  let newToken;
   try {
     switch(req.method) {
       case "PUT":

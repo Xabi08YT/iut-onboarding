@@ -97,35 +97,35 @@ export default {
       currentView: "planning",
       slidesParameters: reactive({
         meme: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         },
         transport: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         },
         plannings: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         },
         weather: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         },
         discord: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         },
         maintainer: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         },
         announcements: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         },
         menu: {
-          time: 10 * 1000,
+          time: 10,
           active: true,
         }
       }),
@@ -138,23 +138,23 @@ export default {
           The order in the object is the display order
         */
         lundi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
           allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 1,
         },
         mardi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
           allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 2,
         },
         mercredi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
           allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 3,
         },
         jeudi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
           allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 4,
         },
         vendredi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
           allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 5,
         },
         planning: {
@@ -167,15 +167,15 @@ export default {
           }
         },
         transport: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : this.getTimeForBusesAndWeather(),
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.isEndOfDay() ? 30 * 1000 : this.slidesParameters.transport.time * 1000,
           allowed: () => this.slidesParameters.transport.active,
         },
         weather: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7 * 1000,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.isEndOfDay() ? 30 * 1000 : this.slidesParameters.weather.time * 1000,
           allowed: () => this.slidesParameters.weather.active,
         },
         menus: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.menu.time * 1000,
           allowed: () => {
             // 6h to 14h
             let currentHour = new Date().getHours();
@@ -184,16 +184,16 @@ export default {
         },
         /* Enable this at the start of each year (The QR code has to be updated)*/
         discord: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.discord.time * 1000,
           allowed: () => this.slidesParameters.discord.active,
         },
         /* Enable when looking for new maintainers */
         maintainer: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 10,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.maintainer.time * 1000,
           allowed: () => this.slidesParameters.maintainer.active && !this.isEndOfDay(),
         },
         announcement: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.announcements.time * 1000,
           allowed: () => this.slidesParameters.announcements.active &&  !this.isEndOfDay(),
         }
       },
@@ -208,17 +208,6 @@ export default {
     isEndOfDay() {
       const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
       return currentTime > (17 * 60 + 30);
-    },
-
-    /**
-     * @return the time to show the weather and transport card depending on current Hour
-     */
-    getTimeForBusesAndWeather() {
-      const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
-      if(currentTime > 17 * 60 + 30) {
-        return 60000;
-      }
-      return 7000;
     },
 
     /**

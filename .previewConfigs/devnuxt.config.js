@@ -1,35 +1,44 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default {
-    compatibilityDate: '2024-04-03',
+    compatibilityDate: "2024-04-03",
     devtools: { enabled: true },
     modules: [
-        '@nuxtjs/google-fonts',
-        '@nuxtjs/tailwindcss',
-        'shadcn-nuxt',
-        'nuxt-lucide-icons'
+        "@nuxtjs/google-fonts",
+        "@nuxtjs/tailwindcss",
+        "shadcn-nuxt",
+        "nuxt-lucide-icons",
     ],
-  
-    app: {
-      baseURL: '/preview/info/'
+
+    lucide: {
+        namePrefix: "Lucide"
     },
-  
+
+    css: ["./stylesheets/global.css"],
+
+    app: {
+        baseURL: "/preview/info/"
+    },
+
     googleFonts: {
-      display: 'swap',
-      outputDir: 'assets/fonts/',
-      families: {
-        Fredoka: {
-          wght: ["75..125",500]
-        },
-        Poppins: {
-          wght: 300
+        display: "swap",
+        outputDir: "assets/fonts/",
+        families: {
+            Fredoka: {
+                wght: ["75..125",500]
+            },
+            Poppins: {
+                wght: 300
+            }
         }
-      }
     },
 
     routeRules: {
-      "/api/hp/**": {
-        proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
-      }
+        "api/hp/**": {
+            proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
+        },
+        "/admin/**": { ssr: false },
+        // Add cors headers
+        "/api/v1/**": { cors: true },
     },
 
     shadcn: {
@@ -43,4 +52,4 @@ export default {
          */
         componentDir: "./components/ui"
     }
-  };
+};

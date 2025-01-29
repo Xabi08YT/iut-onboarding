@@ -131,11 +131,7 @@ export default {
       }),
       views: {
         /*
-          To active only one or some views, juste comment here what you dont want to be
-          displayed.
-          If only one view is uncommented, the slide show will be disabled (Usefull for development).
-
-          The order in the object is the display order
+          All parameters related to slides are managed in the admin panel (ROOT_URL/admin/)
         */
         lundi: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,

@@ -9,6 +9,10 @@ export default {
     "nuxt-lucide-icons",
   ],
 
+  lucide: {
+    namePrefix: "Lucide"
+  },
+
   css: ["./stylesheets/global.css"],
 
   app: {

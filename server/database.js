@@ -131,7 +131,7 @@ export async function getEvents() {
 
   if (!cachedData || cachedData.length === 0) {
     client.$connect();
-    let results = await client.event.findMany();
+    let results = await client.event.findMany({orderBy: {startTS: "asc"}});
     client.$disconnect();
     cache.set("events", results);
     return results;

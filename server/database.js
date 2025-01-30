@@ -165,7 +165,9 @@ export async function createEvent(data) {
 export async function updateEvent(data) {
   client.$connect();
   await client.event.update({
-    where: {id: data.id},
+    where: {
+      id: parseInt(data.id),
+    },
     data,
   });
   client.$disconnect();

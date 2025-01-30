@@ -36,7 +36,6 @@ export default {
         "api/hp/**": {
             proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
         },
-        "/admin/**": { ssr: false },
         // Add cors headers
         "/api/v1/**": { cors: true },
     },

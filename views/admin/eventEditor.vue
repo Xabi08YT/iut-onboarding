@@ -6,8 +6,19 @@ import {ScrollArea} from "../../components/ui/scroll-area";
 import {Button} from "../../components/ui/button";
 import {toast} from "../../components/ui/toast";
 import {deepObjectClone} from "../../lib/utils";
+import {DialogClose, DialogHeader} from "../../components/ui/dialog";
+import {Input} from "../../components/ui/input";
+import {Label} from "../../components/ui/label";
+import {Textarea} from "../../components/ui/textarea";
 
 let events = ref([]);
+
+let modTitle = ref("");
+let modDescription = ref("");
+let modDateBeg = ref();
+let modDateEnd = ref();
+let modValid = ref(false);
+
 const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
 
 /**
@@ -68,6 +79,7 @@ const deleteEvent = async (id) => {
 const editEvent = async (modified) => {
   let res = await fetch("/info/api/v1/event", {
     method: "PUT",
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modified)
   });
   if(res.ok) {
@@ -94,6 +106,7 @@ const editEvent = async (modified) => {
 const addEvent = async (newEvent) => {
   let res = await fetch("/info/api/v1/event", {
     method: "POST",
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newEvent)
   });
   if(res.ok) {
@@ -125,6 +138,10 @@ const init = async () => {
 
   await initEvents();
 };
+
+watch([modTitle,modDescription,modDateEnd,modDateBeg], () => {
+  modValid.value = (new Date(modDateBeg.value) < new Date(modDateEnd.value) && 0 < modTitle.value.length < 101 && 0 < modDescription.value.length < 201);
+});
 
 init();
 </script>
@@ -169,8 +186,19 @@ init();
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Modifier une annonce</DialogTitle>
-                      <DialogDescription>Ici vous pouvez editer une annonce existante.</DialogDescription>
+                      <DialogDescription>Ici vous pouvez editer une annonce existante. <br/> Note: Les changements doivent être appliqués.</DialogDescription>
                     </DialogHeader>
+                    <Label for="titleEventModify">Titre ({{modTitle.length}}/100)</Label>
+                    <Input id="titleEventModify" v-model="modTitle"/>
+                    <Label for="descriptionEventModify">Description ({{modDescription.length}}/200)</Label>
+                    <Textarea id="descriptionEventModify" v-model="modDescription"/>
+                    <Label for="beginEventModify">Date de début de l'affichage</Label>
+                    <Input id="beginEventModify" type="datetime-local" v-model="modDateBeg"/>
+                    <Label for="endEventModify">Date de fin de l'affichage</Label>
+                    <Input id="endEventModify" type="datetime-local" v-model="modDateEnd"/>
+                    <DialogClose as-child>
+                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: null, channel: 1})">Appliquer</Button>
+                    </DialogClose>
                   </DialogContent>
                 </Dialog>
                 <Button variant="destructive" @click=deleteEvent(item.id)>

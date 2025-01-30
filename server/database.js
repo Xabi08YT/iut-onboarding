@@ -149,6 +149,12 @@ export async function createEvent(data) {
   client.$connect();
   client.event.create({data});
   client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  client.$disconnect();
+  cache.set("events", results);
 }
 
 /**
@@ -163,6 +169,12 @@ export async function updateEvent(data) {
     data,
   });
   client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  client.$disconnect();
+  cache.set("events", results);
 }
 
 /**
@@ -172,6 +184,11 @@ export async function updateEvent(data) {
  */
 export async function deleteEvent(id) {
   client.$connect();
-  client.event.delete({where: {id}});
+  await client.event.delete({where: {id: parseInt(id)}});
   client.$disconnect();
+  //Update cache
+  client.$connect();
+  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  client.$disconnect();
+  cache.set("events", results);
 }

@@ -18,11 +18,9 @@ import {
 
 
 let slides = ref([]);
+let compareSlidesUser = ref([]);
 let events = ref([]);
 let users = ref([]);
-let compareSlidesUser = ref([]);
-let compareEvents = ref([]);
-let compareUser = ref([]);
 const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
 
 /**
@@ -66,9 +64,7 @@ const initSlides = async () => {
 const initEvents = async () => {
   let res = await fetch("/info/api/v1/event");
   let data = await res.json();
-  console.log(data);
   events.value = deepObjectClone(data);
-  compareEvents.value = [...deepObjectClone(events.value)];
 };
 
 /**
@@ -79,13 +75,17 @@ const initUsers = async () => {
   let res = await fetch("/info/api/v1/user");
   let data = await res.json();
   users.value = deepObjectClone(data);
-  compareUser.value = [...deepObjectClone(users.value)];
 };
 
-const deleteEvents = async (id) => {
+/**
+ * Call the api to delete the event with the furnished id
+ * @param id
+ * @returns {Promise<void>}
+ */
+const deleteEvent = async (id) => {
   let res = await fetch("/info/api/v1/event", {
     method: "DELETE",
-    body: JSON.stringify({id})
+    body: JSON.stringify(id)
   });
   if(res.ok) {
     toast({
@@ -95,10 +95,64 @@ const deleteEvents = async (id) => {
     let msg = await res.json();
     toast({
       title: "Failed to delete event",
-      description: msg,
+      description: msg.message,
       variant: "destructive",
     });
   }
+
+  await initEvents();
+};
+
+/**
+ * Call the api to modify the event and replace it with the furnished object
+ * @param modified
+ * @returns {Promise<void>}
+ */
+const editEvent = async (modified) => {
+  let res = await fetch("/info/api/v1/event", {
+    method: "PUT",
+    body: JSON.stringify(modified)
+  });
+  if(res.ok) {
+    toast({
+      title: "Event Modified successfully",
+    });
+  } else {
+    let msg = await res.json();
+    toast({
+      title: "Failed to modify event",
+      description: msg.message,
+      variant: "destructive",
+    });
+  }
+
+  await initEvents();
+};
+
+/**
+ * Call the api to create a new event
+ * @param newEvent
+ * @returns {Promise<void>}
+ */
+const addEvent = async (newEvent) => {
+  let res = await fetch("/info/api/v1/event", {
+    method: "POST",
+    body: JSON.stringify(newEvent)
+  });
+  if(res.ok) {
+    toast({
+      title: "Event created successfully",
+    });
+  } else {
+    let msg = await res.json();
+    toast({
+      title: "Failed to create event",
+      description: msg.message,
+      variant: "destructive",
+    });
+  }
+
+  await initEvents();
 };
 
 /**
@@ -210,7 +264,7 @@ init();
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow v-for="(item, index) in compareEvents " :key="index">
+                <TableRow v-for="(item, index) in events " :key="index">
                   <TableCell class="text-center">{{ item.title }}</TableCell>
                   <TableCell class="text-center">{{ formatDate(item.startTS) }}</TableCell>
                   <TableCell class="text-center">{{ formatDate(item.endTS) }}</TableCell>
@@ -219,7 +273,7 @@ init();
                     <Button>
                       <LucidePen/>
                     </Button>
-                    <Button class="bg-red-500" onclick="">
+                    <Button class="bg-red-500" @click=deleteEvent(item.id)>
                       <LucideTrash2/>
                     </Button>
                   </TableCell>
@@ -250,7 +304,7 @@ init();
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow v-for="(item, index) in compareUser " :key="index">
+                <TableRow v-for="(item, index) in users " :key="index">
                   <TableCell class="text-center">{{ item.username }}</TableCell>
                   <TableCell class="text-center">{{ item.role.toString() }}</TableCell>
                   <TableCell class="text-center block max-w-[50px] sm:max-w-full">

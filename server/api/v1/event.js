@@ -78,7 +78,7 @@ async function handler(req) {
           return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
         }
         body = await readBody(req);
-        await deleteEvent(body.id);
+        await deleteEvent(body);
         return new Response(JSON.stringify({message:null}), {status: 200});
       case "GET":
         return new Response(JSON.stringify(await getEvents()), {status: 200});

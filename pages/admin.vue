@@ -36,11 +36,16 @@ const deepObjectClone = (o) => {
 
 /**
  * Format a date to a readable format
- * @param date date
+ * @param date date string
  * @returns string Date in the readable format
  */
 const formatDate = (date) => {
-  return `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+  let dt = date.split("T");
+  dt[1] = dt[1].replace("Z", "");
+  let dp = dt[0].split("-");
+  let newD = `${dp[2]}/${dp[1]}/${dp[0]} `;
+  let newT = dt[1].split(".")[0];
+  return `${newT} ${newD}`;
 };
 
 /**
@@ -162,8 +167,8 @@ init();
               <TableBody>
                 <TableRow v-for="(item, index) in compareEvents " :key="index" >
                   <TableCell class="text-center">{{ item.title }}</TableCell>
-                  <TableCell class="text-center">{{ formatDate(new Date(item.startTS)) }}</TableCell>
-                  <TableCell class="text-center">{{ formatDate(new Date(item.endTS)) }}</TableCell>
+                  <TableCell class="text-center">{{ formatDate(item.startTS) }}</TableCell>
+                  <TableCell class="text-center">{{ formatDate(item.endTS) }}</TableCell>
                   <TableCell class="text-center">{{ channels[item.channel] }}</TableCell>
                   <TableCell class="text-center"><Button><LucidePen /></Button> <Button class="bg-red-500"><LucideTrash2 /></Button></TableCell>
                 </TableRow>
@@ -182,7 +187,7 @@ init();
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead class="text-center">Nom d'utilisateur</TableHead>
+                  <TableHead class="text-center">Identifiant</TableHead>
                   <TableHead class="text-center">Role</TableHead>
                   <TableHead class="text-center">Action</TableHead>
                 </TableRow>
@@ -191,7 +196,7 @@ init();
                 <TableRow v-for="(item, index) in compareUser " :key="index" >
                   <TableCell class="text-center">{{ item.username }}</TableCell>
                   <TableCell class="text-center">{{item.role.toString()}}</TableCell>
-                  <TableCell class="text-center block max-w-[50px]"><Button><LucidePen /></Button> <Button class="bg-red-500"><LucideTrash2 /></Button></TableCell>
+                  <TableCell class="text-center block max-w-[50px] sm:max-w-full"><Button><LucidePen /></Button> <Button class="bg-red-500"><LucideTrash2 /></Button></TableCell>
                 </TableRow>
               </TableBody>
             </Table>

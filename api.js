@@ -1,6 +1,3 @@
-import ICAL from "ical.js";
-import { useFetch } from "nuxt/app";
-
 const TBM_URL = "https://gateway-apim.infotbm.com/maas-web/web/v1/timetables/stops/stop_area:";
 const WEATHER_URL_NEXT_12_HOURS =
   "https://api.weatherapi.com/v1/forecast.json?key=72687f6b06f94afa9f7103056220603&q=Gradignan&aqi=no&lang=fr&hour=";
@@ -76,14 +73,5 @@ export const getTBMLineWaitInterval = async (stopId, lineId) => {
     return result;
   } catch (e) {
     throw `Erreur de récupération des wait interval TBM (ligne: ${lineId}, arrêt: ${stopId}) : ${e}`;
-  }
-};
-
-export const getAllRestaurantsMenus = async () => {
-  try {
-    const result = await fetch(".netlify/functions/getCrousMenus");
-    return await result.json();
-  } catch (e) {
-    throw `Erreur de récupération des menus CROUS : ${e}`;
   }
 };

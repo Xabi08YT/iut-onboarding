@@ -59,7 +59,7 @@ export async function updateSlide(data) {
 
   //Updating the cache
   client.$connect();
-  let results = await client.slide.findMany();
+  let results = await client.slide.findMany({orderBy: {name: "asc"}});
   client.$disconnect();
   cache.set("slides", results);
 }

@@ -15,8 +15,8 @@ let events = ref([]);
 
 let modTitle = ref("");
 let modDescription = ref("");
-let modDateBeg = ref();
-let modDateEnd = ref();
+let modDateBeg = ref("");
+let modDateEnd = ref("");
 let modValid = ref(false);
 
 const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
@@ -69,6 +69,15 @@ const deleteEvent = async (id) => {
   }
 
   await initEvents();
+};
+
+const initModForm = (item) => {
+  modTitle.value = item.title;
+  modDescription.value = item.description;
+  console.log(item);
+  modDateBeg.value = item.startTS.slice(0,-3);
+  modDateEnd.value = item.endTS.slice(0,-3);
+  console.log(modDateBeg.value);
 };
 
 /**
@@ -179,7 +188,7 @@ init();
               <TableCell class="text-center flex justify-center">
                 <Dialog>
                   <DialogTrigger>
-                    <Button>
+                    <Button @click="initModForm(item)">
                       <LucidePen/>
                     </Button>
                   </DialogTrigger>

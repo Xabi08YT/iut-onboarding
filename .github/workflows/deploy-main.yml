@@ -32,5 +32,3 @@ jobs:
             podman-compose down
             echo "Bringing up new containers with the latest released code..."
             podman-compose up -d
-            echo "Cleaning up..."
-            podman image ls -a | grep '<none>' | awk '{print $3}' | xargs podman rmi -f

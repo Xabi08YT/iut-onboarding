@@ -114,11 +114,7 @@ export async function getAllRestaurantsMenus() {
 
 
 export default defineEventHandler(async (event) => {
-<<<<<<<< HEAD:server/api/v1/getCrousMenus.js
   if (event.req.method === "GET") {
-========
-  if (event.req.method === 'GET') {
->>>>>>>> main:server/api/getCrousMenus.js
     try {
       const menus = await getAllRestaurantsMenus();
       return { statusCode: 200, body: JSON.stringify(menus) };

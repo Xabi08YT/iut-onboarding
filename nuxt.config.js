@@ -19,6 +19,10 @@ export default {
     baseURL: "/info/"
   },
 
+  app: {
+    baseURL: '/info/'
+  },
+
   googleFonts: {
     display: "swap",
     outputDir: "assets/fonts/",

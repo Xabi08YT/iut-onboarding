@@ -74,10 +74,8 @@ const deleteEvent = async (id) => {
 const initModForm = (item) => {
   modTitle.value = item.title;
   modDescription.value = item.description;
-  console.log(item);
   modDateBeg.value = item.startTS.slice(0,-3);
   modDateEnd.value = item.endTS.slice(0,-3);
-  console.log(modDateBeg.value);
 };
 
 /**

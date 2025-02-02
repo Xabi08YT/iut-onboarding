@@ -168,7 +168,7 @@ export async function updateEvent(data) {
     where: {
       id: parseInt(data.id),
     },
-    data,
+    data: {id: data.id, title: data.title, description: data.description, startTS: new Date(data.startts), endTS: new Date(data.endts), image: data.image, channel: data.channel},
   });
   client.$disconnect();
 

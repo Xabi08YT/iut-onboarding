@@ -67,27 +67,27 @@
 </template>
 
 <script>
-import DateAndHourHeader from "./components/DateHourHeader.vue";
-import TransitionOverlay from "./components/TransitionOverlay.vue";
-import Background from "./components/Background.vue";
-import LoadingBar from "./components/LoadingBar.vue";
+import DateAndHourHeader from "../components/DateHourHeader.vue";
+import TransitionOverlay from "../components/TransitionOverlay.vue";
+import Background from "../components/Background.vue";
+import LoadingBar from "../components/LoadingBar.vue";
 
-import Menus from "./views/Menus.vue";
-import Transport from "./views/Transport.vue";
-import Weather from "./views/Weather.vue";
-import Planning from "./views/NextPlannings.vue";
-import Discord from "./views/Discord.vue";
-import MaintainerProposal from "./views/MaintainerProposal.vue";
+import Menus from "../views/Menus.vue";
+import Transport from "../views/Transport.vue";
+import Weather from "../views/Weather.vue";
+import Planning from "../views/NextPlannings.vue";
+import Discord from "../views/Discord.vue";
+import MaintainerProposal from "../views/MaintainerProposal.vue";
 
-import "./stylesheets/reset.css";
-import Announcement from "./views/Announcement.vue";
-import TeacherAnnouncement from "./views/TeacherAnnouncement.vue";
-import WelcomeAmericans from "./views/WelcomeMessage.vue";
-import Lundi from "./views/Lundi.vue";
-import Mardi from "./views/Mardi.vue";
-import Mercredi from "./views/Mercredi.vue";
-import Jeudi from "./views/Jeudi.vue";
-import Vendredi from "./views/Vendredi.vue";
+import "../stylesheets/reset.css";
+import Announcement from "../views/Announcement.vue";
+import TeacherAnnouncement from "../views/TeacherAnnouncement.vue";
+import WelcomeAmericans from "../views/WelcomeMessage.vue";
+import Lundi from "../views/Lundi.vue";
+import Mardi from "../views/Mardi.vue";
+import Mercredi from "../views/Mercredi.vue";
+import Jeudi from "../views/Jeudi.vue";
+import Vendredi from "../views/Vendredi.vue";
 
 const DEVELOPEMENT_MODE = false;
 
@@ -95,33 +95,63 @@ export default {
   data() {
     return {
       currentView: "planning",
+      slidesParameters: reactive({
+        meme: {
+          time: 10,
+          active: true,
+        },
+        transport: {
+          time: 10,
+          active: true,
+        },
+        plannings: {
+          time: 10,
+          active: true,
+        },
+        weather: {
+          time: 10,
+          active: true,
+        },
+        discord: {
+          time: 10,
+          active: true,
+        },
+        maintainer: {
+          time: 10,
+          active: true,
+        },
+        announcements: {
+          time: 10,
+          active: true,
+        },
+        menu: {
+          time: 10,
+          active: true,
+        }
+      }),
       views: {
         /*
-          To active only one or some views, juste comment here what you dont want to be
-          displayed.
-          If only one view is uncommented, the slide show will be disabled (Usefull for development).
-
-          The order in the object is the display order
+          All parameters related to slides are managed in the admin panel (ROOT_URL/admin/)
         */
         lundi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 1,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 1,
         },
         mardi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 2,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 2,
         },
         mercredi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 3,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 3,
         },
         jeudi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 4,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 4,
         },
         vendredi: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => true && !this.isEndOfDay() && new Date().getDay() === 5,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 5,
         },
         planning: {
           time: () => DEVELOPEMENT_MODE ? 5000 : this.returnTimeForPlanning(),
@@ -129,46 +159,38 @@ export default {
             // 6h to 17h30
             const currentTime =
             new Date().getHours() * 60 + new Date().getMinutes();
-            return currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30;
+            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30;
           }
         },
         transport: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : this.getTimeForBusesAndWeather(),
-          allowed: () => true,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.isEndOfDay() ? 30 * 1000 : this.slidesParameters.transport.time * 1000,
+          allowed: () => this.slidesParameters.transport.active,
         },
         weather: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 7 * 1000,
-          allowed: () => true,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.isEndOfDay() ? 30 * 1000 : this.slidesParameters.weather.time * 1000,
+          allowed: () => this.slidesParameters.weather.active,
         },
         menus: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 15,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.menu.time * 1000,
           allowed: () => {
             // 6h to 14h
             let currentHour = new Date().getHours();
-            return currentHour >= 6 && currentHour < 14;
+            return this.slidesParameters.menu.active && currentHour >= 6 && currentHour < 14;
           },
         },
         /* Enable this at the start of each year (The QR code has to be updated)*/
         discord: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => false,
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.discord.time * 1000,
+          allowed: () => this.slidesParameters.discord.active,
         },
         /* Enable when looking for new maintainers */
         maintainer: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 10,
-          allowed: () => true && !this.isEndOfDay(),
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.maintainer.time * 1000,
+          allowed: () => this.slidesParameters.maintainer.active && !this.isEndOfDay(),
         },
         announcement: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => false && !this.isEndOfDay(),
-        },
-        tannouncement: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 7,
-          allowed: () => false && !this.isEndOfDay(),
-        },
-        welcAmericans: {
-          time: () => DEVELOPEMENT_MODE ? 10000 : 1000 * 10,
-          allowed: () => false && !this.isEndOfDay(),
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.announcements.time * 1000,
+          allowed: () => this.slidesParameters.announcements.active &&  !this.isEndOfDay(),
         }
       },
     };
@@ -182,17 +204,6 @@ export default {
     isEndOfDay() {
       const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
       return currentTime > (17 * 60 + 30);
-    },
-
-    /**
-     * @return the time to show the weather and transport card depending on current Hour
-     */
-    getTimeForBusesAndWeather() {
-      const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
-      if(currentTime > 17 * 60 + 30) {
-        return 60000;
-      }
-      return 7000;
     },
 
     /**
@@ -211,8 +222,7 @@ export default {
      */
     changeView() {
       this.currentView = this.getNextViewName();
-      if (
-        this.views[this.currentView].allowed() === false &&
+      if (this.views[this.currentView].allowed() === false &&
         !DEVELOPEMENT_MODE
       ) {
         this.changeView();
@@ -260,10 +270,26 @@ export default {
         return 1000 * 60 * 10; // Forcing for 10 minutes
       return 1000 * 10;
     },
+    /**
+     * Refresh enabled slides and display time of these slides.
+     * @returns {Promise<void>}
+     */
+    async refreshEnabledSlides() {
+      console.log("Refreshing slide parameters...");
+      let res = await fetch(`${useRequestURL()}api/v1/slide`).then(res => res.json());
+      let slides = {};
+      for (let slide of res) {
+        slides[slide.name] = {active: slide.active, time: slide.time};
+      }
+      this.slidesParameters = slides;
+    }
   },
-  mounted() {
+  async mounted() {
+    await this.refreshEnabledSlides();
     this.$refs.background && this.$refs.background.next();
     this.changeView();
+    //refreshing every 30 sec
+    setInterval(this.refreshEnabledSlides, 10 * 1000);
   },
   components: {
     Planning,

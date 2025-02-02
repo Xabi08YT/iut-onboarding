@@ -1,6 +1,3 @@
-import ICAL from "ical.js";
-import { useFetch } from "nuxt/app";
-
 const TBM_URL = "https://gateway-apim.infotbm.com/maas-web/web/v1/timetables/stops/stop_area:";
 const WEATHER_URL_NEXT_12_HOURS =
   "https://api.weatherapi.com/v1/forecast.json?key=72687f6b06f94afa9f7103056220603&q=Gradignan&aqi=no&lang=fr&hour=";
@@ -77,33 +74,4 @@ export const getTBMLineWaitInterval = async (stopId, lineId) => {
   } catch (e) {
     throw `Erreur de récupération des wait interval TBM (ligne: ${lineId}, arrêt: ${stopId}) : ${e}`;
   }
-};
-
-const transformDesc = (desc) => {
-  if(desc.length === 0) {
-    return ;
-  }
-  let stage1 = desc.replaceAll("<br/>",";");
-  let stage2 = stage1.split(";");
-  let stage3 = [];
-  for(let i of stage2) {
-    stage3.push(i.split(":"));
-  }
-
-  let stage4 = {};
-  for(let t of stage3) {
-    let key = t[0];
-    key = key.replaceAll("é","e");
-    key = key.replaceAll(" ","");
-    key = key.replaceAll("è","e");
-    stage4[key] = t[1];
-  }
-
-  if(stage4.Salle !== undefined) {
-    stage4.Salle = stage4.Salle.split(" ")[1];
-  } else {
-    stage4.Salle = "";
-  }
-
-  return stage4;
 };

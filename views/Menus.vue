@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     refresh() {
-      fetch("api/getCrousMenus").then(async (res) => {
+      fetch("api/v1/getCrousMenus").then(async (res) => {
         let rq =  await res.json();
         let data = JSON.parse(rq.body);
         return data;

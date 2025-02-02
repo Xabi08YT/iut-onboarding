@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import logoIUT from "../public/assets/logo_iut_nouvelan_NOTEXT.png";
-import logoGP from "../public/assets/gitpoule.png"
+import logoIUT from "../public/assets/logo_iut.png";
+import logoGP from "../public/assets/gitpoule.png";
 
 export default {
   data() {

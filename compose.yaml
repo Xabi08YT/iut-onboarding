@@ -10,3 +10,5 @@ services:
     networks:
       proxy:
         ipv4_address: 10.89.1.251
+    volumes:
+      - "~/infoProd.env:/server/.env"

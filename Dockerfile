@@ -1,6 +1,8 @@
 FROM docker.io/node:20-alpine
 WORKDIR /server
 COPY . /server
-RUN npm ci
-RUN npm run build
-CMD node .output/server/index.mjs
+RUN apk update && apk add openssl musl zlib libgcc
+RUN npm i -g pnpm
+RUN pnpm install
+RUN pnpm run build
+CMD ["sh","setup.sh"]

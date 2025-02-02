@@ -37,7 +37,7 @@ async function fetchMenu(URL) {
     if (plat.includes(":") || plat.includes("(") || plat.length === 0)
       return;
       // Sans les "Entrées diverses" et "Desserts divers" et sans les salades car on aime pas la salade
-    if (plat.includes("Entrées") || plat.includes("Desserts") || plat.includes("Salade"))
+    if (plat.toLowerCase().includes("entrées") || plat.toLowerCase().includes("desserts") || plat.toLowerCase().includes("salade"))
       return;
 
     //To remove **** in the sirtaki menu
@@ -57,8 +57,8 @@ async function fetchMenu(URL) {
     if(plat.includes("Plat")) {
       plat = plat.toUpperCase();
     }
-    
-    let tmp = plat
+
+    let tmp = plat;
     tmp = tmp.replaceAll(' ','');
     if(tmp.length > 0 && !plat.toLowerCase().includes("menu non communiqué"))
       tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1));
@@ -114,7 +114,7 @@ export async function getAllRestaurantsMenus() {
 
 
 export default defineEventHandler(async (event) => {
-  if (event.req.method === 'GET') {
+  if (event.req.method === "GET") {
     try {
       const menus = await getAllRestaurantsMenus();
       return { statusCode: 200, body: JSON.stringify(menus) };

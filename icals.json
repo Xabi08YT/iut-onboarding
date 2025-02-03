@@ -1,5 +1,5 @@
 {
-  "info_but_s2": {
+  "info_but1": {
     "ical": "CE6FAB5627F4696412C6E6297A64EE4A8EEC910CD961553EECE888D6F1EB77BAC648D3DA4E6891D5D1A3DD0BCE6A56A4",
     "classes": [
       {
@@ -36,7 +36,7 @@
       }
     ]
   },
-  "info_but_s4": {
+  "info_but2": {
     "ical": "CE6FAB5627F4696412C6E6297A64EE4A83290540DDC890349F6867A153E94B3635517BC0F0CCDC9E422927D479D4D482",
     "classes": [
       {
@@ -65,7 +65,7 @@
       }
     ]
   },
-  "info_but_s5": {
+  "info_but3": {
     "ical": "A5BA7B9BD091109DC1576A6B349173D638C31FD690895E60DAA9056F97E77A4CD4C6F3195E9DB4F0BDF5B45BFE147567",
     "classes": [
       {

@@ -145,9 +145,10 @@ export async function getEvents() {
  * @returns null
  */
 export async function createEvent(data) {
-  data.id = null;
+  data.startTS = new Date(data.startTS);
+  data.endTS = new Date(data.endTS);
   client.$connect();
-  client.event.create({data});
+  await client.event.create({data});
   client.$disconnect();
 
   //Update cache

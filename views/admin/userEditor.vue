@@ -5,6 +5,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../c
 import {ScrollArea} from "../../components/ui/scroll-area";
 import {Button} from "../../components/ui/button";
 import {deepObjectClone} from "../../lib/utils";
+import {toast} from "../../components/ui/toast";
 
 let users = ref([]);
 
@@ -16,6 +17,75 @@ const initUsers = async () => {
   let res = await fetch("/info/api/v1/user");
   let data = await res.json();
   users.value = deepObjectClone(data);
+};
+
+/**
+ * Create a new user from the passed JSON
+ * @param user
+ * @returns {Promise<void>}
+ */
+const createUser = async (user) => {
+  let res = await fetch("/info/api/v1/user", {
+    method: "POST",
+    body: JSON.stringify(user),
+  });
+  if(res.ok) {
+    toast({
+      title: "User created successfully",
+    });
+  } else {
+    toast({
+      title: "Unable to create user",
+      description: await res.json().then(data => data.message),
+      variant: "destructive"
+    });
+  }
+};
+
+/**
+ * Edit the user replacing existing data by the new JSON
+ * @param user
+ * @returns {Promise<void>}
+ */
+const editUser = async (user) => {
+  let res = await fetch("/info/api/v1/user", {
+    method: "PUT",
+    body: JSON.stringify(user),
+  });
+  if(res.ok) {
+    toast({
+      title: "User modified successfully",
+    });
+  } else {
+    toast({
+      title: "Unable to modify user",
+      description: await res.json().then(data => data.message),
+      variant: "destructive"
+    });
+  }
+};
+
+/**
+ * Remove a user that has the passed ID
+ * @param id
+ * @returns {Promise<void>}
+ */
+const deleteUser = async (id) => {
+  let res = await fetch("/info/api/v1/user", {
+    method: "DELETE",
+    body: id,
+  });
+  if(res.ok) {
+    toast({
+      title: "User created successfully",
+    });
+  } else {
+    toast({
+      title: "Unable to delete user",
+      description: await res.json().then(data => data.message),
+      variant: "destructive"
+    });
+  }
 };
 
 /**

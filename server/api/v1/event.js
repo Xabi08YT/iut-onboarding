@@ -1,5 +1,6 @@
 import {createEvent, getEvents, updateEvent, deleteEvent} from "~/server/database";
 import {verifyToken} from "~/server/jwt";
+import {parseCookies, setCookie } from "h3";
 
 /**
  * @openapi

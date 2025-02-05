@@ -116,20 +116,20 @@ async function handler(req) {
           return new Response(JSON.stringify({message: "Incorrect credentials"}), {status: 403});
         }
         token = await createToken(res);
-        return new Response("", {status: 201, headers: {"Set-Cookie": token}});
+        return new Response("", {status: 201, headers: {"Set-Cookie": `onboardingToken=${token}; SameSite=Strict`}});
       case "PUT":
-        token = await exchangeToken(getHeader(req, "cookie"));
-        if(await verifyToken(getHeader(req, "cookie")) === false || token === -1) {
+        token = await exchangeToken(parseCookies(req)?.onboardingToken);
+        if(await verifyToken(parseCookies(req)?.onboardingToken) === false || token === -1) {
           return new Response(JSON.stringify({message:"Session expired or token is invalid."}), {status: 401});
         }
-        return new Response(JSON.stringify({message: "Token modified successfully."}), {status: 200, headers: {"Set-Cookie": token} });
+        return new Response(JSON.stringify({message: "Token modified successfully."}), {status: 200, headers: {"Set-Cookie": `onboardingToken=${token}; SameSite=Strict`} });
       case "DELETE":
-        if(await verifyToken(getHeader(req, "cookie")) === false) {
+        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
         }
         return new Response("", {status: 200, headers: {"Set-Cookie": ""}});
       case "GET":
-        if(await verifyToken(getHeader(req, "cookie")) === false) {
+        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
         }
         return new Response("", {status: 200});

@@ -1,5 +1,6 @@
 import {getSlides, updateSlide} from "~/server/database";
-import {exchangeToken, verifyToken} from "~/server/jwt";
+import {verifyToken} from "~/server/jwt";
+import {parseCookies} from "h3";
 
 /**
  * @openapi
@@ -76,7 +77,7 @@ async function handler(req) {
   try {
     switch(req.method) {
       case "PUT":
-        if(await verifyToken(getHeader(req, "cookie")) === false) {
+        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message: "Session expired"}), {status: 401});
         }
         await updateSlide(await readBody(req));

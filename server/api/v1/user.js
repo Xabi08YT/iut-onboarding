@@ -60,11 +60,11 @@ import {getRole, verifyToken} from "~/server/jwt";
  *         description: "This user does not exist."
  */
 async function handler(req) {
-  if(await verifyToken(getHeader(req, "cookie")) === false) {
+  if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
     return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
   }
 
-  /*if(!getRole(getHeader(req, "cookie")).contains("ADMIN")) {
+  /*if(!getRole(parseCookies(req)?.onboardingToken).contains("ADMIN")) {
     return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
   }*/
 

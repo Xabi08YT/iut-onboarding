@@ -61,21 +61,21 @@ async function handler(req) {
   try {
     switch(req.method) {
       case "POST":
-        if(await verifyToken(getHeader(req, "cookie")) === false) {
+        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
         }
         body = await readBody(req);
         await createEvent(body);
         return new Response(JSON.stringify({message:"Event created successfully."}), {status: 201});
       case "PUT":
-        if(await verifyToken(getHeader(req, "cookie")) === false) {
+        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
         }
         body = await readBody(req);
         await updateEvent(body);
         return new Response(JSON.stringify({message:null}), {status: 200});
       case "DELETE":
-        if(await verifyToken(getHeader(req, "cookie")) === false) {
+        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
         }
         body = await readBody(req);

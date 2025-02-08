@@ -6,8 +6,25 @@ import {ScrollArea} from "../../components/ui/scroll-area";
 import {Button} from "../../components/ui/button";
 import {deepObjectClone} from "../../lib/utils";
 import {toast} from "../../components/ui/toast";
+import {Label} from "../../components/ui/label";
+import {Input} from "../../components/ui/input";
+import {DialogClose, DialogHeader, DialogTrigger} from "../../components/ui/dialog";
 
 let users = ref([]);
+
+// Vars to store user entry for account creation
+let cUsername = ref("");
+let cPassword = ref("");
+let cPasswordConfirm = ref("");
+let cRoles = ref(["ADMIN"]);
+let cValid = ref(false);
+
+// Vars to store user entry for account modification
+let mUsername = ref("");
+let mPassword = ref("");
+let mPasswordConfirm = ref("");
+let mRoles = ref(["ADMIN"]);
+let mValid = ref(false);
 
 /**
  * Fill the content related to the users
@@ -77,7 +94,7 @@ const deleteUser = async (id) => {
   });
   if(res.ok) {
     toast({
-      title: "User created successfully",
+      title: "User deleted successfully",
     });
   } else {
     toast({
@@ -96,6 +113,27 @@ const init = async () => {
   await initUsers();
 };
 
+const initEditor = (data) => {
+  mUsername.value = data.username;
+  mRoles.value = data.role;
+};
+
+watch([cUsername, cPassword, cPasswordConfirm, cRoles], () => {
+  cValid.value = (cUsername.value !== "" && cPassword.value !== "" && cPassword.value === cPasswordConfirm.value);
+});
+
+watch([mUsername, mPassword, mPasswordConfirm, mRoles], () => {
+  mValid.value = (mUsername.value !== "" && mPassword.value !== "" && mPassword.value === cPasswordConfirm.value);
+});
+
+const initCreate = () => {
+  [cUsername, cPassword, cPasswordConfirm] = ["","",""];
+};
+
+const initModify = (item) => {
+  [mUsername, mPassword, mPasswordConfirm] = [item.username,"", ""];
+};
+
 init();
 </script>
 
@@ -104,9 +142,30 @@ init();
     <CardHeader>
       <CardTitle class="flex justify-between">
         <div>Administration des utilisateurs</div>
-        <Button>
-          <LucideCirclePlus/>
-        </Button>
+        <Dialog>
+          <DialogTrigger>
+            <Button @click="initCreate">
+              <LucideCirclePlus/>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Ajouter une annonce</DialogTitle>
+              <DialogDescription>Ici vous pouvez ajouter une nouvelle annonce.</DialogDescription>
+            </DialogHeader>
+            <Label for="usernameCreate">Nom d&apos;utilisateur ({{cUsername.length}}/100)</Label>
+            <Input id="usernameCreate" v-model="cUsername"/>
+            <Label for="passwordCreate">Mot de Passe</Label>
+            <Input id="passwordCreate" v-model="cPassword" type="password"/>
+            <Label for="passwordCreateConfirm">Confirmer le Mot de Passe</Label>
+            <Input id="passwordCreateConfirm" v-model="cPasswordConfirm" type="password" />
+            <Label for="roleCreate">Roles</Label>
+            <Input id="roleCreate" v-model="cRoles" disabled />
+            <DialogClose as-child>
+              <Button v-show="cValid" @click="createUser({username:cUsername, password: cPassword, role: cRoles})">Ajouter</Button>
+            </DialogClose>
+          </DialogContent>
+        </Dialog>
       </CardTitle>
       <CardDescription class="text-left">Ici vous ajouter, editer et supprimer des utilisateurs</CardDescription>
     </CardHeader>
@@ -125,10 +184,31 @@ init();
               <TableCell class="text-center">{{ item.username }}</TableCell>
               <TableCell class="text-center">{{ item.role.toString() }}</TableCell>
               <TableCell class="text-center block max-w-[50px] sm:max-w-full">
-                <Button>
-                  <LucidePen/>
-                </Button>
-                <Button variant="destructive">
+                <Dialog>
+                  <DialogTrigger>
+                    <Button @click="initModify(item)">
+                      <LucidePen/>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Ajouter une annonce</DialogTitle>
+                      <DialogDescription>Ici vous pouvez ajouter une nouvelle annonce.</DialogDescription>
+                    </DialogHeader>
+                    <Label for="usernameModify">Nom d&apos;utilisateur ({{mUsername.length}}/100)</Label>
+                    <Input id="usernameModify" v-model="mUsername"/>
+                    <Label for="passwordModify">Mot de Passe</Label>
+                    <Input id="passwordModify" v-model="mPassword" type="password"/>
+                    <Label for="passwordModifyConfirm">Confirmer le Mot de Passe</Label>
+                    <Input id="passwordModifyConfirm" v-model="mPasswordConfirm" type="password" />
+                    <Label for="roleModify">Roles</Label>
+                    <Input id="roleModify" v-model="mRoles" disabled />
+                    <DialogClose as-child>
+                      <Button v-show="mValid" @click="editUser({id: item.id, username:mUsername, password: mPassword, role: mRoles})">Ajouter</Button>
+                    </DialogClose>
+                  </DialogContent>
+                </Dialog>
+                <Button variant="destructive" @click="deleteUser(item.id)">
                   <LucideTrash2/>
                 </Button>
               </TableCell>

@@ -75,13 +75,14 @@ async function handler(req) {
     let data = await readBody(req);
     switch(req.method) {
       case "POST":
-        await createUser(data);
+        await createUser(JSON.parse(data));
         return new Response(JSON.stringify({message:"User created successfully."}), {status: 201});
       case "PUT":
-        await updateUser(data);
+        await updateUser(JSON.parse(data));
         return new Response(JSON.stringify({message:null}), {status: 200});
       case "DELETE":
-        await deleteUser(data.id);
+        console.log(data);
+        await deleteUser(parseInt(data));
         return new Response(JSON.stringify({message:null}), {status: 200});
       default:
         return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});

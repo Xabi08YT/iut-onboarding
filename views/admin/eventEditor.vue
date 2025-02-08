@@ -13,12 +13,14 @@ import {Textarea} from "../../components/ui/textarea";
 
 let events = ref([]);
 
+// Vars to store user entry for event modification
 let modTitle = ref("");
 let modDescription = ref("");
 let modDateBeg = ref("");
 let modDateEnd = ref("");
 let modValid = ref(false);
 
+// Vars to store user entry for event creation
 let createTitle = ref("");
 let createDescription = ref("");
 let createDateBeg = ref("");

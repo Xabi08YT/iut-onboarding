@@ -275,7 +275,6 @@ export default {
      * @returns {Promise<void>}
      */
     async refreshEnabledSlides() {
-      console.log("Refreshing slide parameters...");
       let res = await fetch(`${useRequestURL()}api/v1/slide`).then(res => res.json());
       let slides = {};
       for (let slide of res) {

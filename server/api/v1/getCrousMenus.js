@@ -83,7 +83,7 @@ export async function getAllRestaurantsMenus() {
     sirtaki = await fetchMenu(SIRTAKI_URL);
   } catch(error) {
     // Si échec, marquer la carte comme désactivée.
-    console.log(`Unable to retreive Menu for Sirtaki. Error: ${error}`);
+    console.error(`Unable to retreive Menu for Sirtaki. Error: ${error}`);
     sirtakiEnabled = false;
   }
 
@@ -95,7 +95,7 @@ export async function getAllRestaurantsMenus() {
   try {
     space = await fetchMenu(SPACE_URL);
   } catch(error) {
-    console.log(`Unable to retreive Menu for Space. Error: ${error}`);
+    console.error(`Unable to retreive Menu for Space. Error: ${error}`);
     spaceEnabled = false;
   }
 

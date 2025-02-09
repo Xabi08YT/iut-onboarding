@@ -52,14 +52,7 @@
     <Announcement
       v-if="Object.keys(views).includes('announcement')"
       :isActive="currentView == 'announcement'"
-    />
-    <TeacherAnnouncement
-      v-if="Object.keys(views).includes('tannouncement')"
-      :isActive="currentView == 'tannouncement'"
-    />
-    <WelcomeAmericans
-      v-if="Object.keys(views).includes('welcAmericans')"
-      :isActive="currentView == 'welcAmericans'"
+      :eventData="events[eventIndex-1]"
     />
     <LoadingBar :view="views[currentView]" />
     <TransitionOverlay ref="loading" />
@@ -95,6 +88,8 @@ export default {
   data() {
     return {
       currentView: "planning",
+      events: reactive([]),
+      eventIndex: 0,
       slidesParameters: reactive({
         meme: {
           time: 10,
@@ -211,6 +206,9 @@ export default {
      */
     getNextViewName() {
       const viewTypes = Object.keys(this.views);
+      if(this.currentView === "announcement" && this.events.length > this.eventIndex) {
+        return viewTypes[viewTypes.indexOf(this.currentView)];
+      }
       let nextView = viewTypes[viewTypes.indexOf(this.currentView) + 1];
       if (nextView === undefined) nextView = viewTypes[0];
       return nextView;
@@ -222,11 +220,23 @@ export default {
      */
     changeView() {
       this.currentView = this.getNextViewName();
+
       if (this.views[this.currentView].allowed() === false &&
         !DEVELOPEMENT_MODE
       ) {
         this.changeView();
         return;
+      }
+
+      if(this.events.length === 0 && this.currentView === "announcement") {
+        this.changeView();
+        return;
+      }
+
+      if(this.currentView === "announcement") {
+        ++this.eventIndex;
+      } else {
+        this.eventIndex = 0;
       }
 
       if (Object.keys(this.views).length <= 1)
@@ -281,14 +291,24 @@ export default {
         slides[slide.name] = {active: slide.active, time: slide.time};
       }
       this.slidesParameters = slides;
+    },
+    /**
+     * Refresh ongoing registered events in the database
+     * @returns {Promise<void>}
+     */
+    async refreshOngoingEvents() {
+      let res = await fetch(`${useRequestURL()}api/v1/getOngoingEvents`).then(res => res.json());
+      this.events = JSON.parse(res.body);
     }
   },
   async mounted() {
     await this.refreshEnabledSlides();
+    await this.refreshOngoingEvents();
     this.$refs.background && this.$refs.background.next();
     this.changeView();
     //refreshing every 30 sec
     setInterval(this.refreshEnabledSlides, 10 * 1000);
+    setInterval(this.refreshOngoingEvents, 30 * 1000);
   },
   components: {
     Planning,

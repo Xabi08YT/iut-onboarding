@@ -20,10 +20,10 @@ export async function login(username, password) {
   client.$connect();
   let user = await client.user.findFirst({where: {username}});
   client.$disconnect();
-  if(!user) {
-    return {ok: false, user:null};
+  if (!user) {
+    return {ok: false, user: null};
   }
-  return {ok:bcrypt.compare(password,user.password),user};
+  return {ok: bcrypt.compare(password, user.password), user};
 }
 
 /**
@@ -77,7 +77,7 @@ export async function getUsers() {
       role: true,
     },
     orderBy: {
-      username:"asc",
+      username: "asc",
     }
   });
   client.$disconnect();
@@ -127,11 +127,27 @@ export async function deleteUser(id) {
  * @returns {Promise<void>} all the events
  */
 export async function getEvents() {
+  client.$connect();
+  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  client.$disconnect();
+
+  return results;
+}
+
+export async function getOngoingEvents() {
   const cachedData = cache.get("events");
 
   if (!cachedData || cachedData.length === 0) {
     client.$connect();
-    let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+    let results = await client.event.findMany({
+      where: {
+        startTS: {
+          lte: new Date()
+        }, endTS: {
+          gte: new Date()
+        }
+      }, orderBy: {channel: "asc"}
+    });
     client.$disconnect();
     cache.set("events", results);
     return results;
@@ -145,14 +161,23 @@ export async function getEvents() {
  * @returns null
  */
 export async function createEvent(data) {
-  data.id = null;
+  data.startTS = new Date(data.startTS);
+  data.endTS = new Date(data.endTS);
   client.$connect();
-  client.event.create({data});
+  await client.event.create({data});
   client.$disconnect();
 
   //Update cache
   client.$connect();
-  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  let results = await client.event.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {channel: "asc"}
+  });
   client.$disconnect();
   cache.set("events", results);
 }
@@ -168,13 +193,29 @@ export async function updateEvent(data) {
     where: {
       id: parseInt(data.id),
     },
-    data: {id: data.id, title: data.title, description: data.description, startTS: new Date(data.startts), endTS: new Date(data.endts), image: data.image, channel: data.channel},
+    data: {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      startTS: new Date(data.startts),
+      endTS: new Date(data.endts),
+      image: data.image,
+      channel: data.channel
+    },
   });
   client.$disconnect();
 
   //Update cache
   client.$connect();
-  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  let results = await client.event.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {channel: "asc"}
+  });
   client.$disconnect();
   cache.set("events", results);
 }
@@ -190,7 +231,15 @@ export async function deleteEvent(id) {
   client.$disconnect();
   //Update cache
   client.$connect();
-  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  let results = await client.event.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {channel: "asc"}
+  });
   client.$disconnect();
   cache.set("events", results);
 }

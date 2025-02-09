@@ -6,18 +6,26 @@ import {ScrollArea} from "../../components/ui/scroll-area";
 import {Button} from "../../components/ui/button";
 import {toast} from "../../components/ui/toast";
 import {deepObjectClone} from "../../lib/utils";
-import {DialogClose, DialogHeader} from "../../components/ui/dialog";
+import {DialogClose, DialogHeader, DialogTrigger} from "../../components/ui/dialog";
 import {Input} from "../../components/ui/input";
 import {Label} from "../../components/ui/label";
 import {Textarea} from "../../components/ui/textarea";
 
 let events = ref([]);
 
+// Vars to store user entry for event modification
 let modTitle = ref("");
 let modDescription = ref("");
 let modDateBeg = ref("");
 let modDateEnd = ref("");
 let modValid = ref(false);
+
+// Vars to store user entry for event creation
+let createTitle = ref("");
+let createDescription = ref("");
+let createDateBeg = ref("");
+let createDateEnd = ref("");
+let createValid = ref(false);
 
 const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
 
@@ -76,6 +84,13 @@ const initModForm = (item) => {
   modDescription.value = item.description;
   modDateBeg.value = item.startTS.slice(0,-3);
   modDateEnd.value = item.endTS.slice(0,-3);
+};
+
+const initCreateForm = () => {
+  createTitle.value = "";
+  createDescription.value = "";
+  createDateBeg.value = "";
+  createDateEnd.value = "";
 };
 
 /**
@@ -150,6 +165,10 @@ watch([modTitle,modDescription,modDateEnd,modDateBeg], () => {
   modValid.value = (new Date(modDateBeg.value) < new Date(modDateEnd.value) && 0 < modTitle.value.length < 101 && 0 < modDescription.value.length < 201);
 });
 
+watch([createTitle,createDescription,createDateEnd,createDateBeg], () => {
+  createValid.value = (new Date(createDateBeg.value) < new Date(createDateEnd.value) && 0 < createTitle.value.length < 101 && 0 < createDescription.value.length < 201);
+});
+
 init();
 </script>
 
@@ -158,9 +177,30 @@ init();
     <CardHeader>
       <CardTitle class="flex justify-between">
         <div>Editeur d'annonces</div>
-        <Button>
-          <LucideCirclePlus/>
-        </Button>
+        <Dialog>
+          <DialogTrigger>
+            <Button @click="initCreateForm">
+              <LucideCirclePlus/>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Ajouter une annonce</DialogTitle>
+              <DialogDescription>Ici vous pouvez ajouter une nouvelle annonce.</DialogDescription>
+            </DialogHeader>
+            <Label for="titleEventModify">Titre ({{createTitle.length}}/100)</Label>
+            <Input id="titleEventModify" v-model="createTitle"/>
+            <Label for="descriptionEventModify">Description ({{createDescription.length}}/200)</Label>
+            <Textarea id="descriptionEventModify" v-model="createDescription"/>
+            <Label for="beginEventModify">Date de début de l'affichage</Label>
+            <Input id="beginEventModify" type="datetime-local" v-model="createDateBeg" />
+            <Label for="endEventModify">Date de fin de l'affichage</Label>
+            <Input id="endEventModify" type="datetime-local" v-model="createDateEnd" />
+            <DialogClose as-child>
+              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: null, channel: 1})">Ajouter</Button>
+            </DialogClose>
+          </DialogContent>
+        </Dialog>
       </CardTitle>
       <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des annonces à afficher.
       </CardDescription>

@@ -1,10 +1,10 @@
 <template>
-    <div class="view-container" v-show="isActive">
-        <h1 class="view-title">Annonce de l'Assopeña</h1>
+    <div class="view-container" v-show="isActive" v-if="eventData !== undefined">
+        <h1 class="view-title">{{eventData.title}}</h1>
         <div class="announcment">
-          <h2>Vous voulez des défis pendant toute une nuit ? Les inscriptions, c'est par ici !</h2>
-          <div id="AssoImg">
-            <img src="@/public/assets/logo_iut.png" />
+          <h2>{{eventData.description}}</h2>
+          <div id="AssoImg" >
+            <img :src=path() />
           </div>
         </div>
     </div>
@@ -13,6 +13,12 @@
 export default{
   props: {
     isActive: Boolean,
+    eventData: Object,
+  },
+  data() {
+    return {
+      path:() => this.eventData.image !== null ? `data:image/png;base64,${this.eventData.image}` : "assets/Warning.png",
+    }
   }
 };
 </script>

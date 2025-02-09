@@ -29,7 +29,6 @@ const init = async () => {
    * Seeking for any changes
    */
   watch(compareSlidesUser.value, async () => {
-    console.log("Change detected");
     for (let s of compareSlidesUser.value) {
       if (!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
         slides.value[s.id - 1] = deepObjectClone(s);

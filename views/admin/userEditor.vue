@@ -113,11 +113,6 @@ const init = async () => {
   await initUsers();
 };
 
-const initEditor = (data) => {
-  mUsername.value = data.username;
-  mRoles.value = data.role;
-};
-
 watch([cUsername, cPassword, cPasswordConfirm, cRoles], () => {
   cValid.value = (cUsername.value !== "" && cPassword.value !== "" && cPassword.value === cPasswordConfirm.value);
 });

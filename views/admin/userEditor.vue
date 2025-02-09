@@ -57,6 +57,8 @@ const createUser = async (user) => {
       variant: "destructive"
     });
   }
+
+  await initUsers();
 };
 
 /**
@@ -80,6 +82,8 @@ const editUser = async (user) => {
       variant: "destructive"
     });
   }
+
+  await initUsers();
 };
 
 /**
@@ -103,6 +107,8 @@ const deleteUser = async (id) => {
       variant: "destructive"
     });
   }
+
+  await initUsers();
 };
 
 /**
@@ -118,15 +124,15 @@ watch([cUsername, cPassword, cPasswordConfirm, cRoles], () => {
 });
 
 watch([mUsername, mPassword, mPasswordConfirm, mRoles], () => {
-  mValid.value = (mUsername.value !== "" && mPassword.value !== "" && mPassword.value === cPasswordConfirm.value);
+  mValid.value = (mUsername.value !== "" && mPassword.value === cPasswordConfirm.value);
 });
 
 const initCreate = () => {
-  [cUsername, cPassword, cPasswordConfirm] = ["","",""];
+  [cUsername.value, cPassword.value, cPasswordConfirm.value] = ["","",""];
 };
 
 const initModify = (item) => {
-  [mUsername, mPassword, mPasswordConfirm] = [item.username,"", ""];
+  [mUsername.value, mPassword.value, mPasswordConfirm.value] = [item.username,"", ""];
 };
 
 init();
@@ -145,8 +151,8 @@ init();
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Ajouter une annonce</DialogTitle>
-              <DialogDescription>Ici vous pouvez ajouter une nouvelle annonce.</DialogDescription>
+              <DialogTitle>Ajouter un utilisateur</DialogTitle>
+              <DialogDescription>Ici vous pouvez ajouter un nouvel utilisateur.</DialogDescription>
             </DialogHeader>
             <Label for="usernameCreate">Nom d&apos;utilisateur ({{cUsername.length}}/100)</Label>
             <Input id="usernameCreate" v-model="cUsername"/>
@@ -187,8 +193,8 @@ init();
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Ajouter une annonce</DialogTitle>
-                      <DialogDescription>Ici vous pouvez ajouter une nouvelle annonce.</DialogDescription>
+                      <DialogTitle>Editer un utilisateur</DialogTitle>
+                      <DialogDescription>Ici vous pouvez editer un utilisateur. Les changements doivent être appliqués manuellement.</DialogDescription>
                     </DialogHeader>
                     <Label for="usernameModify">Nom d&apos;utilisateur ({{mUsername.length}}/100)</Label>
                     <Input id="usernameModify" v-model="mUsername"/>
@@ -199,7 +205,7 @@ init();
                     <Label for="roleModify">Roles</Label>
                     <Input id="roleModify" v-model="mRoles" disabled />
                     <DialogClose as-child>
-                      <Button v-show="mValid" @click="editUser({id: item.id, username:mUsername, password: mPassword, role: mRoles})">Ajouter</Button>
+                      <Button v-show="mValid" @click="editUser(mPassword.value !== '' ? {id: item.id, username:mUsername, password: mPassword, role: mRoles} :{id: item.id, username:mUsername, role: mRoles})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

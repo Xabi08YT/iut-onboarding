@@ -1,61 +1,77 @@
 <template>
   <div class="view-container">
-    <Background ref="background" />
+    <Background ref="background"/>
 
-    <DateAndHourHeader />
+    <DateAndHourHeader/>
     <Lundi
-      v-if="Object.keys(views).includes('lundi')"
-      :isActive="currentView == 'lundi'"
+        v-if="Object.keys(views).includes('lundi')"
+        :isActive="currentView == 'lundi'"
     />
     <Mardi
-      v-if="Object.keys(views).includes('mardi')"
-      :isActive="currentView == 'mardi'"
+        v-if="Object.keys(views).includes('mardi')"
+        :isActive="currentView == 'mardi'"
     />
     <Mercredi
-      v-if="Object.keys(views).includes('mercredi')"
-      :isActive="currentView == 'mercredi'"
+        v-if="Object.keys(views).includes('mercredi')"
+        :isActive="currentView == 'mercredi'"
     />
     <Jeudi
-      v-if="Object.keys(views).includes('jeudi')"
-      :isActive="currentView == 'jeudi'"
+        v-if="Object.keys(views).includes('jeudi')"
+        :isActive="currentView == 'jeudi'"
     />
     <Vendredi
-      v-if="Object.keys(views).includes('vendredi')"
-      :isActive="currentView == 'vendredi'"
+        v-if="Object.keys(views).includes('vendredi')"
+        :isActive="currentView == 'vendredi'"
     />
     <Menus
-      v-if="Object.keys(views).includes('menus')"
-      :isActive="currentView == 'menus'"
+        v-if="Object.keys(views).includes('menus')"
+        :isActive="currentView == 'menus'"
     />
     <Planning
-      v-if="Object.keys(views).includes('planning')"
-      :isActive="currentView == 'planning'"
+        v-if="Object.keys(views).includes('planning')"
+        :isActive="currentView == 'planning'"
     />
     <client-only>
       <Transport
-        v-if="Object.keys(views).includes('transport')"
-        :isActive="currentView == 'transport'"
+          v-if="Object.keys(views).includes('transport')"
+          :isActive="currentView == 'transport'"
       />
       <Weather
-        v-if="Object.keys(views).includes('weather')"
-        :isActive="currentView == 'weather'"
+          v-if="Object.keys(views).includes('weather')"
+          :isActive="currentView == 'weather'"
       />
     </client-only>
     <Discord
-      v-if="Object.keys(views).includes('discord')"
-      :isActive="currentView == 'discord'"
+        v-if="Object.keys(views).includes('discord')"
+        :isActive="currentView == 'discord'"
     />
     <MaintainerProposal
-      v-if="Object.keys(views).includes('maintainer')"
-      :isActive="currentView == 'maintainer'"
+        v-if="Object.keys(views).includes('maintainer')"
+        :isActive="currentView == 'maintainer'"
     />
     <Announcement
-      v-if="Object.keys(views).includes('announcement')"
-      :isActive="currentView == 'announcement'"
-      :eventData="events[eventIndex-1]"
+        v-if="Object.keys(views).includes('announcement')"
+        :isActive="currentView == 'announcement'"
+        :eventData="events[eventIndex-1]"
     />
-    <LoadingBar :view="views[currentView]" />
-    <TransitionOverlay ref="loading" />
+    <Welcome
+      v-if="Object.keys(views).includes('welcome')"
+      :isActive="currentView == 'welcome'"
+    />
+    <NextConferences
+        v-if="Object.keys(views).includes('nextConference')"
+        :isActive="currentView == 'nextConference'"
+    />
+    <Ateliers
+      v-if="Object.keys(views).includes('ateliers')"
+      :isActive="currentView == 'ateliers'"
+    />
+    <StudentPOV
+      v-if="Object.keys(views).includes('studentPOV')"
+      :isActive="currentView == 'studentPOV'"
+    />
+    <LoadingBar :view="views[currentView]"/>
+    <TransitionOverlay ref="loading"/>
   </div>
 </template>
 
@@ -81,8 +97,13 @@ import Mardi from "../views/Mardi.vue";
 import Mercredi from "../views/Mercredi.vue";
 import Jeudi from "../views/Jeudi.vue";
 import Vendredi from "../views/Vendredi.vue";
+import NextConferences from "../views/JPO/NextConferences.vue";
+import Ateliers from "../views/JPO/Ateliers.vue";
+import Welcome from "../views/JPO/Welcome.vue";
+import StudentPOV from "../views/JPO/StudentPOV.vue";
 
 const DEVELOPEMENT_MODE = false;
+const JPO_DATESTRING = "2025-02-15";
 
 export default {
   data() {
@@ -153,7 +174,7 @@ export default {
           allowed: () => {
             // 6h to 17h30
             const currentTime =
-            new Date().getHours() * 60 + new Date().getMinutes();
+                new Date().getHours() * 60 + new Date().getMinutes();
             return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30;
           }
         },
@@ -185,7 +206,33 @@ export default {
         },
         announcement: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.announcements.time * 1000,
-          allowed: () => this.slidesParameters.announcements.active &&  !this.isEndOfDay(),
+          allowed: () => this.slidesParameters.announcements.active && !this.isEndOfDay(),
+        },
+
+        /*      RESERVED FOR JPO        */
+        welcome: {
+          time: () => 7 * 1000,
+          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
+        },
+        nextConference: {
+          time: () => 10 * 1000,
+          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
+        },
+        ateliers: {
+          time: () => 10 * 1000,
+          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
+        },
+        studentPOV: {
+          time: () => 10 * 1000,
+          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
         }
       },
     };
@@ -205,8 +252,8 @@ export default {
      * @return the name of the next view that will be displayed
      */
     getNextViewName() {
-      const viewTypes = Object.keys(this.views);
-      if(this.currentView === "announcement" && this.events.length > this.eventIndex) {
+      const viewTypes = Object.keys(this.views).filter((e) => this.views[e].allowed());
+      if (this.currentView === "announcement" && this.events.length > this.eventIndex) {
         return viewTypes[viewTypes.indexOf(this.currentView)];
       }
       let nextView = viewTypes[viewTypes.indexOf(this.currentView) + 1];
@@ -221,19 +268,12 @@ export default {
     changeView() {
       this.currentView = this.getNextViewName();
 
-      if (this.views[this.currentView].allowed() === false &&
-        !DEVELOPEMENT_MODE
-      ) {
+      if (this.events.length === 0 && this.currentView === "announcement") {
         this.changeView();
         return;
       }
 
-      if(this.events.length === 0 && this.currentView === "announcement") {
-        this.changeView();
-        return;
-      }
-
-      if(this.currentView === "announcement") {
+      if (this.currentView === "announcement") {
         ++this.eventIndex;
       } else {
         this.eventIndex = 0;
@@ -311,6 +351,10 @@ export default {
     setInterval(this.refreshOngoingEvents, 30 * 1000);
   },
   components: {
+    StudentPOV,
+    Welcome,
+    Ateliers,
+    NextConferences,
     Planning,
     TransitionOverlay,
     Background,

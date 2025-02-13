@@ -18,7 +18,7 @@ export default{
   data() {
     return {
       path:() => this.eventData.image !== null ? `data:image/png;base64,${this.eventData.image}` : "assets/Warning.png",
-    }
+    };
   }
 };
 </script>

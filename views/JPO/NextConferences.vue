@@ -19,7 +19,7 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  nextConferences = conferences.filter((e) => e.when >= new Date());
+  nextConferences.value = conferences.filter((e) => e.when >= new Date());
 });
 
 </script>

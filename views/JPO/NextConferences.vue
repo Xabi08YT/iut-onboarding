@@ -1,6 +1,8 @@
 <script setup>
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../components/ui/table";
 
+let refreshInterval;
+
 const conferences = [
   {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T09:15:00+01:00")},
   {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T10:45:00+01:00")},
@@ -12,16 +14,18 @@ const conferences = [
   {room: "105", who: "M. JOURNET", when: new Date("2025-02-15T11:45:00+01:00")},
 ].sort((a,b) => a.when - b.when );
 
-let nextConferences = ref(conferences.filter((e) => e.when >= new Date()));
+let nextConferences = ref([]);
 
 const props = defineProps({
   isActive: Boolean,
 });
 
 onMounted(() => {
-  nextConferences = conferences.filter((e) => e.when >= new Date());
+  nextConferences.value = [...conferences.filter((e) => e.when >= new Date())];
+  refreshInterval = setInterval((refresh) => nextConferences.value = [...conferences.filter((e) => e.when >= new Date())], 10000);
 });
 
+onUnmounted(() => clearInterval(refreshInterval));
 </script>
 
 <template>
@@ -44,7 +48,7 @@ onMounted(() => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow v-for="(item, index) in nextConferences" :key="index" class="Spaced">
+          <TableRow v-for="(item) in nextConferences" class="Spaced">
             <TableCell class="tableTitle">
               {{ item.when.toString().split(" ")[4] }}
             </TableCell>

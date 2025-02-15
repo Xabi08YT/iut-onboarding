@@ -5,6 +5,8 @@ const props = defineProps({
   isActive: Boolean,
 });
 
+let refreshInterval;
+
 const ateliers = reactive([{
   name: "Programmation IHM",
   room: "206",
@@ -40,7 +42,7 @@ let getClass = (item) => {
   return item.state.toString() === "FERME" ? "red" : item.state.toString() === "OUVERT" ? "green" : "orange";
 };
 
-onMounted( () => {
+let refresh = () => {
   let ts = new Date();
   let hours = ts.getHours();
   let mins = ts.getMinutes();
@@ -59,7 +61,13 @@ onMounted( () => {
       value.state = "FERME";
     }
   });
+}
+
+onMounted( () => {
+  refreshInterval = setInterval(refresh, 10000);
 });
+
+onUnmounted(() => clearInterval(refreshInterval));
 </script>
 
 <template>

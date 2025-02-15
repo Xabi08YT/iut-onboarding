@@ -5,7 +5,7 @@ let refreshInterval;
 
 const conferences = [
   {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T09:15:00+01:00")},
-  {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T10:10:00+01:00")},
+  {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T10:45:00+01:00")},
   {room: "006", who: "Mme DUTOUR", when: new Date("2025-02-15T11:30:00+01:00")},
   {room: "006", who: "Mme DUTOUR", when: new Date("2025-02-15T10:00:00+01:00")},
   {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T12:15:00+01:00")},

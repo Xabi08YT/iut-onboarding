@@ -45,7 +45,7 @@ onMounted( () => {
   let hours = ts.getHours();
   let mins = ts.getMinutes();
 
-  ateliers.value.forEach((value) => {
+  ateliers.forEach((value) => {
     if(hours > 8 && hours < 9 && value.toString().includes("Programmation")) {
       value.state = "OUVRE BIENTOT";
     }

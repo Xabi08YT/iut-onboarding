@@ -12,14 +12,14 @@ const conferences = [
   {room: "105", who: "M. JOURNET", when: new Date("2025-02-15T11:45:00+01:00")},
 ].sort((a,b) => a.when - b.when );
 
-let nextConferences = ref(conferences.filter((e) => e.when >= new Date()));
+let nextConferences = ref([]);
 
 const props = defineProps({
   isActive: Boolean,
 });
 
 onMounted(() => {
-  nextConferences.value = conferences.filter((e) => e.when >= new Date());
+  nextConferences = [...conferences.filter((e) => e.when >= new Date())];
 });
 
 </script>

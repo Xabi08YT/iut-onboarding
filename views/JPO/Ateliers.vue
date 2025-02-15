@@ -5,7 +5,7 @@ const props = defineProps({
   isActive: Boolean,
 });
 
-const ateliers = ref([{
+const ateliers = reactive([{
   name: "Programmation IHM",
   room: "206",
   state: "FERME"

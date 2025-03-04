@@ -245,7 +245,7 @@ export default {
 
     isEndOfDay() {
       const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
-      return currentTime > (17 * 60 + 30);
+      return false && currentTime > (17 * 60 + 30);
     },
 
     /**
@@ -371,8 +371,6 @@ export default {
     Discord,
     MaintainerProposal,
     Announcement,
-    TeacherAnnouncement,
-    WelcomeAmericans,
   },
 };
 </script>

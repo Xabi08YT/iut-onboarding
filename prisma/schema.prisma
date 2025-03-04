@@ -26,13 +26,13 @@ model Event {
   startTS     DateTime
   endTS       DateTime
   description String
-  image       Bytes?   @db.ByteA
+  image       String
   channel     Int
 }
 
 model Slide {
   id     Int     @id @default(autoincrement())
-  name   String
+  name   String  @unique
   active Boolean
   time   Int
 }

@@ -19,10 +19,6 @@ export default {
     baseURL: "/info/"
   },
 
-  app: {
-    baseURL: '/info/'
-  },
-
   googleFonts: {
     display: "swap",
     outputDir: "assets/fonts/",
@@ -38,7 +34,7 @@ export default {
 
   routeRules: {
     "api/hp/**": {
-        proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
+      proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
     },
     // Add cors headers
     "/api/v1/**": { cors: true },

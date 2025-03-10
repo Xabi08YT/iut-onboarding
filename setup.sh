@@ -1,7 +1,7 @@
 if [ ! -f ./.setupfinished ]; then
   npx prisma db push
   npx prisma generate
-  node populate.js
+  node createFirstUser.js
   touch .setupfinished
   node .output/server/index.mjs
   exit

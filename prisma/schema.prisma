@@ -26,7 +26,7 @@ model Event {
   startTS     DateTime
   endTS       DateTime
   description String
-  image       String
+  image       String?
   channel     Int
 }
 

@@ -203,7 +203,7 @@ init();
             <Label for="imageURLEventCreate">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
             <Input id="imageURLEventCreate" type="text" v-model="createIMGURL"/>
             <DialogClose as-child>
-              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL, channel: 1})">Ajouter</Button>
+              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.value, channel: 1})">Ajouter</Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -252,7 +252,7 @@ init();
                     <Label for="imageURLEventModify">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
                     <Input id="imageURLEventModify" type="text" v-model="modIMGURL"/>
                     <DialogClose as-child>
-                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL, channel: 1})">Appliquer</Button>
+                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.value, channel: 1})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

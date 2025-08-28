@@ -16,14 +16,14 @@ let users = ref([]);
 let cUsername = ref("");
 let cPassword = ref("");
 let cPasswordConfirm = ref("");
-let cRoles = ref(["ADMIN"]);
+let cRoles = ref([""]);
 let cValid = ref(false);
 
 // Vars to store user entry for account modification
 let mUsername = ref("");
 let mPassword = ref("");
 let mPasswordConfirm = ref("");
-let mRoles = ref(["ADMIN"]);
+let mRoles = ref([""]);
 let mValid = ref(false);
 
 /**
@@ -132,7 +132,7 @@ const initCreate = () => {
 };
 
 const initModify = (item) => {
-  [mUsername.value, mPassword.value, mPasswordConfirm.value] = [item.username,"", ""];
+  [mUsername.value, mPassword.value, mPasswordConfirm.value,mRoles.value] = [item.username,"", "",item.role];
 };
 
 init();
@@ -160,8 +160,8 @@ init();
             <Input id="passwordCreate" v-model="cPassword" type="password"/>
             <Label for="passwordCreateConfirm">Confirmer le Mot de Passe</Label>
             <Input id="passwordCreateConfirm" v-model="cPasswordConfirm" type="password" />
-            <Label for="roleCreate">Roles</Label>
-            <Input id="roleCreate" v-model="cRoles" disabled />
+            <Label for="roleCreate">Roles (ADMIN, MAINTAINER, BDE, ENSEIGNANT, CULTURE)</Label>
+            <Input id="roleCreate" v-model="cRoles" />
             <DialogClose as-child>
               <Button v-show="cValid" @click="createUser({username:cUsername, password: cPassword, role: cRoles})">Ajouter</Button>
             </DialogClose>
@@ -202,10 +202,10 @@ init();
                     <Input id="passwordModify" v-model="mPassword" type="password"/>
                     <Label for="passwordModifyConfirm">Confirmer le Mot de Passe</Label>
                     <Input id="passwordModifyConfirm" v-model="mPasswordConfirm" type="password" />
-                    <Label for="roleModify">Roles</Label>
-                    <Input id="roleModify" v-model="mRoles" disabled />
+                    <Label for="roleModify">Roles (ADMIN, MAINTAINER, BDE, ENSEIGNANT, CULTURE)</Label>
+                    <Input id="roleModify" v-model="mRoles" />
                     <DialogClose as-child>
-                      <Button v-show="mValid" @click="editUser(mPassword.value !== '' ? {id: item.id, username:mUsername, password: mPassword, role: mRoles} :{id: item.id, username:mUsername, role: mRoles})">Appliquer</Button>
+                      <Button v-show="mValid" @click="editUser(mPassword.value !== '' ? {id: item.id, username:mUsername, password: mPassword, role: mRoles} :{id: item.id, username:mUsername, role: mRoles.split(',')})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

@@ -18,6 +18,13 @@ const login = async () => {
     toast({
       title: "Utilisateur connecté",
     });
+    let msg = await res.json();
+    console.log(msg);
+    if(msg == "CHOOSE") {
+      return navigateTo("/waitroom");
+    } else if(msg == "CULTURE") {
+      return navigateTo("/culturepanel");
+    }
     return navigateTo("/admin");
   }
 

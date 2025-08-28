@@ -123,11 +123,10 @@ async function handler(req) {
         let culturePanelPerm = user.role.includes("CULTURE") || user.role.includes("MAINTAINER");
         let i = 0;
         while(!adminPanelPerm && i<user.role.length) {
-          console.log("looping");
           if(adminPanelRoles.includes(user.role[i])) {
             adminPanelPerm = true;
           }
-          console.log("looping++");
+          ++i;
         }
         console.debug("adminPanelPerm", adminPanelPerm);
 

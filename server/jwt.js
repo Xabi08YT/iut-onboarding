@@ -41,6 +41,10 @@ export async function getUID(token) {
 }
 
 export async function getRole(token) {
-  return verifyToken(token) ? verifyToken(token).role : -1;
+  const payload = await verifyToken(token);
+  if(payload === false) {
+    return -1;
+  }
+  return payload.user.role;
 }
 

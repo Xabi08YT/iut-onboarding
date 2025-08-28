@@ -1,5 +1,5 @@
 import {getSlides, updateSlide} from "~/server/database";
-import {verifyToken} from "~/server/jwt";
+import {getRole, verifyToken} from "~/server/jwt";
 import {parseCookies} from "h3";
 
 /**
@@ -73,12 +73,19 @@ import {parseCookies} from "h3";
  *                   example: "{error message}"
  */
 async function handler(req) {
-  let newToken;
   try {
     switch(req.method) {
       case "PUT":
-        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-          return new Response(JSON.stringify({message: "Session expired"}), {status: 401});
+
+        let token = parseCookies(req)?.onboardingToken
+        if(await verifyToken(token) === false) {
+          return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+        }
+
+        let roles = await getRole(token);
+
+        if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("MAINTAINER"))) {
+          return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
         }
         await updateSlide(await readBody(req));
         return new Response(JSON.stringify({message:"Slide updated successfully."}), {status: 200});

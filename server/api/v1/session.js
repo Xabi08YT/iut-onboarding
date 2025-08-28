@@ -1,5 +1,5 @@
 import {login} from "~/server/database";
-import {createToken, exchangeToken, verifyToken} from "~/server/jwt";
+import {createToken, exchangeToken, getRole, verifyToken} from "~/server/jwt";
 
 /**
  * @openapi
@@ -154,7 +154,8 @@ async function handler(req) {
         if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
         }
-        return new Response("", {status: 200});
+        let roles = await getRole(parseCookies(req)?.onboardingToken);
+        return new Response(JSON.stringify({roles: roles}), {status: 200});
       default:
         return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
     }

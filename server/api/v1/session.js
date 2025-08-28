@@ -107,6 +107,7 @@ async function handler(req) {
   let data;
   let res;
   let token;
+  let adminPanelRoles = ["BDE","ENSEIGNANT","ADMIN"]
   try {
     switch(req.method) {
       case "POST":
@@ -116,7 +117,29 @@ async function handler(req) {
           return new Response(JSON.stringify({message: "Incorrect credentials"}), {status: 403});
         }
         token = await createToken(res);
-        return new Response("", {status: 201, headers: {"Set-Cookie": `onboardingToken=${token}; SameSite=Strict`}});
+        let user = res.user;
+        let toRedirect = "";
+        let adminPanelPerm = false;
+        let culturePanelPerm = user.role.includes("CULTURE") || user.role.includes("MAINTAINER");
+        let i = 0;
+        while(!adminPanelPerm && i<user.role.length) {
+          console.log("looping");
+          if(adminPanelRoles.includes(user.role[i])) {
+            adminPanelPerm = true;
+          }
+          console.log("looping++");
+        }
+        console.debug("adminPanelPerm", adminPanelPerm);
+
+        if(culturePanelPerm && adminPanelPerm) {
+          toRedirect = "CHOOSE";
+        } else if (adminPanelPerm) {
+          toRedirect = "ADMIN";
+        } else {
+          toRedirect = "CULTURE";
+        }
+
+        return new Response(JSON.stringify({goto: toRedirect}), {status: 201, headers: {"Set-Cookie": `onboardingToken=${token}; SameSite=Strict`}});
       case "PUT":
         token = await exchangeToken(parseCookies(req)?.onboardingToken);
         if(await verifyToken(parseCookies(req)?.onboardingToken) === false || token === -1) {

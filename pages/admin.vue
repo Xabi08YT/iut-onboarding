@@ -18,7 +18,6 @@ const init = async () => {
     return navigateTo("/login");
   }
   let {roles} = await loggedIn.json();
-  console.log(roles);
   if (roles.includes("ADMIN") || roles.includes("MAINTAINER")) {
     fullaccess.value = true;
   } else if (!(roles.includes("BDE") || roles.includes("ENSEIGNANT")) && roles.includes("CULTURE")) {

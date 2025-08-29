@@ -182,7 +182,7 @@ init();
   <Card>
     <CardHeader>
       <CardTitle class="flex justify-between">
-        <div>Editeur d'annonces</div>
+        <div>Editeur des rencotres du club culture</div>
         <Dialog>
           <DialogTrigger>
             <Button @click="initCreateForm">
@@ -212,7 +212,7 @@ init();
           </DialogContent>
         </Dialog>
       </CardTitle>
-      <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des annonces à afficher.
+      <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des rencontres à afficher.
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -223,7 +223,7 @@ init();
               <TableHead class="text-center">Titre</TableHead>
               <TableHead class="text-center">Diffusé du</TableHead>
               <TableHead class="text-center">Au</TableHead>
-              <TableHead class="text-center">Sur le canal</TableHead>
+              <TableHead class="text-center">Rencontre le</TableHead>
               <TableHead class="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -232,7 +232,7 @@ init();
               <TableCell class="text-center">{{ item.title }}</TableCell>
               <TableCell class="text-center">{{ formatDate(item.startTS) }}</TableCell>
               <TableCell class="text-center">{{ formatDate(item.endTS) }}</TableCell>
-              <TableCell class="text-center">{{ channels[item.channel] }}</TableCell>
+              <TableCell class="text-center">{{ formatDate(item.eventTS) }}</TableCell>
               <TableCell class="text-center flex justify-center">
                 <Dialog>
                   <DialogTrigger>

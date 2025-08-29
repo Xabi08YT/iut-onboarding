@@ -256,12 +256,12 @@ export async function createCultureEvent(data) {
     data.eventTS = new Date(data.eventTS);
   }
   client.$connect();
-  await client.event.create({data});
+  await client.cultureEvent.create({data});
   client.$disconnect();
 
   //Update cache
   client.$connect();
-  let results = await client.event.findMany({
+  let results = await client.cultureEvent.findMany({
     where: {
       startTS: {
         lte: new Date()
@@ -281,7 +281,7 @@ export async function createCultureEvent(data) {
  */
 export async function updateCultureEvent(data) {
   client.$connect();
-  await client.event.update({
+  await client.cultureEvent.update({
     where: {
       id: parseInt(data.id),
     },
@@ -300,7 +300,7 @@ export async function updateCultureEvent(data) {
 
   //Update cache
   client.$connect();
-  let results = await client.event.findMany({
+  let results = await client.cultureEvent.findMany({
     where: {
       startTS: {
         lte: new Date()
@@ -324,7 +324,7 @@ export async function deleteCultureEvent(id) {
   client.$disconnect();
   //Update cache
   client.$connect();
-  let results = await client.event.findMany({
+  let results = await client.cultureEvent.findMany({
     where: {
       startTS: {
         lte: new Date()
@@ -346,7 +346,7 @@ export async function getCultureOngoingEvents() {
 
   if (!cachedData || cachedData.length === 0) {
     client.$connect();
-    let results = await client.event.findMany({
+    let results = await client.cultureEvent.findMany({
       where: {
         startTS: {
           lte: new Date()
@@ -356,8 +356,20 @@ export async function getCultureOngoingEvents() {
       }, orderBy: {channel: "asc"}
     });
     client.$disconnect();
-    cache.set("events", results);
+    cache.set("cevents", results);
     return results;
   }
   return cachedData;
+}
+
+/**
+ * Get all events from the database
+ * @returns {Promise<void>} all the events
+ */
+export async function getCultureEvents() {
+  client.$connect();
+  let results = await client.cultureEvent.findMany({orderBy: {startTS: "asc"}});
+  client.$disconnect();
+
+  return results;
 }

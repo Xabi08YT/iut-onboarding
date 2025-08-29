@@ -243,3 +243,121 @@ export async function deleteEvent(id) {
   client.$disconnect();
   cache.set("events", results);
 }
+
+/**
+ * Create a culture event in the database
+ * @param data
+ * @returns {Promise<void>}
+ */
+export async function createCultureEvent(data) {
+  data.startTS = new Date(data.startTS);
+  data.endTS = new Date(data.endTS);
+  if(data.eventTS) {
+    data.eventTS = new Date(data.eventTS);
+  }
+  client.$connect();
+  await client.event.create({data});
+  client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let results = await client.event.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {channel: "asc"}
+  });
+  client.$disconnect();
+  cache.set("cevents", results);
+}
+
+/**
+ * Update an existing culture event with this data.
+ * @param data
+ * @returns null
+ */
+export async function updateCultureEvent(data) {
+  client.$connect();
+  await client.event.update({
+    where: {
+      id: parseInt(data.id),
+    },
+    data: {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      startTS: new Date(data.startts),
+      endTS: new Date(data.endts),
+      eventTS: data.eventTS ? new Date(data.eventTS) : undefined,
+      image: data.image,
+      channel: data.channel
+    },
+  });
+  client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let results = await client.event.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {channel: "asc"}
+  });
+  client.$disconnect();
+  cache.set("cevents", results);
+}
+
+/**
+ * Deletes the culture event that has the same ID as the one passed in this function
+ * @param id ID of the event to remove
+ * @returns null
+ */
+export async function deleteCultureEvent(id) {
+  client.$connect();
+  await client.event.delete({where: {id: parseInt(id)}});
+  client.$disconnect();
+  //Update cache
+  client.$connect();
+  let results = await client.event.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {channel: "asc"}
+  });
+  client.$disconnect();
+  cache.set("cevents", results);
+}
+
+/**
+ * Get all ongoing Culture Events
+ * @returns {Promise<unknown>}
+ */
+export async function getCultureOngoingEvents() {
+  const cachedData = cache.get("cevents");
+
+  if (!cachedData || cachedData.length === 0) {
+    client.$connect();
+    let results = await client.event.findMany({
+      where: {
+        startTS: {
+          lte: new Date()
+        }, endTS: {
+          gte: new Date()
+        }
+      }, orderBy: {channel: "asc"}
+    });
+    client.$disconnect();
+    cache.set("events", results);
+    return results;
+  }
+  return cachedData;
+}

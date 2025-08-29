@@ -363,8 +363,8 @@ export async function getCultureOngoingEvents() {
 }
 
 /**
- * Get all events from the database
- * @returns {Promise<void>} all the events
+ * Get all culture events from the database
+ * @returns {Promise<void>} all the culture events
  */
 export async function getCultureEvents() {
   client.$connect();

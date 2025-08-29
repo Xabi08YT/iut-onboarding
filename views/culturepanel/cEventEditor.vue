@@ -50,7 +50,7 @@ const formatDate = (date) => {
  * @returns {Promise<void>}
  */
 const initEvents = async () => {
-  let res = await fetch("/info/api/v1/event");
+  let res = await fetch("/info/api/v1/cultureEvents");
   let data = await res.json();
   events.value = deepObjectClone(data);
 };
@@ -61,7 +61,7 @@ const initEvents = async () => {
  * @returns {Promise<void>}
  */
 const deleteEvent = async (id) => {
-  let res = await fetch("/info/api/v1/event", {
+  let res = await fetch("/info/api/v1/cultureEvents", {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -105,7 +105,7 @@ const initCreateForm = () => {
  * @returns {Promise<void>}
  */
 const editEvent = async (modified) => {
-  let res = await fetch("/info/api/v1/event", {
+  let res = await fetch("/info/api/v1/cultureEvents", {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modified)
@@ -132,7 +132,7 @@ const editEvent = async (modified) => {
  * @returns {Promise<void>}
  */
 const addEvent = async (newEvent) => {
-  let res = await fetch("/info/api/v1/event", {
+  let res = await fetch("/info/api/v1/cultureEvents", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newEvent)
@@ -207,7 +207,7 @@ init();
             <Label for="imageURLEventCreate">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
             <Input id="imageURLEventCreate" type="text" v-model="createIMGURL"/>
             <DialogClose as-child>
-              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.value, channel: 1})">Ajouter</Button>
+              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.value, eventTS: createDateEvent})">Ajouter</Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -258,7 +258,7 @@ init();
                     <Label for="imageURLEventModify">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
                     <Input id="imageURLEventModify" type="text" v-model="modIMGURL"/>
                     <DialogClose as-child>
-                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.value, channel: 1})">Appliquer</Button>
+                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.value, eventTS: modDateEvent})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

@@ -11,10 +11,12 @@ import {parseCookies, setCookie } from "h3";
 
 /**
  * @openapi
- * /event:
+ * /cultureEvent:
  *   get:
  *     tags:
  *      - Culture meetings management
+ *     security:
+ *      - JWT: []
  *     description: "Get a list containing all the cultural events that are currently stored in the database"
  *     responses:
  *       200:
@@ -38,7 +40,7 @@ import {parseCookies, setCookie } from "h3";
  *         description: "Access denied."
  *   put:
  *     tags:
- *      - Event management
+ *      - Culture meetings management
  *     security:
  *      - JWT: []
  *     description: "Modify an existing event"
@@ -53,7 +55,7 @@ import {parseCookies, setCookie } from "h3";
  *         description: "This event does not exist."
  *   delete:
  *     tags:
- *      - Event management
+ *      - Culture meetings management
  *     security:
  *      - JWT: []
  *     description: "Deletes an existing event"

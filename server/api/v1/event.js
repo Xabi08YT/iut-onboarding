@@ -8,6 +8,8 @@ import {parseCookies, setCookie } from "h3";
  *   get:
  *     tags:
  *      - Event management
+ *     security:
+ *      - JWT: []
  *     description: "Get a list containing all the events that are currently stored in the database"
  *     responses:
  *       200:

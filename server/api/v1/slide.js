@@ -8,6 +8,8 @@ import {parseCookies} from "h3";
  *   get:
  *     tags:
  *      - Slide management
+ *     security:
+ *      - JWT: []
  *     description: "Retrieve a list of slides."
  *     responses:
  *       200:

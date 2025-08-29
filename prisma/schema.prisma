@@ -30,6 +30,16 @@ model Event {
   channel     Int
 }
 
+model CultureEvent {
+  id          Int       @id @default(autoincrement())
+  title       String
+  startTS     DateTime
+  endTS       DateTime
+  eventTS     DateTime?
+  description String
+  image       String?
+}
+
 model Slide {
   id     Int     @id @default(autoincrement())
   name   String  @unique

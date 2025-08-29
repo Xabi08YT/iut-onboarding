@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
       const events = await getCultureOngoingEvents();
       return {statusCode: 200, body: JSON.stringify(events)};
     } catch (error) {
+      console.error(error);
       return {statusCode: 500, body: JSON.stringify(error)};
     }
   }

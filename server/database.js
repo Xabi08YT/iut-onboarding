@@ -268,7 +268,7 @@ export async function createCultureEvent(data) {
       }, endTS: {
         gte: new Date()
       }
-    }, orderBy: {channel: "asc"}
+    }, orderBy: {eventTS: "asc"}
   });
   client.$disconnect();
   cache.set("cevents", results);
@@ -307,7 +307,7 @@ export async function updateCultureEvent(data) {
       }, endTS: {
         gte: new Date()
       }
-    }, orderBy: {channel: "asc"}
+    }, orderBy: {eventTS: "asc"}
   });
   client.$disconnect();
   cache.set("cevents", results);
@@ -331,7 +331,7 @@ export async function deleteCultureEvent(id) {
       }, endTS: {
         gte: new Date()
       }
-    }, orderBy: {channel: "asc"}
+    }, orderBy: {eventTS: "asc"}
   });
   client.$disconnect();
   cache.set("cevents", results);
@@ -353,7 +353,7 @@ export async function getCultureOngoingEvents() {
         }, endTS: {
           gte: new Date()
         }
-      }, orderBy: {channel: "asc"}
+      }, orderBy: {eventTS: "asc"}
     });
     client.$disconnect();
     cache.set("cevents", results);

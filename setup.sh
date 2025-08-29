@@ -1,5 +1,7 @@
+#!/bin/bash
+npx prisma db push
+
 if [ ! -f ./.setupfinished ]; then
-  npx prisma db push
   npx prisma generate
   node createFirstUser.js
   touch .setupfinished

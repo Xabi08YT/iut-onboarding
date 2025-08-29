@@ -4,7 +4,7 @@ import {
     updateEvent,
     deleteEvent,
     createCultureEvent,
-    updateCultureEvent, deleteCultureEvent
+    updateCultureEvent, deleteCultureEvent, getCultureEvents
 } from "~/server/database";
 import {getRole, verifyToken} from "~/server/jwt";
 import {parseCookies, setCookie } from "h3";

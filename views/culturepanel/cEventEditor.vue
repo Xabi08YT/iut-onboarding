@@ -37,6 +37,9 @@ let createValid = ref(false);
  * @returns string Date in the readable format
  */
 const formatDate = (date) => {
+  if(date === undefined || date === null){
+    return "";
+  }
   let dt = date.split("T");
   dt[1] = dt[1].replace("Z", "");
   let dp = dt[0].split("-");
@@ -86,8 +89,8 @@ const initModForm = (item) => {
   modDescription.value = item.description;
   modDateBeg.value = item.startTS.slice(0,-3);
   modDateEnd.value = item.endTS.slice(0,-3);
-  modDateEvent.value = item.event;
-  modIMGURL.value = item.image;
+  modDateEvent.value = item.eventTS.slice(0,-3);
+  modIMGURL.value = item.image ? item.image : "";
 };
 
 const initCreateForm = () => {
@@ -258,7 +261,7 @@ init();
                     <Label for="imageURLEventModify">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
                     <Input id="imageURLEventModify" type="text" v-model="modIMGURL"/>
                     <DialogClose as-child>
-                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.value, eventTS: modDateEvent})">Appliquer</Button>
+                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL?.value, eventTS: modDateEvent})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

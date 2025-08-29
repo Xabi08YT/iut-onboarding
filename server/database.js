@@ -320,7 +320,7 @@ export async function updateCultureEvent(data) {
  */
 export async function deleteCultureEvent(id) {
   client.$connect();
-  await client.event.delete({where: {id: parseInt(id)}});
+  await client.cultureEvent.delete({where: {id: parseInt(id)}});
   client.$disconnect();
   //Update cache
   client.$connect();

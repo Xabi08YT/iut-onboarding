@@ -128,7 +128,6 @@ async function handler(req) {
           }
           ++i;
         }
-        console.debug("adminPanelPerm", adminPanelPerm);
 
         if(culturePanelPerm && adminPanelPerm) {
           toRedirect = "CHOOSE";

@@ -19,10 +19,6 @@ export default {
     baseURL: "/info/"
   },
 
-  app: {
-    baseURL: '/info/'
-  },
-
   googleFonts: {
     display: "swap",
     outputDir: "assets/fonts/",
@@ -42,6 +38,8 @@ export default {
     },
     // Add cors headers
     "/api/v1/**": { cors: true },
+    "/admin**": { ssr: false },
+    "/culturepanel": {ssr: false },
   },
 
   shadcn: {

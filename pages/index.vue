@@ -52,12 +52,12 @@
     <Announcement
         v-if="Object.keys(views).includes('announcement')"
         :isActive="currentView == 'announcement'"
-        :eventData="events[eventIndex-1]"
+        :eventData="events[(eventIndex-1)%events.length]"
     />
     <CultureClub
       v-if="Object.keys(views).includes('culture')"
       :isActive="currentView == 'culture'"
-      :eventData="cultureEvents[cultureEventIndex-1]"
+      :eventData="cultureEvents[(cultureEventIndex-1)%cultureEvents.length]"
     />
     <Welcome
       v-if="Object.keys(views).includes('welcome')"
@@ -370,13 +370,15 @@ export default {
      * @returns {Promise<void>}
      */
     async refreshOngoingCultureEvent() {
-      let res = await fetch(`${useRequestURL()}/api/v1/getOngoingCultureEvents`).then(res => res.json());
+      let res = await fetch(`${useRequestURL()}api/v1/getOngoingCultureEvents`).then(res => res.json());
       this.cultureEvents = JSON.parse(res.body);
+      console.log(this.cultureEvents);
     }
   },
   async mounted() {
     await this.refreshEnabledSlides();
     await this.refreshOngoingEvents();
+    await this.refreshOngoingCultureEvent();
     this.$refs.background && this.$refs.background.next();
     this.changeView();
     //refreshing every 10 sec
@@ -462,5 +464,15 @@ body {
   font-weight: 800;
   padding: 30px 50px;
   border-radius: 30px;
+}
+
+.announcment {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.25);
+  padding: 25px;
+  display: flex;
+  flex-direction: column !important;
+  align-items: center;
 }
 </style>

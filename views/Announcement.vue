@@ -38,16 +38,6 @@ export default{
     height: 425px;
 }
 
-.announcment {
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.25);
-  padding: 25px;
-  display: flex;
-  flex-direction: column !important;
-  align-items: center;
-}
-
 h2 {
   font-family: Fredoka, sans-serif;
   font-size: 35px;

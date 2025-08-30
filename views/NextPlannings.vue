@@ -116,8 +116,9 @@ let getAllPlannings = async () => {
       if (classEvent !== undefined) primeEvent = classEvent;
 
       //Switching between columns depending on the promotion
+      c.promotion = c.promotion.replaceAll('_','').toLowerCase();
       switch (c.promotion) {
-        case "info_but1":
+        case "infobut1":
           edt.info_but1.push({
             className: c.className,
             isFullClass: classEvent !== undefined,
@@ -149,7 +150,7 @@ let getAllPlannings = async () => {
             ],
           });
           break;
-        case "info_but2":
+        case "infobut2":
           edt.info_but2.push({
             className: c.className,
             isFullClass: classEvent !== undefined,
@@ -181,9 +182,9 @@ let getAllPlannings = async () => {
             ],
           });
           break;
-        case "info_but3_FI":
-        case "info_but3_ALT":
-        case "info_but3":
+        case "infobut3FI":
+        case "infobut3ALT":
+        case "infobut3":
 
           edt.info_but3.push({
             className: `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}`,

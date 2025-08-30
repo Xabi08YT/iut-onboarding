@@ -284,7 +284,7 @@ export default {
     changeView() {
       this.currentView = this.getNextViewName();
 
-      if (this.events.length === 0 && this.currentView === "announcement" || (this.cultureEvents === 0 && this.currentView === "culture")) {
+      if (this.events.length === 0 && this.currentView === "announcement" || (this.cultureEvents.length === 0 && this.currentView === "culture")) {
         this.changeView();
         return;
       }
@@ -372,7 +372,6 @@ export default {
     async refreshOngoingCultureEvent() {
       let res = await fetch(`${useRequestURL()}api/v1/getOngoingCultureEvents`).then(res => res.json());
       this.cultureEvents = JSON.parse(res.body);
-      console.log(this.cultureEvents);
     }
   },
   async mounted() {

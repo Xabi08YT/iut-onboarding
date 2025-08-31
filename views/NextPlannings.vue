@@ -115,10 +115,8 @@ let getAllPlannings = async () => {
 
       if (classEvent !== undefined) primeEvent = classEvent;
 
-      //Switching between columns depending on the promotion
-      console.log(c.promotion);
       c.promotion = c.promotion.replaceAll('_','').toLowerCase();
-      console.log(c.promotion);
+      //Switching between columns depending on the promotion
       switch (c.promotion) {
         case "infobuts1":
         case "infobuts2":

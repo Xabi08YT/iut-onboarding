@@ -3,7 +3,7 @@ import {defineComponent, onMounted, onUnmounted, reactive} from "vue";
 import PlanningCard from "../components/PlanningCard.vue";
 import icals from "../icals.json";
 import {HyperplanningScheduler} from "@xabi08yt/iutgradignanhpscheduler";
-import hpSettings from "../hpSettings.json";
+import hpSettings from "../data.json";
 
 const edt = reactive({info_but1: [], info_but2: [], info_but3: []});
 const delay = 1000 * 60 * 5; // Refresh toutes les 5 minutes
@@ -13,7 +13,7 @@ let refreshInterval = undefined;
 let promos;
 let proxyUrl = `${useRequestURL()}api/hp/`;
 let classes = [];
-let {version} = hpSettings;
+let {HPversion} = hpSettings;
 
 const props = defineProps({
   isActive: Boolean,
@@ -45,25 +45,25 @@ let generateGroupsSchedulers = () => {
   let But3_done = false;
   Object.keys(icals).forEach((promo) => {
     if (
-      promo === "info_but3_ALT" ||
-        (promo === "info_but3_FI" && !But3_done)
+      promo === "infobut3alt" ||
+        (promo === "infobut3fr" && !But3_done)
     ) {
-      promos.push("info_but3");
+      promos.push("infobut3");
     }
     icals[promo].classes.forEach((c) => {
       classes.push({
         promotion: promo,
         className: c.className,
-        classIcal: new HyperplanningScheduler(c.classIcal, {proxyUrl, version}),
+        classIcal: new HyperplanningScheduler(c.classIcal, {proxyUrl, version: HPversion}),
         groups: c.groups
           ? {
             prime: new HyperplanningScheduler(c.groups.prime, {
               proxyUrl,
-              version,
+              version: HPversion,
             }),
             seconde: new HyperplanningScheduler(c.groups.seconde, {
               proxyUrl,
-              version,
+              version: HPversion,
             }),
           }
           : [],
@@ -115,9 +115,12 @@ let getAllPlannings = async () => {
 
       if (classEvent !== undefined) primeEvent = classEvent;
 
+      c.promotion = c.promotion.replaceAll('_','').toLowerCase();
       //Switching between columns depending on the promotion
       switch (c.promotion) {
-        case "info_but1":
+        case "infobuts1":
+        case "infobuts2":
+        case "infobut1":
           edt.info_but1.push({
             className: c.className,
             isFullClass: classEvent !== undefined,
@@ -149,7 +152,9 @@ let getAllPlannings = async () => {
             ],
           });
           break;
-        case "info_but2":
+        case "infobuts3":
+        case "infobuts4":
+        case "infobut2":
           edt.info_but2.push({
             className: c.className,
             isFullClass: classEvent !== undefined,
@@ -181,12 +186,17 @@ let getAllPlannings = async () => {
             ],
           });
           break;
-        case "info_but3_FI":
-        case "info_but3_ALT":
-        case "info_but3":
-
+        case "infobuts5":
+        case "infobuts6":
+        case "infobuts5alt":
+        case "infobuts6alt":
+        case "infobuts5fi":
+        case "infobuts6fi":
+        case "infobut3fr":
+        case "infobut3alt":
+        case "infobut3":
           edt.info_but3.push({
-            className: `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}`,
+            className: c.className.split(" ")[1] ? `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}` : `${c.className.split(" ")[0]}`,
             isFullClass: classEvent !== undefined,
             type: [
               primeEvent ? primeEvent.type : undefined,
@@ -256,14 +266,14 @@ onUnmounted(() => clearInterval(refreshInterval));
     <div id="columns">
       <!--Column for BUT1-->
       <div id="c1">
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but1.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but1.slice(2, 4)"
               :key="index"
@@ -273,14 +283,14 @@ onUnmounted(() => clearInterval(refreshInterval));
       </div>
       <!--Column for BUT2-->
       <div id="c2">
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but2.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but2.slice(2, 4)"
               :key="index"
@@ -290,14 +300,14 @@ onUnmounted(() => clearInterval(refreshInterval));
       </div>
       <!--Column for BUT3-->
       <div id="c3">
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but3.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but3.slice(2, 4)"
               :key="index"
@@ -318,5 +328,12 @@ span {
 #columns {
   display: flex;
   flex-direction: row;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.rows {
+  display: inline-flex !important;
+  flex-wrap: nowrap;
 }
 </style>

@@ -18,6 +18,7 @@ let modTitle = ref("");
 let modDescription = ref("");
 let modDateBeg = ref("");
 let modDateEnd = ref("");
+let modDateEvent = ref("");
 let modIMGURL = ref("");
 let modValid = ref(false);
 
@@ -26,10 +27,9 @@ let createTitle = ref("");
 let createDescription = ref("");
 let createDateBeg = ref("");
 let createDateEnd = ref("");
+let createDateEvent = ref("");
 let createIMGURL = ref("");
 let createValid = ref(false);
-
-const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
 
 /**
  * Format a date to a readable format
@@ -37,6 +37,9 @@ const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
  * @returns string Date in the readable format
  */
 const formatDate = (date) => {
+  if(date === undefined || date === null){
+    return "";
+  }
   let dt = date.split("T");
   dt[1] = dt[1].replace("Z", "");
   let dp = dt[0].split("-");
@@ -50,7 +53,7 @@ const formatDate = (date) => {
  * @returns {Promise<void>}
  */
 const initEvents = async () => {
-  let res = await fetch("api/v1/event");
+  let res = await fetch("api/v1/cultureEvents");
   let data = await res.json();
   events.value = deepObjectClone(data);
 };
@@ -61,7 +64,7 @@ const initEvents = async () => {
  * @returns {Promise<void>}
  */
 const deleteEvent = async (id) => {
-  let res = await fetch("api/v1/event", {
+  let res = await fetch("api/v1/cultureEvents", {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -86,7 +89,8 @@ const initModForm = (item) => {
   modDescription.value = item.description;
   modDateBeg.value = item.startTS.slice(0,-3);
   modDateEnd.value = item.endTS.slice(0,-3);
-  modIMGURL.value = item.image;
+  modDateEvent.value = item.eventTS.slice(0,-3);
+  modIMGURL.value = item.image ? item.image : "";
 };
 
 const initCreateForm = () => {
@@ -95,6 +99,7 @@ const initCreateForm = () => {
   createDateBeg.value = "";
   createIMGURL.value = "";
   createDateEnd.value = "";
+  createDateEvent.value = "";
 };
 
 /**
@@ -103,7 +108,7 @@ const initCreateForm = () => {
  * @returns {Promise<void>}
  */
 const editEvent = async (modified) => {
-  let res = await fetch("api/v1/event", {
+  let res = await fetch("api/v1/cultureEvents", {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modified)
@@ -130,7 +135,7 @@ const editEvent = async (modified) => {
  * @returns {Promise<void>}
  */
 const addEvent = async (newEvent) => {
-  let res = await fetch("api/v1/event", {
+  let res = await fetch("api/v1/cultureEvents", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newEvent)
@@ -180,7 +185,7 @@ init();
   <Card>
     <CardHeader>
       <CardTitle class="flex justify-between">
-        <div>Editeur d'annonces</div>
+        <div>Editeur des rencotres du club culture</div>
         <Dialog>
           <DialogTrigger>
             <Button @click="initCreateForm">
@@ -200,15 +205,17 @@ init();
             <Input id="beginEventModify" type="datetime-local" v-model="createDateBeg" />
             <Label for="endEventModify">Date de fin de l'affichage</Label>
             <Input id="endEventModify" type="datetime-local" v-model="createDateEnd" />
+            <Label for="endEventModify">Date de l'évenement</Label>
+            <Input id="endEventModify" type="datetime-local" v-model="createDateEvent" />
             <Label for="imageURLEventCreate">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
             <Input id="imageURLEventCreate" type="text" v-model="createIMGURL"/>
             <DialogClose as-child>
-              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.value, channel: 1})">Ajouter</Button>
+              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.value, eventTS: createDateEvent})">Ajouter</Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
       </CardTitle>
-      <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des annonces à afficher.
+      <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des rencontres à afficher.
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -219,7 +226,7 @@ init();
               <TableHead class="text-center">Titre</TableHead>
               <TableHead class="text-center">Diffusé du</TableHead>
               <TableHead class="text-center">Au</TableHead>
-              <TableHead class="text-center">Sur le canal</TableHead>
+              <TableHead class="text-center">Rencontre le</TableHead>
               <TableHead class="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -228,7 +235,7 @@ init();
               <TableCell class="text-center">{{ item.title }}</TableCell>
               <TableCell class="text-center">{{ formatDate(item.startTS) }}</TableCell>
               <TableCell class="text-center">{{ formatDate(item.endTS) }}</TableCell>
-              <TableCell class="text-center">{{ channels[item.channel] }}</TableCell>
+              <TableCell class="text-center">{{ formatDate(item.eventTS) }}</TableCell>
               <TableCell class="text-center flex justify-center">
                 <Dialog>
                   <DialogTrigger>
@@ -249,10 +256,12 @@ init();
                     <Input id="beginEventModify" type="datetime-local" v-model="modDateBeg"/>
                     <Label for="endEventModify">Date de fin de l'affichage</Label>
                     <Input id="endEventModify" type="datetime-local" v-model="modDateEnd"/>
+                    <Label for="endEventModify">Date de fin de l'évènement</Label>
+                    <Input id="endEventModify" type="datetime-local" v-model="modDateEvent"/>
                     <Label for="imageURLEventModify">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
                     <Input id="imageURLEventModify" type="text" v-model="modIMGURL"/>
                     <DialogClose as-child>
-                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.value, channel: 1})">Appliquer</Button>
+                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL?.value, eventTS: modDateEvent})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

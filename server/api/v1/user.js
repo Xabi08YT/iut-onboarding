@@ -60,25 +60,31 @@ import {getRole, verifyToken} from "~/server/jwt";
  *         description: "This user does not exist."
  */
 async function handler(req) {
-  if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
+  let token = parseCookies(req)?.onboardingToken
+  if(await verifyToken(token) === false) {
     return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
   }
 
-  /*if(!getRole(parseCookies(req)?.onboardingToken).contains("ADMIN")) {
+  let roles = await getRole(token);
+
+  if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("MAINTAINER"))) {
     return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
-  }*/
+  }
 
   if(req.method === "GET") {
     return new Response(JSON.stringify(await getUsers()), {status: 200});
   }
   try {
     let data = await readBody(req);
+    let parsed = JSON.parse(data);
     switch(req.method) {
       case "POST":
-        await createUser(JSON.parse(data));
+        parsed.role = parsed.role.split(",");
+        await createUser(parsed);
         return new Response(JSON.stringify({message:"User created successfully."}), {status: 201});
       case "PUT":
-        await updateUser(JSON.parse(data));
+        parsed.role = parsed.role.split(",");
+        await updateUser(parsed);
         return new Response(JSON.stringify({message:null}), {status: 200});
       case "DELETE":
         console.log(data);

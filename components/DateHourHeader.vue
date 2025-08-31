@@ -2,7 +2,7 @@
   <div id="header">
     <p>{{ currentDate }}</p>
     <p>{{ currentTime }}</p>
-    <img style="width: 150px; margin-left: 150px;" src="/assets/logo_iut.png" />
+    <img style="width: 150px; margin-left: 150px;" :src="logoLink" />
   </div>
 </template>
 
@@ -14,6 +14,8 @@ export default {
       currentDate: "",
       currentTimeInterval: undefined,
       currentDateInterval: undefined,
+      currentUpdateLogoInterval: undefined,
+      logoLink: ref("")
     };
   },
   methods: {
@@ -27,16 +29,24 @@ export default {
         day: "2-digit",
       });
     },
+    updateLogo() {
+      fetch("api/v1/getLogo").then(async (response) => {
+        this.logoLink = await response.text();
+      })
+    }
   },
   mounted() {
+    this.updateLogo();
     this.updateCurrentTime();
     this.updateCurrentDate();
     this.currentTimeInterval = setInterval(this.updateCurrentTime, 1000); // Refresh every seconds
     this.currentDateInterval = setInterval(this.updateCurrentDate, 3600000); // Refresh evry hours
+    this.currentUpdateLogoInterval = setInterval(this.updateLogo, 3600000);
   },
   unmounted() {
     clearInterval(this.currentTimeInterval);
     clearInterval(this.currentDateInterval);
+    clearInterval(this.currentUpdateLogoInterval);
   },
 };
 </script>

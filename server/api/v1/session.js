@@ -1,5 +1,5 @@
 import {login} from "~/server/database";
-import {createToken, exchangeToken, verifyToken} from "~/server/jwt";
+import {createToken, exchangeToken, getRole, verifyToken} from "~/server/jwt";
 
 /**
  * @openapi
@@ -107,6 +107,7 @@ async function handler(req) {
   let data;
   let res;
   let token;
+  let adminPanelRoles = ["BDE","ENSEIGNANT","ADMIN"]
   try {
     switch(req.method) {
       case "POST":
@@ -116,7 +117,27 @@ async function handler(req) {
           return new Response(JSON.stringify({message: "Incorrect credentials"}), {status: 403});
         }
         token = await createToken(res);
-        return new Response("", {status: 201, headers: {"Set-Cookie": `onboardingToken=${token}; SameSite=Strict`}});
+        let user = res.user;
+        let toRedirect = "";
+        let adminPanelPerm = false;
+        let culturePanelPerm = user.role.includes("CULTURE") || user.role.includes("MAINTAINER");
+        let i = 0;
+        while(!adminPanelPerm && i<user.role.length) {
+          if(adminPanelRoles.includes(user.role[i])) {
+            adminPanelPerm = true;
+          }
+          ++i;
+        }
+
+        if(culturePanelPerm && adminPanelPerm) {
+          toRedirect = "CHOOSE";
+        } else if (adminPanelPerm) {
+          toRedirect = "ADMIN";
+        } else {
+          toRedirect = "CULTURE";
+        }
+
+        return new Response(JSON.stringify({goto: toRedirect}), {status: 201, headers: {"Set-Cookie": `onboardingToken=${token}; SameSite=Strict`}});
       case "PUT":
         token = await exchangeToken(parseCookies(req)?.onboardingToken);
         if(await verifyToken(parseCookies(req)?.onboardingToken) === false || token === -1) {
@@ -132,7 +153,8 @@ async function handler(req) {
         if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
           return new Response(JSON.stringify({message:"Session expired"}), {status: 401});
         }
-        return new Response("", {status: 200});
+        let roles = await getRole(parseCookies(req)?.onboardingToken);
+        return new Response(JSON.stringify({roles: roles}), {status: 200});
       default:
         return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
     }

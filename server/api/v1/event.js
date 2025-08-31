@@ -1,5 +1,5 @@
 import {createEvent, getEvents, updateEvent, deleteEvent} from "~/server/database";
-import {verifyToken} from "~/server/jwt";
+import {getRole, verifyToken} from "~/server/jwt";
 import {parseCookies, setCookie } from "h3";
 
 /**
@@ -8,6 +8,8 @@ import {parseCookies, setCookie } from "h3";
  *   get:
  *     tags:
  *      - Event management
+ *     security:
+ *      - JWT: []
  *     description: "Get a list containing all the events that are currently stored in the database"
  *     responses:
  *       200:
@@ -58,6 +60,16 @@ import {parseCookies, setCookie } from "h3";
  */
 async function handler(req) {
   let body;
+  let token = parseCookies(req)?.onboardingToken
+  if(await verifyToken(token) === false) {
+    return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+  }
+
+  let roles = await getRole(token);
+
+  if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER") || !roles.includes("ENSEIGNANT"))) {
+    return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
+  }
   try {
     switch(req.method) {
       case "POST":

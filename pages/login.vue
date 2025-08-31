@@ -8,7 +8,7 @@ let username = "";
 let password = "";
 
 const login = async () => {
-  let res = await fetch("/info/api/v1/session", {
+  let res = await fetch("api/v1/session", {
     headers: {"Content-Type": "application/json"}, method: "POST", body: JSON.stringify({
       username,
       password
@@ -18,6 +18,13 @@ const login = async () => {
     toast({
       title: "Utilisateur connecté",
     });
+    let msg = await res.json();
+    console.log(msg);
+    if(msg == "CHOOSE") {
+      return navigateTo("/waitroom");
+    } else if(msg == "CULTURE") {
+      return navigateTo("/culturepanel");
+    }
     return navigateTo("/admin");
   }
 

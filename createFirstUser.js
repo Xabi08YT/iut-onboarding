@@ -14,6 +14,7 @@ const defaultSlides = [
   {name: "maintainer", active: true, time: 10},
   {name: "announcements", active: true, time: 7},
   {name: "weather", active: true, time: 7},
+  {name: "cultureclub", active: true, time: 7},
 ];
 
 function createRandomString(length) {
@@ -42,6 +43,6 @@ client.user.create({
 
 //Adding all default slides to database
 for(let slide of defaultSlides) {
-  client.slide.create({data: slide});
+  client.slide.create({data: slide}).then();
 }
 client.$disconnect();

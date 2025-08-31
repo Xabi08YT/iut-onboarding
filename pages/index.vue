@@ -52,7 +52,12 @@
     <Announcement
         v-if="Object.keys(views).includes('announcement')"
         :isActive="currentView == 'announcement'"
-        :eventData="events[eventIndex-1]"
+        :eventData="events[(eventIndex-1)%events.length]"
+    />
+    <CultureClub
+      v-if="Object.keys(views).includes('culture')"
+      :isActive="currentView == 'culture'"
+      :eventData="cultureEvents[(cultureEventIndex-1)%cultureEvents.length]"
     />
     <Welcome
       v-if="Object.keys(views).includes('welcome')"
@@ -101,6 +106,7 @@ import NextConferences from "../views/JPO/NextConferences.vue";
 import Ateliers from "../views/JPO/Ateliers.vue";
 import Welcome from "../views/JPO/Welcome.vue";
 import StudentPOV from "../views/JPO/StudentPOV.vue";
+import CultureClub from "../views/CultureClub.vue";
 
 const DEVELOPEMENT_MODE = false;
 const JPO_DATESTRING = "2025-02-15";
@@ -110,7 +116,9 @@ export default {
     return {
       currentView: "planning",
       events: reactive([]),
+      cultureEvents: reactive([]),
       eventIndex: 0,
+      cultureEventIndex: 0,
       slidesParameters: reactive({
         meme: {
           time: 10,
@@ -141,6 +149,10 @@ export default {
           active: true,
         },
         menu: {
+          time: 10,
+          active: true,
+        },
+        culture: {
           time: 10,
           active: true,
         }
@@ -208,6 +220,10 @@ export default {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.announcements.time * 1000,
           allowed: () => this.slidesParameters.announcements.active && !this.isEndOfDay(),
         },
+        culture: {
+          time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.culture.time * 1000,
+          allowed: () => this.slidesParameters.culture.active && !this.isEndOfDay(),
+        },
 
         /*      RESERVED FOR JPO        */
         welcome: {
@@ -253,7 +269,7 @@ export default {
      */
     getNextViewName() {
       const viewTypes = Object.keys(this.views).filter((e) => this.views[e].allowed());
-      if (this.currentView === "announcement" && this.events.length > this.eventIndex) {
+      if (this.currentView === "announcement" && this.events.length > this.eventIndex || (this.currentView === "culture" && this.cultureEvents.length > this.cultureEventIndex)) {
         return viewTypes[viewTypes.indexOf(this.currentView)];
       }
       let nextView = viewTypes[viewTypes.indexOf(this.currentView) + 1];
@@ -268,7 +284,7 @@ export default {
     changeView() {
       this.currentView = this.getNextViewName();
 
-      if (this.events.length === 0 && this.currentView === "announcement") {
+      if (this.events.length === 0 && this.currentView === "announcement" || (this.cultureEvents.length === 0 && this.currentView === "culture")) {
         this.changeView();
         return;
       }
@@ -277,6 +293,12 @@ export default {
         ++this.eventIndex;
       } else {
         this.eventIndex = 0;
+      }
+
+      if (this.currentView === "culture") {
+        ++this.cultureEventIndex;
+      } else {
+        this.cultureEventIndex = 0;
       }
 
       if (Object.keys(this.views).length <= 1)
@@ -328,6 +350,9 @@ export default {
       let res = await fetch(`${useRequestURL()}api/v1/slide`).then(res => res.json());
       let slides = {};
       for (let slide of res) {
+        if(slide.name === "cultureclub") {
+          slide.name = "culture";
+        }
         slides[slide.name] = {active: slide.active, time: slide.time};
       }
       this.slidesParameters = slides;
@@ -339,18 +364,30 @@ export default {
     async refreshOngoingEvents() {
       let res = await fetch(`${useRequestURL()}api/v1/getOngoingEvents`).then(res => res.json());
       this.events = JSON.parse(res.body);
+    },
+    /**
+     * Refresh ongoing registered cultural events in the database
+     * @returns {Promise<void>}
+     */
+    async refreshOngoingCultureEvent() {
+      let res = await fetch(`${useRequestURL()}api/v1/getOngoingCultureEvents`).then(res => res.json());
+      this.cultureEvents = JSON.parse(res.body);
     }
   },
   async mounted() {
     await this.refreshEnabledSlides();
     await this.refreshOngoingEvents();
+    await this.refreshOngoingCultureEvent();
     this.$refs.background && this.$refs.background.next();
     this.changeView();
-    //refreshing every 30 sec
+    //refreshing every 10 sec
     setInterval(this.refreshEnabledSlides, 10 * 1000);
+    //refreshing every 30 sec
     setInterval(this.refreshOngoingEvents, 30 * 1000);
+    setInterval(this.refreshOngoingCultureEvent, 30 * 1000);
   },
   components: {
+    CultureClub,
     StudentPOV,
     Welcome,
     Ateliers,
@@ -426,5 +463,15 @@ body {
   font-weight: 800;
   padding: 30px 50px;
   border-radius: 30px;
+}
+
+.announcment {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.25);
+  padding: 25px;
+  display: flex;
+  flex-direction: column !important;
+  align-items: center;
 }
 </style>

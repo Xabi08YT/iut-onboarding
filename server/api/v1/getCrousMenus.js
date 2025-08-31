@@ -33,7 +33,6 @@ async function fetchMenu(URL) {
 
   $("li").each((_, htmlPlat) => {
     let plat = $(htmlPlat).html();
-    console.log(plat);
     // Sans les lignes inutiles
     if (plat.includes(":") || plat.includes("(") || plat.length === 0)
       return;

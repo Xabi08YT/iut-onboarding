@@ -45,10 +45,10 @@ let generateGroupsSchedulers = () => {
   let But3_done = false;
   Object.keys(icals).forEach((promo) => {
     if (
-      promo === "info_but3_ALT" ||
-        (promo === "info_but3_FI" && !But3_done)
+      promo === "infobut3alt" ||
+        (promo === "infobut3fr" && !But3_done)
     ) {
-      promos.push("info_but3");
+      promos.push("infobut3");
     }
     icals[promo].classes.forEach((c) => {
       classes.push({
@@ -116,8 +116,12 @@ let getAllPlannings = async () => {
       if (classEvent !== undefined) primeEvent = classEvent;
 
       //Switching between columns depending on the promotion
+      console.log(c.promotion);
       c.promotion = c.promotion.replaceAll('_','').toLowerCase();
+      console.log(c.promotion);
       switch (c.promotion) {
+        case "infobuts1":
+        case "infobuts2":
         case "infobut1":
           edt.info_but1.push({
             className: c.className,
@@ -150,6 +154,8 @@ let getAllPlannings = async () => {
             ],
           });
           break;
+        case "infobuts3":
+        case "infobuts4":
         case "infobut2":
           edt.info_but2.push({
             className: c.className,
@@ -182,10 +188,15 @@ let getAllPlannings = async () => {
             ],
           });
           break;
-        case "infobut3FI":
-        case "infobut3ALT":
+        case "infobuts5":
+        case "infobuts6":
+        case "infobuts5alt":
+        case "infobuts6alt":
+        case "infobuts5fi":
+        case "infobuts6fi":
+        case "infobut3fr":
+        case "infobut3alt":
         case "infobut3":
-
           edt.info_but3.push({
             className: `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}`,
             isFullClass: classEvent !== undefined,
@@ -257,14 +268,14 @@ onUnmounted(() => clearInterval(refreshInterval));
     <div id="columns">
       <!--Column for BUT1-->
       <div id="c1">
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but1.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but1.slice(2, 4)"
               :key="index"
@@ -274,14 +285,14 @@ onUnmounted(() => clearInterval(refreshInterval));
       </div>
       <!--Column for BUT2-->
       <div id="c2">
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but2.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but2.slice(2, 4)"
               :key="index"
@@ -291,14 +302,14 @@ onUnmounted(() => clearInterval(refreshInterval));
       </div>
       <!--Column for BUT3-->
       <div id="c3">
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but3.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content">
+        <div class="view-content rows">
           <PlanningCard
               v-for="(data, index) in edt.info_but3.slice(2, 4)"
               :key="index"
@@ -319,5 +330,12 @@ span {
 #columns {
   display: flex;
   flex-direction: row;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.rows {
+  display: inline-flex !important;
+  flex-wrap: nowrap;
 }
 </style>

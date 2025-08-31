@@ -28,11 +28,12 @@ async function fetchMenu(URL) {
   let $ = cheerio.load(html);
   let tabPlats = [];
 
-  const htmlSelfMenu = $("ul.meal_foodies > li:nth-child(2)");
+  const htmlSelfMenu = $("ul.meal_foodies > li:nth-child(3)");
   $ = cheerio.load(htmlSelfMenu.html());
 
   $("li").each((_, htmlPlat) => {
     let plat = $(htmlPlat).html();
+    console.log(plat);
     // Sans les lignes inutiles
     if (plat.includes(":") || plat.includes("(") || plat.length === 0)
       return;

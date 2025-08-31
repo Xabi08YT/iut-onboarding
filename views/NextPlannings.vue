@@ -198,7 +198,7 @@ let getAllPlannings = async () => {
         case "infobut3alt":
         case "infobut3":
           edt.info_but3.push({
-            className: `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}`,
+            className: c.className.split(" ")[1] ? `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}` : `${c.className.split(" ")[0]}`,
             isFullClass: classEvent !== undefined,
             type: [
               primeEvent ? primeEvent.type : undefined,

@@ -3,9 +3,11 @@ import {Toaster} from "../components/ui/toast";
 import SlideEditor from "../views/admin/slideEditor.vue";
 import EventEditor from "../views/admin/eventEditor.vue";
 import UserEditor from "../views/admin/userEditor.vue";
+import DiscordEditor from "../views/admin/discordEditor.vue";
 
 let fullaccess = ref(false);
 let redirect = false;
+let bde = ref(false);
 
 /**
  * Initializes the page
@@ -18,6 +20,9 @@ const init = async () => {
     return navigateTo("/login");
   }
   let {roles} = await loggedIn.json();
+  if (roles.includes("BDE")) {
+    bde.value = true;
+  }
   if (roles.includes("ADMIN") || roles.includes("MAINTAINER")) {
     fullaccess.value = true;
   } else if (!(roles.includes("BDE") || roles.includes("ENSEIGNANT")) && roles.includes("CULTURE")) {
@@ -43,6 +48,7 @@ init();
     <div class="flex flex-col justify-center items-center lg:w-1/2 h-full my-0 py-0">
       <eventEditor class="mx-0 lg:mb-[25px] min-w-full min-h-[500px] lg:min-h-0  lg:h-1/2 mb-[25px]" />
       <userEditor class="mx-0 min-w-full min-h-[500px] lg:min-h-0 lg:h-1/2" v-if="fullaccess === true" />
+      <discordEditor class="mx-0 min-w-full min-h-[500px] lg:min-h-0 lg:h-1/2" v-if="bde === true" />
     </div>
   </div>
 </template>

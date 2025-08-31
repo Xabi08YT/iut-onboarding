@@ -38,8 +38,6 @@ export default {
         },
         // Add cors headers
         "/api/v1/**": { cors: true },
-        "/admin**": { ssr: false },
-        "/culturepanel": {ssr: false },
     },
 
     shadcn: {

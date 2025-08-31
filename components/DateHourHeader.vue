@@ -31,7 +31,7 @@ export default {
     },
     updateLogo() {
       fetch("/api/v1/getLogo").then(async (response) => {
-        this.logoLink.value = await response.text();
+        this.logoLink = await response.text();
       })
     }
   },

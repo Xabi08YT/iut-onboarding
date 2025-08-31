@@ -28,22 +28,7 @@ export default {
       });
     },
     getlogo() {
-      let logo;
-      let month = new Date().getMonth().toString();
-      switch (month) {
-        case "1":
-          logo = "/assets/logo_iut_nouvelan_NOTEXT.png";
-          break;
-        case "9":
-          logo = "/assets/logo_iut_halloween.png";
-          break;
-        case "11":
-          logo = "/assets/logo_iut_noel.png";
-          break;
-        default:
-          logo = "/assets/logo_iut.png";
-      }
-      return logo;
+      return fetch("api/v1/getLogo").then();
     }
   },
   mounted() {

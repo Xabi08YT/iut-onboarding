@@ -16,7 +16,7 @@ let compareSlidesUser = ref([]);
  * @returns {Promise<void>}
  */
 const initSlides = async () => {
-  let res = await fetch("/info/api/v1/slide");
+  let res = await fetch("api/v1/slide");
   let data = await res.json();
   slides.value = deepObjectClone(data);
   compareSlidesUser.value = [...deepObjectClone(slides.value)];
@@ -32,7 +32,7 @@ const init = async () => {
     for (let s of compareSlidesUser.value) {
       if (!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
         slides.value[s.id - 1] = deepObjectClone(s);
-        let res = await fetch("/info/api/v1/slide", {
+        let res = await fetch("api/v1/slide", {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(s)

@@ -53,7 +53,7 @@ const formatDate = (date) => {
  * @returns {Promise<void>}
  */
 const initEvents = async () => {
-  let res = await fetch("/info/api/v1/cultureEvents");
+  let res = await fetch("api/v1/cultureEvents");
   let data = await res.json();
   events.value = deepObjectClone(data);
 };
@@ -64,7 +64,7 @@ const initEvents = async () => {
  * @returns {Promise<void>}
  */
 const deleteEvent = async (id) => {
-  let res = await fetch("/info/api/v1/cultureEvents", {
+  let res = await fetch("api/v1/cultureEvents", {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -108,7 +108,7 @@ const initCreateForm = () => {
  * @returns {Promise<void>}
  */
 const editEvent = async (modified) => {
-  let res = await fetch("/info/api/v1/cultureEvents", {
+  let res = await fetch("api/v1/cultureEvents", {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modified)
@@ -135,7 +135,7 @@ const editEvent = async (modified) => {
  * @returns {Promise<void>}
  */
 const addEvent = async (newEvent) => {
-  let res = await fetch("/info/api/v1/cultureEvents", {
+  let res = await fetch("api/v1/cultureEvents", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newEvent)
@@ -161,7 +161,7 @@ const addEvent = async (newEvent) => {
  * @returns {Promise<void>}
  */
 const init = async () => {
-  let loggedIn = await fetch("/info/api/v1/session");
+  let loggedIn = await fetch("api/v1/session");
 
   if (!loggedIn.ok) {
     return navigateTo("/login");

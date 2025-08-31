@@ -31,7 +31,7 @@ let mValid = ref(false);
  * @returns {Promise<void>}
  */
 const initUsers = async () => {
-  let res = await fetch("/info/api/v1/user");
+  let res = await fetch("api/v1/user");
   let data = await res.json();
   users.value = deepObjectClone(data);
 };
@@ -42,7 +42,7 @@ const initUsers = async () => {
  * @returns {Promise<void>}
  */
 const createUser = async (user) => {
-  let res = await fetch("/info/api/v1/user", {
+  let res = await fetch("api/v1/user", {
     method: "POST",
     body: JSON.stringify(user),
   });
@@ -67,7 +67,7 @@ const createUser = async (user) => {
  * @returns {Promise<void>}
  */
 const editUser = async (user) => {
-  let res = await fetch("/info/api/v1/user", {
+  let res = await fetch("api/v1/user", {
     method: "PUT",
     body: JSON.stringify(user),
   });
@@ -92,7 +92,7 @@ const editUser = async (user) => {
  * @returns {Promise<void>}
  */
 const deleteUser = async (id) => {
-  let res = await fetch("/info/api/v1/user", {
+  let res = await fetch("api/v1/user", {
     method: "DELETE",
     body: id,
   });

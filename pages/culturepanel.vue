@@ -6,7 +6,7 @@ import CEventEditor from "../views/culturepanel/cEventEditor.vue";
  * @returns {Promise<void>}
  */
 const init = async () => {
-  let loggedIn = await fetch("/info/api/v1/session");
+  let loggedIn = await fetch("api/v1/session");
 
   if (!loggedIn.ok) {
     return navigateTo("/login");

@@ -8,7 +8,7 @@ let username = "";
 let password = "";
 
 const login = async () => {
-  let res = await fetch("/info/api/v1/session", {
+  let res = await fetch("api/v1/session", {
     headers: {"Content-Type": "application/json"}, method: "POST", body: JSON.stringify({
       username,
       password

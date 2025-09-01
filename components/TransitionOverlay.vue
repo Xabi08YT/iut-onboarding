@@ -13,9 +13,10 @@ export default {
     return {
       active: false,
       duration: 3000,
-      logoIut: logoIUT,
+      logoIut: ref(""),
       logoGP: logoGP,
-      currentLogo: null
+      currentLogo: null,
+      logoto: null
     };
   },
   methods: {
@@ -29,6 +30,9 @@ export default {
       this.duration = duration;
       setTimeout(() => (this.active = false), duration);
     },
+    refreshLogo() {
+      fetch("api/v1/getLogo").then(async (res) => this.logoIut = await res.text());
+    }
   },
   computed: {
     backgroundStyle() {
@@ -42,6 +46,13 @@ export default {
       }s`;
     },
   },
+  mounted() {
+    this.refreshLogo();
+    this.logoto = setTimeout(this.refreshLogo, 3600*1000);
+  },
+  unmounted() {
+    clearTimeout(this.logoto);
+  }
 };
 </script>
 

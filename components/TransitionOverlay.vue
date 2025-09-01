@@ -13,7 +13,7 @@ export default {
     return {
       active: false,
       duration: 3000,
-      logoIut: logoIUT,
+      logoIut: fetch("api/v1/getLogo").then(res => res.text()),
       logoGP: logoGP,
       currentLogo: null
     };

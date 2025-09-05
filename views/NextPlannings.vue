@@ -266,14 +266,14 @@ onUnmounted(() => clearInterval(refreshInterval));
     <div id="columns">
       <!--Column for BUT1-->
       <div id="c1">
-        <div class="view-content rows">
+        <div class="view-content">
           <PlanningCard
               v-for="(data, index) in edt.info_but1.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content rows">
+        <div class="view-content">
           <PlanningCard
               v-for="(data, index) in edt.info_but1.slice(2, 4)"
               :key="index"
@@ -283,14 +283,14 @@ onUnmounted(() => clearInterval(refreshInterval));
       </div>
       <!--Column for BUT2-->
       <div id="c2">
-        <div class="view-content rows">
+        <div class="view-content">
           <PlanningCard
               v-for="(data, index) in edt.info_but2.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content rows">
+        <div class="view-content">
           <PlanningCard
               v-for="(data, index) in edt.info_but2.slice(2, 4)"
               :key="index"
@@ -300,14 +300,14 @@ onUnmounted(() => clearInterval(refreshInterval));
       </div>
       <!--Column for BUT3-->
       <div id="c3">
-        <div class="view-content rows">
+        <div class="view-content">
           <PlanningCard
               v-for="(data, index) in edt.info_but3.slice(0, 2)"
               :key="index"
               :data="data"
           />
         </div>
-        <div class="view-content rows">
+        <div class="view-content">
           <PlanningCard
               v-for="(data, index) in edt.info_but3.slice(2, 4)"
               :key="index"
@@ -330,10 +330,5 @@ span {
   flex-direction: row;
   margin-left: 5px;
   margin-top: 5px;
-}
-
-.rows {
-  display: inline-flex !important;
-  flex-wrap: nowrap;
 }
 </style>

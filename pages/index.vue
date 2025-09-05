@@ -203,7 +203,7 @@ export default {
           allowed: () => {
             // 6h to 14h
             let currentHour = new Date().getHours();
-            return this.slidesParameters.menu.active && currentHour >= 6 && currentHour < 14;
+            return this.slidesParameters.menu.active && currentHour >= 6 && currentHour < 14 || true;
           },
         },
         /* Enable this at the start of each year (The QR code has to be updated)*/
@@ -261,7 +261,7 @@ export default {
 
     isEndOfDay() {
       const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
-      return currentTime > (17 * 60 + 30);
+      return currentTime > (17 * 60 + 30) && false;
     },
 
     /**

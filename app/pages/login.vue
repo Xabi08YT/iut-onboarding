@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {Input} from "~/components/ui/input";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "~/components/ui/card";
-import {Button} from "~/components/ui/button";
-import {toast, Toaster, useToast} from "~/components/ui/toast";
+import {Input} from "../components/ui/input";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../components/ui/card";
+import {Button} from "../components/ui/button";
+import {toast, Toaster, useToast} from "../components/ui/toast";
 import { navigateTo } from "nuxt/app";
 
 let username = "";
@@ -36,7 +36,7 @@ const login = async () => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center gap-2 w-screen" id="login">
+  <div class="flex justify-center items-center gap-2 w-screen h-screen" id="login">
     <Toaster />
     <Card class="max-w-md">
       <CardHeader>
@@ -58,6 +58,5 @@ const login = async () => {
 #login {
   background-image: url("/assets/bg.jpeg");
   background-size: cover;
-  height: 100dvh;
 }
 </style>

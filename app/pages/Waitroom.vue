@@ -46,7 +46,10 @@ const goToJPO = () => {
 #choose {
   background-image: url("/assets/bg.jpeg");
   background-size: cover;
+<<<<<<< HEAD:app/pages/Waitroom.vue
   height: 100dvh;
+=======
+>>>>>>> c7b640d (Alsans (#45)):pages/Waitroom.vue
 }
 
 .space {

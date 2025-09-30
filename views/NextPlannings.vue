@@ -43,13 +43,34 @@ function setCurrentHourRange() {
 let generateGroupsSchedulers = () => {
   promos = [];
   let But3_done = false;
+  let But2_done = false;
+  let But1_done = false;
   Object.keys(icals).forEach((promo) => {
+
+    //3ème année
     if (
       promo === "infobut3alt" ||
-        (promo === "infobut3fr" && !But3_done)
+        (promo === "infobut3fi" && !But3_done)
     ) {
       promos.push("infobut3");
     }
+
+    //2ème année
+    if (
+      promo === "infobuts3" ||
+        (promo === "infobuts4" && !But2_done)
+    ) {
+      promos.push("infobut2");
+    }
+
+    //1ère année
+    if (
+      promo === "infobuts1" ||
+        (promo === "infobuts2" && !But1_done)
+    ) {
+      promos.push("infobut1");
+    }
+
     icals[promo].classes.forEach((c) => {
       classes.push({
         promotion: promo,
@@ -192,9 +213,10 @@ let getAllPlannings = async () => {
         case "infobuts6alt":
         case "infobuts5fi":
         case "infobuts6fi":
-        case "infobut3fr":
+        case "infobut3fi":
         case "infobut3alt":
         case "infobut3":
+
           edt.info_but3.push({
             className: c.className.split(" ")[1] ? `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}` : `${c.className.split(" ")[0]}`,
             isFullClass: classEvent !== undefined,

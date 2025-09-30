@@ -13,7 +13,7 @@
     "@libsql/client": "^0.5.6",
     "@nuxt/eslint": "^0.6.0",
     "@nuxtjs/google-fonts": "^3.2.0",
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^6.16.2",
     "@prisma/nuxt": "^0.3.0",
     "@vee-validate/zod": "^4.14.6",
     "@vueuse/core": "^11.3.0",
@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.2",
-    "prisma": "^5.20.0",
+    "prisma": "^6.16.2",
     "typescript": "^5.6.3"
   }
 }

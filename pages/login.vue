@@ -3,6 +3,7 @@ import {Input} from "../components/ui/input";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../components/ui/card";
 import {Button} from "../components/ui/button";
 import {toast, Toaster, useToast} from "../components/ui/toast";
+import { navigateTo } from "nuxt/app";
 
 let username = "";
 let password = "";
@@ -13,16 +14,13 @@ const login = async () => {
       username,
       password
     })});
-
   if(res.ok) {
-    toast({
-      title: "Utilisateur connecté",
-    });
+    toast({title: "Utilisateur connecté"});
     let msg = await res.json();
     console.log(msg);
-    if(msg == "CHOOSE") {
+    if(msg.goto == "CHOOSE") {
       return navigateTo("/waitroom");
-    } else if(msg == "CULTURE") {
+    } else if(msg.goto == "CULTURE") {
       return navigateTo("/culturepanel");
     }
     return navigateTo("/admin");

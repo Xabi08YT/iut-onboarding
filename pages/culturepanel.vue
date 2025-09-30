@@ -20,7 +20,6 @@ const init = async () => {
   }
   if(roles.includes("ADMIN")){
     admin.value = true;
-    console.log("c'est passé zebi");
   }
 };
 

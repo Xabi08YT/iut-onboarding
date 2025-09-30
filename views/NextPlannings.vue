@@ -79,7 +79,6 @@ let nextEventFilter = (event) => {
       event.dateStart.getHours() * 60 + event.dateStart.getMinutes();
   const eventEndTime =
       event.dateEnd.getHours() * 60 + event.dateEnd.getMinutes();
-  console.log(event)
 
   // Cas spécial -> afficher les cours de 14h entre 11h30 et 13h30
   if (currentTime > 11 * 60 + 30 && currentTime < 13 * 60 + 30)

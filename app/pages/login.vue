@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {Input} from "~/components/ui/input";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "~/components/ui/card";
-import {Button} from "~/components/ui/button";
-import {toast, Toaster, useToast} from "~/components/ui/toast";
+import {Input} from "../components/ui/input";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../components/ui/card";
+import {Button} from "../components/ui/button";
+import {toast, Toaster, useToast} from "../components/ui/toast";
 import { navigateTo } from "nuxt/app";
 
 let username = "";

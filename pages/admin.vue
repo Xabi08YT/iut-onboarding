@@ -4,6 +4,7 @@ import SlideEditor from "../views/admin/slideEditor.vue";
 import EventEditor from "../views/admin/eventEditor.vue";
 import UserEditor from "../views/admin/userEditor.vue";
 import DiscordEditor from "../views/admin/discordEditor.vue";
+import { navigateTo } from "nuxt/app";
 
 let fullaccess = ref(false);
 let redirect = false;
@@ -36,11 +37,16 @@ const init = async () => {
   }
 };
 
+const goToCulture = () => {
+  return navigateTo("/culturepanel");
+};
+
 init();
 
 </script>
 
 <template>
+  <Button v-if="fullaccess" class="m-[25px] w-half" @click="goToCulture()">Culture Panel</Button>
   <div id="container"
        class="w-screen min-h-screen lg:h-screen lg:max-h-screen flex flex-col lg:flex-row p-[25px] justify-center items-center">
     <Toaster/>

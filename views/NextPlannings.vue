@@ -86,7 +86,7 @@ let nextEventFilter = (event) => {
 
   // Display this event 30min before it starts and stop displaying it 30 mins before it ends.
   return (
-    currentTime > eventStartTime - 30 && currentTime < eventEndTime - 30
+    currentTime > eventStartTime - 30 && currentTime <= eventEndTime - 30
   );
 };
 

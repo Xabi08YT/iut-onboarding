@@ -50,6 +50,7 @@ const createUser = async (user) => {
     toast({
       title: "User created successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     toast({
       title: "Unable to create user",
@@ -75,6 +76,7 @@ const editUser = async (user) => {
     toast({
       title: "User modified successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     toast({
       title: "Unable to modify user",
@@ -100,6 +102,7 @@ const deleteUser = async (id) => {
     toast({
       title: "User deleted successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     toast({
       title: "Unable to delete user",

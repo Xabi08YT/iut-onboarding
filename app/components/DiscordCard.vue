@@ -1,25 +1,34 @@
 <template>
     <div class="container">
         <div class="logoDiscordContainer">
-            <img :src="logoDiscord" alt="Discord Banner 2"/>
+            <img src="@@/public/assets/logo_discord.png" alt="Discord Banner 2"/>
         </div>
         <div class="qrCodeContainer">
-            <img :src="`https://api.qrserver.com/v1/create-qr-code/?data=${link()}&amp;size=400x400`" class="qrCode"/>
+            <img :src="`https://api.qrserver.com/v1/create-qr-code/?data=${link}&amp;size=400x400`" class="qrCode"/>
         </div>
     </div>
 </template>
 
 <script>
-import logoDiscord from "~~/public/assets/logo_discord.png";
 
 export default {
-  data() {
+  data: () => {
     return {
-      link: () => {
-        let link = fetch("api/v1/discord").then(res => res);
-        return encodeURIComponent(link)},
-      logoDiscord: logoDiscord
-    };
+      interval: null,
+      link: null,
+    }
+  },
+  methods: {
+    getLink() {
+      fetch("api/v1/discord").then(async (res) => this.link = await res.text())
+    }
+  },
+  mounted() {
+    this.interval = setInterval(this.getLink, 500000);
+    this.getLink();
+  },
+  unmounted() {
+    clearInterval(this.interval);
   }
 };
 </script>

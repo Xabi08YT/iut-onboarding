@@ -20,11 +20,11 @@ async function handler(req) {
                 }
                 body = await readBody(req);
                 let tmp = await body.json();
-                data.BDEDiscordLink = tmp.link;
+                updateConfigValue({key: "BDEdiscord", value: tmp.link});
                 fs.writeFileSync("../../../data.json", JSON.stringify(data));
                 return new Response(JSON.stringify({message:null}), {status: 200});
             case "GET":
-                let {BDEDiscordLink} = data;
+                let BDEDiscordLink = getConfigValue("BDEdiscord");
                 return new Response(BDEDiscordLink, {status: 200});
             default:
                 return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});

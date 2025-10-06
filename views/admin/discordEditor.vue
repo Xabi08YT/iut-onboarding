@@ -6,8 +6,16 @@ import {Button} from "~/components/ui/button";
 let discordLink = ref("");
 
 let applyDiscord = async () => {
-  await fetch("api/v1/discord", {method: "PUT", body: JSON.stringify({link: discordLink.value})});
+  let res = await fetch("api/v1/discord", {method: "PUT", body: JSON.stringify({link: discordLink.value})});
   getDiscordLink();
+  if (res.ok) {
+    toast({title: "Lien mis à jour avec succès"});
+  } else {
+    toast({title: "Une erreur est survenue.",
+    description:await res.json().then(data => data.message),
+    variant:"destructive"})
+  }
+
 };
 
 let getDiscordLink = () => {

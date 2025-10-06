@@ -2,6 +2,7 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
 import {Input} from "~/components/ui/input";
 import {Button} from "~/components/ui/button";
+import {toast, Toaster, useToast} from "~/components/ui/toast";
 
 let discordLink = ref("");
 
@@ -13,7 +14,7 @@ let applyDiscord = async () => {
   } else {
     toast({title: "Une erreur est survenue.",
     description:await res.json().then(data => data.message),
-    variant:"destructive"})
+    variant:"destructive"});
   }
 
 };
@@ -27,6 +28,7 @@ getDiscordLink();
 
 <template>
   <Card class="flex flex-col">
+    <Toaster />
     <CardHeader>
       <CardTitle>Editer le lien du discord</CardTitle>
       <CardDescription>Ici vous pouvez editer le lien vers le discord. Le QR code sera généré automatiquement.</CardDescription>

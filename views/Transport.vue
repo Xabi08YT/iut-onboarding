@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TransportCard from "../components/TransportCard.vue";
+import TransportCard from "~/components/TransportCard.vue";
 
 export default {
   props: {

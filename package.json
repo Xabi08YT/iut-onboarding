@@ -30,7 +30,7 @@
     "memfs": "^4.14.0",
     "node-cache": "^5.1.2",
     "node-fetch": "^3.3.2",
-    "nuxt": "^3.13.0",
+    "nuxt": "^4.1.2",
     "nuxt-lucide-icons": "^1.0.5",
     "ora": "^8.2.0",
     "prompt-password": "^1.2.0",

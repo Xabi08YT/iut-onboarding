@@ -1,5 +1,5 @@
-import {createEvent, getEvents, updateEvent, deleteEvent} from "~/server/database";
-import {getRole, verifyToken} from "~/server/jwt";
+import {createEvent, getEvents, updateEvent, deleteEvent} from "~~/server/database";
+import {getRole, verifyToken} from "~~/server/jwt";
 import {parseCookies, setCookie } from "h3";
 
 /**

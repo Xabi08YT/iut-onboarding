@@ -1,4 +1,4 @@
-import {getOngoingEvents} from "~/server/database";
+import {getOngoingEvents} from "~~/server/database";
 
 export default defineEventHandler(async (event) => {
   if (event.req.method === "GET") {

@@ -1,5 +1,5 @@
-import {getSlides, updateSlide} from "~/server/database";
-import {getRole, verifyToken} from "~/server/jwt";
+import {getSlides, updateSlide} from "~~/server/database";
+import {getRole, verifyToken} from "~~/server/jwt";
 import {parseCookies} from "h3";
 
 /**

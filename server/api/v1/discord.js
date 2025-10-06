@@ -1,6 +1,6 @@
 import fs from "fs";
 import data from "../../../data.json";
-import {getRole, verifyToken} from "~/server/jwt";
+import {getRole, verifyToken} from "~~/server/jwt";
 
 async function handler(req) {
     let body;

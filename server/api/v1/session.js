@@ -1,5 +1,5 @@
-import {login} from "~/server/database";
-import {createToken, exchangeToken, getRole, verifyToken} from "~/server/jwt";
+import {login} from "~~/server/database";
+import {createToken, exchangeToken, getRole, verifyToken} from "~~/server/jwt";
 
 /**
  * @openapi

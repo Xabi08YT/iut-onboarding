@@ -8,7 +8,7 @@
   </template>
 
 <script>
-import DiscordCard from "../components/DiscordCard.vue";
+import DiscordCard from "~/components/DiscordCard.vue";
 
 export default {
   props: {

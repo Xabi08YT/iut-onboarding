@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import MenuCard from "../components/MenuCard.vue";
+import MenuCard from "~/components/MenuCard.vue";
 
 export default {
   props: {

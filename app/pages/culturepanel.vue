@@ -1,7 +1,6 @@
 <script setup>
 import { navigateTo } from "nuxt/app";
 import CEventEditor from "@@/views/culturepanel/cEventEditor.vue";
-import {Button} from "~/components/ui/button";
 
 let admin = ref(false);
 

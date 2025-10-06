@@ -35,7 +35,7 @@ getDiscordLink();
     </CardHeader>
     <CardContent>
       <Input name="discord" type="text" v-model="discordLink" class="w-full" />
-      <Button @click="applyDiscord()" class="w-full">Enregistrer</Button>
+      <Button @click="applyDiscord()" class="w-full mt-[10px]">Enregistrer</Button>
     </CardContent>
   </Card>
 </template>

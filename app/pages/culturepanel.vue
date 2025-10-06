@@ -1,6 +1,6 @@
 <script setup>
 import { navigateTo } from "nuxt/app";
-import CEventEditor from "../views/culturepanel/cEventEditor.vue";
+import CEventEditor from "@@/views/culturepanel/cEventEditor.vue";
 
 let admin = ref(false);
 

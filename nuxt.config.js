@@ -21,7 +21,7 @@ export default {
 
   googleFonts: {
     display: "swap",
-    outputDir: "assets/fonts/",
+    outputDir: "app/assets/fonts/",
     families: {
       Fredoka: {
         wght: ["75..125",500]

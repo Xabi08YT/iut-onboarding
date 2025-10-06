@@ -381,9 +381,8 @@ export async function getCultureEvents() {
  */
 export async function getConfigValue(key) {
   client.$connect();
-  let results = await client.cultureEvent.findFirst({where: {key}});
+  let results = await client.config.findFirst({where: {key}});
   client.$disconnect();
-
   return results;
 }
 
@@ -398,10 +397,7 @@ export async function updateConfigValue(data) {
     where: {
       key: data.key,
     },
-    data: {
-      key: data.key,
-      value: data.value,
-    },
+    data: data
   })
   client.$disconnect();
 

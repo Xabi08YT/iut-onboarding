@@ -8,7 +8,7 @@ import {deepObjectClone} from "@@/lib/utils";
 import {toast} from "~/components/ui/toast";
 import {Label} from "~/components/ui/label";
 import {Input} from "~/components/ui/input";
-import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
+import {DialogClose, DialogHeader, DialogTrigger} from "~/components/ui/dialog";
 
 let users = ref([]);
 
@@ -50,7 +50,6 @@ const createUser = async (user) => {
     toast({
       title: "User created successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
   } else {
     toast({
       title: "Unable to create user",
@@ -76,7 +75,6 @@ const editUser = async (user) => {
     toast({
       title: "User modified successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
   } else {
     toast({
       title: "Unable to modify user",
@@ -102,7 +100,6 @@ const deleteUser = async (id) => {
     toast({
       title: "User deleted successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
   } else {
     toast({
       title: "Unable to delete user",
@@ -127,7 +124,7 @@ watch([cUsername, cPassword, cPasswordConfirm, cRoles], () => {
 });
 
 watch([mUsername, mPassword, mPasswordConfirm, mRoles], () => {
-  mValid.value = (mUsername.value !== "" && mPassword.value === mPasswordConfirm.value);
+  mValid.value = (mUsername.value !== "" && mPassword.value === cPasswordConfirm.value);
 });
 
 const initCreate = () => {

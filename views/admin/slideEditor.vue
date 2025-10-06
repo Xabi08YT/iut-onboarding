@@ -41,6 +41,7 @@ const init = async () => {
           toast({
             title: "Slide updated successfully",
           });
+          await fetch("api/v1/session", {method: "PUT"});
         } else {
           toast({
             title: "Slide was not updated",

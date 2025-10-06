@@ -124,7 +124,7 @@ watch([cUsername, cPassword, cPasswordConfirm, cRoles], () => {
 });
 
 watch([mUsername, mPassword, mPasswordConfirm, mRoles], () => {
-  mValid.value = (mUsername.value !== "" && mPassword.value === cPasswordConfirm.value);
+  mValid.value = (mUsername.value !== "" && mPassword.value === mPasswordConfirm.value);
 });
 
 const initCreate = () => {

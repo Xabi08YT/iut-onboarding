@@ -20,7 +20,6 @@ export default {
   },
   methods: {
     getLink() {
-      console.log("refreshing discord");
       fetch("api/v1/discord").then(async (res) => this.link = await res.text())
     }
   },

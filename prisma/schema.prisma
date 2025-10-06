@@ -46,3 +46,8 @@ model Slide {
   active Boolean
   time   Int
 }
+
+model Config{
+  key    String   @id 
+  value  String
+}

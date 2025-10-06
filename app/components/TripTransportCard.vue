@@ -24,6 +24,7 @@
 
 
 <script>
+import * as api from "@@/api";
 import CircleProgress from "vue3-circle-progress";
 
 export default {

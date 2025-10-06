@@ -373,3 +373,43 @@ export async function getCultureEvents() {
 
   return results;
 }
+
+/**
+ * Get the value of the key from the database
+ * @param key
+ * @returns {Promise<void>} all the culture events
+ */
+export async function getConfigValue(key) {
+  client.$connect();
+  let results = await client.cultureEvent.findFirst({where: {key}});
+  client.$disconnect();
+
+  return results;
+}
+
+/**
+ * Update a configuration value.
+ * @param data
+ * @returns null
+ */
+export async function updateConfigValue(data) {
+  client.$connect();
+  await client.config.update({
+    where: {
+      key: data.key,
+    },
+    data: {
+      key: data.key,
+      value: data.value,
+    },
+  })
+  client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let result = client.config.findMany({
+    orderBy: {key: "asc"}
+  });
+  client.$disconnect();
+  cache.set("discord", result)
+}

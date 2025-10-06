@@ -48,7 +48,7 @@ init();
 <template>
   <Button v-if="fullaccess" class="m-[25px] w-half" @click="goToCulture()">Culture Panel</Button>
   <div id="container"
-       class="w-screen min-h-screen lg:h-screen lg:max-h-screen flex flex-col lg:flex-row p-[25px] justify-center items-center">
+       class="w-screen min-h-screen lg:h-dvh lg:max-h-dvh flex flex-col lg:flex-row p-[25px] justify-center items-center">
     <Toaster/>
     <slideEditor class="my-[25px] mx-0 min-w-1/2 min-h-[400px] lg:my-0 lg:mr-[40px] lg:w-1/2 lg:h-full" v-if="fullaccess === true" />
     <div class="flex flex-col justify-center items-center lg:w-1/2 h-full my-0 py-0">
@@ -63,5 +63,6 @@ init();
 #container {
   background-image: url("/assets/bg.jpeg");
   background-size: cover;
+  height: 100dvh;
 }
 </style>

@@ -43,5 +43,6 @@ init();
 #culturepanel {
   background-image: url("/assets/bg.jpeg");
   background-size: cover;
+  height: 100dvh;
 }
 </style>

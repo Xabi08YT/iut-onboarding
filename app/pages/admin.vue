@@ -51,7 +51,7 @@ init();
        class="w-screen min-h-screen lg:h-dvh lg:max-h-dvh flex flex-col lg:flex-row p-[25px] justify-center items-center">
     <Toaster/>
     <slideEditor class="my-[25px] mx-0 min-w-1/2 min-h-[400px] lg:my-0 lg:mr-[40px] lg:w-1/2 lg:h-full" v-if="fullaccess === true" />
-    <div class="flex flex-col justify-center items-center lg:w-1/2 h-full my-0 py-0">
+    <div class="flex flex-col justify-center items-center lg:w-1/2 h-full my-0 py-0" id="adminvert">
       <eventEditor class="mx-0 lg:mb-[25px] min-w-full min-h-[500px] lg:min-h-0  lg:h-1/2 mb-[25px]" />
       <userEditor class="mx-0 min-w-full min-h-[500px] lg:min-h-0 lg:h-1/2" v-if="fullaccess === true" />
       <discordEditor class="mx-0 min-w-full min-h-[500px] lg:min-h-0 lg:h-1/2" v-if="bde === true" />

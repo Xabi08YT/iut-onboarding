@@ -13,7 +13,7 @@ export default {
     namePrefix: "Lucide"
   },
 
-  css: ["./stylesheets/global.css"],
+  css: ["@@/stylesheets/global.css"],
 
   app: {
     baseURL: "/info/"
@@ -50,5 +50,9 @@ export default {
      * @default "./components/ui"
      */
     componentDir: "./components/ui"
-  }
+  },
+
+  tailwindcss: {
+    viewer: false,
+  },
 };

@@ -1,5 +1,5 @@
 import fs from "fs";
-import {getRole, verifyToken} from "~~/server/jwt";
+import {getRole, verifyToken} from "~~~/server/jwt";
 import {updateConfigValue,getConfigValue} from "~~/server/database"
 import event from "./event";
 

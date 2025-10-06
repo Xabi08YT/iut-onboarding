@@ -1,14 +1,14 @@
 <script setup>
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../components/ui/table";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../components/ui/card";
-import {ScrollArea} from "../../components/ui/scroll-area";
-import {Button} from "../../components/ui/button";
-import {deepObjectClone} from "../../lib/utils";
-import {toast} from "../../components/ui/toast";
-import {Label} from "../../components/ui/label";
-import {Input} from "../../components/ui/input";
-import {DialogClose, DialogHeader, DialogTrigger} from "../../components/ui/dialog";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
+import {ScrollArea} from "~/components/ui/scroll-area";
+import {Button} from "~/components/ui/button";
+import {deepObjectClone} from "@@/lib/utils";
+import {toast} from "~/components/ui/toast";
+import {Label} from "~/components/ui/label";
+import {Input} from "~/components/ui/input";
+import {DialogClose, DialogHeader, DialogTrigger} from "~/components/ui/dialog";
 
 let users = ref([]);
 

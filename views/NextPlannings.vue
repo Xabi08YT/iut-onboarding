@@ -33,8 +33,8 @@ function setCurrentHourRange() {
     currentHourRangeStr = "10h25 - 12h15";
   } else if (currentTime < 15 * 60 + 30) {
     // < 15h30
-    currentHourRangeStr = "14h00 - 15h50";
-  } else {
+    currentHourRangeStr = "14h00 - 15h50"; 
+  } else { 
     // > 15h30
     currentHourRangeStr = "16h10 - 18h00";
   }
@@ -43,14 +43,30 @@ function setCurrentHourRange() {
 let generateGroupsSchedulers = () => {
   promos = [];
   let But3_done = false;
-  Object.keys(icals).forEach((promo) => {
-    if (
+
+  Object.keys(icals).forEach((promo) => { 
+
+  classes.push({promotion: promo,className:promo, classIcal:new HyperplanningScheduler(icals[promo].ical,
+     {proxyUrl, version: HPversion}),
+     groups: undefined 
+    }); 
+
+
+ 
+    if (  
       promo === "infobut3alt" ||
-        (promo === "infobut3fr" && !But3_done)
+        (promo === "infobut3fi" && !But3_done)
     ) {
       promos.push("infobut3");
     }
-    icals[promo].classes.forEach((c) => {
+
+
+
+
+
+    icals[promo].classes.forEach((c) => { 
+
+
       classes.push({
         promotion: promo,
         className: c.className,
@@ -92,6 +108,7 @@ let nextEventFilter = (event) => {
 
 let getAllPlannings = async () => {
   console.log("Refreshing plannings");
+  // console.log(classes)
   setCurrentHourRange();
   edt.info_but1 = [];
   edt.info_but2 = [];
@@ -115,8 +132,11 @@ let getAllPlannings = async () => {
 
       if (classEvent !== undefined) primeEvent = classEvent;
 
+      console.log("classe bruh")
+      console.log(c)
       c.promotion = c.promotion.replaceAll('_','').toLowerCase();
       //Switching between columns depending on the promotion
+
       switch (c.promotion) {
         case "infobuts1":
         case "infobuts2":
@@ -151,7 +171,14 @@ let getAllPlannings = async () => {
                 : undefined,
             ],
           });
+
+          
           break;
+
+        
+
+
+
         case "infobuts3":
         case "infobuts4":
         case "infobut2":
@@ -186,15 +213,19 @@ let getAllPlannings = async () => {
             ],
           });
           break;
+
+
+
         case "infobuts5":
         case "infobuts6":
         case "infobuts5alt":
         case "infobuts6alt":
         case "infobuts5fi":
         case "infobuts6fi":
-        case "infobut3fr":
+        case "infobut3fi":
         case "infobut3alt":
         case "infobut3":
+
           edt.info_but3.push({
             className: c.className.split(" ")[1] ? `[${c.className.split(" ")[1]}] ${c.className.split(" ")[0]}` : `${c.className.split(" ")[0]}`,
             isFullClass: classEvent !== undefined,
@@ -230,6 +261,24 @@ let getAllPlannings = async () => {
           console.log("Unknown promotion.");
       }
     }
+
+
+    if (!edt.info_but1[0].subject === undefined){
+      edt.info_but1 = edt.info_but1.slice([0],[1])
+    } else { edt.info_but1 = edt.info_but1.slice([1]) }
+
+
+    if (!edt.info_but2[0].subject === undefined){
+    edt.info_but2 = edt.info_but2.slice([0],[1])
+    } else { edt.info_but2 = edt.info_but2.slice([1]) }
+
+
+    if (!edt.info_but3[0].subject === undefined){
+    edt.info_but3 = edt.info_but3.slice([0],[1])
+    } else { edt.info_but3 = edt.info_but3.slice([1]) }
+
+
+
   } catch (e) {
     console.error("Failed to fetch plannings", e);
     edt.info_but1 = [];

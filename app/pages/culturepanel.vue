@@ -31,7 +31,9 @@ init();
 </script>
 
 <template>
-  <Button v-if="admin" class="m-[25px] w-half" @click="goToAdmin()">Admin Panel</Button>
+  <div class="flex justify-center m-2">
+    <Button v-if="admin" class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToAdmin()">Admin Panel</Button>
+  </div>
   <div id="culturepanel" class="w-screen h-screen flex justify-center items-center">
     <div class="w-1/2 h-[90%]">
       <c-event-editor class="mx-0 lg:mb-[25px] min-w-full min-h-[500px] lg:min-h-full mb-[25px]  "/>

@@ -143,7 +143,6 @@ async function handler(req) {
         if(await verifyToken(parseCookies(req)?.onboardingToken) === false || token === -1) {
           return new Response(JSON.stringify({message:"Session expired or token is invalid."}), {status: 401});
         }
-        console.log("It works.");
         return new Response(JSON.stringify({message: "Token modified successfully."}), {status: 200, headers: {"Set-Cookie": `onboardingToken=${token}; SameSite=Strict`} });
       case "DELETE":
         if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {

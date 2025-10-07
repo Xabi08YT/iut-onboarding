@@ -69,6 +69,7 @@ const deleteEvent = async (id) => {
     toast({
       title: "Event deleted successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -112,6 +113,7 @@ const editEvent = async (modified) => {
     toast({
       title: "Event Modified successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -139,6 +141,7 @@ const addEvent = async (newEvent) => {
     toast({
       title: "Event created successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({

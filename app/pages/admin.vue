@@ -5,6 +5,7 @@ import EventEditor from "~~/views/admin/eventEditor.vue";
 import UserEditor from "~~/views/admin/userEditor.vue";
 import DiscordEditor from "~~/views/admin/discordEditor.vue";
 import { navigateTo } from "nuxt/app";
+import {Button} from "~/components/ui/button";
 
 let fullaccess = ref(false);
 let redirect = false;
@@ -46,7 +47,9 @@ init();
 </script>
 
 <template>
-  <Button v-if="fullaccess" class="m-[25px] w-half" @click="goToCulture()">Culture Panel</Button>
+  <div class="flex justify-center m-2">
+    <Button v-if="fullaccess" class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToCulture()">Culture Panel</Button>
+  </div>
   <div id="container"
        class="w-screen min-h-screen lg:h-dvh lg:max-h-dvh flex flex-col lg:flex-row p-[25px] justify-center items-center">
     <Toaster/>

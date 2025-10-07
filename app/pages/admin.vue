@@ -5,6 +5,7 @@ import EventEditor from "~~/views/admin/eventEditor.vue";
 import UserEditor from "~~/views/admin/userEditor.vue";
 import DiscordEditor from "~~/views/admin/discordEditor.vue";
 import { navigateTo } from "nuxt/app";
+import {Button} from "~/components/ui/button";
 
 let fullaccess = ref(false);
 let redirect = false;

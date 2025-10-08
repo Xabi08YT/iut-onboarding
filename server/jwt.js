@@ -17,7 +17,11 @@ export async function createToken(data) {
 }
 
 export async function exchangeToken(token) {
-  return verifyToken(token) ? createToken(verifyToken(token).id = uuid.v4()) : -1;
+  const verified = await verifyToken(token);
+  if (!verified) return -1;
+
+  verified.id = uuid.v4();
+  return await createToken(verified);
 }
 
 export async function verifyToken(token) {

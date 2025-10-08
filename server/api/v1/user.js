@@ -1,5 +1,5 @@
-import {createUser, deleteUser, getUsers, updateUser} from "~/server/database";
-import {getRole, verifyToken} from "~/server/jwt";
+import {createUser, deleteUser, getUsers, updateUser} from "~~/server/database";
+import {getRole, verifyToken} from "~~/server/jwt";
 
 /**
  * @openapi

@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default {
     compatibilityDate: "2024-04-03",
-    devtools: { enabled: true },
+    devtools: {enabled: true},
     modules: [
         "@nuxtjs/google-fonts",
         "@nuxtjs/tailwindcss",
@@ -13,7 +13,7 @@ export default {
         namePrefix: "Lucide"
     },
 
-    css: ["./stylesheets/global.css"],
+    css: ["@@/stylesheets/global.css"],
 
     app: {
         baseURL: "/preview/info/"
@@ -24,7 +24,7 @@ export default {
         outputDir: "assets/fonts/",
         families: {
             Fredoka: {
-                wght: ["75..125",500]
+                wght: ["75..125", 500]
             },
             Poppins: {
                 wght: 300
@@ -37,7 +37,7 @@ export default {
             proxy: "https://hyperplanning.iut.u-bordeaux.fr/Telechargements/ical/**"
         },
         // Add cors headers
-        "/api/v1/**": { cors: true },
+        "/api/v1/**": {cors: true},
     },
 
     shadcn: {
@@ -50,5 +50,9 @@ export default {
          * @default "./components/ui"
          */
         componentDir: "./components/ui"
-    }
+    },
+
+    tailwindcss: {
+        viewer: false,
+    },
 };

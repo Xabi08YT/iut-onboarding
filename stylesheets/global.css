@@ -76,3 +76,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+#__nuxt {
+  height: 100dvh;
+  width: 100dvw;
+}

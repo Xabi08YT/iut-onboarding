@@ -5,8 +5,8 @@ import {
     deleteEvent,
     createCultureEvent,
     updateCultureEvent, deleteCultureEvent, getCultureEvents
-} from "~/server/database";
-import {getRole, verifyToken} from "~/server/jwt";
+} from "~~/server/database";
+import {getRole, verifyToken} from "~~/server/jwt";
 import {parseCookies, setCookie } from "h3";
 
 /**

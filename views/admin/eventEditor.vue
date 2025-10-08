@@ -1,15 +1,15 @@
 <script setup>
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../components/ui/table";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../components/ui/card";
-import {ScrollArea} from "../../components/ui/scroll-area";
-import {Button} from "../../components/ui/button";
-import {toast} from "../../components/ui/toast";
-import {deepObjectClone} from "../../lib/utils";
-import {DialogClose, DialogHeader, DialogTrigger} from "../../components/ui/dialog";
-import {Input} from "../../components/ui/input";
-import {Label} from "../../components/ui/label";
-import {Textarea} from "../../components/ui/textarea";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
+import {ScrollArea} from "~/components/ui/scroll-area";
+import {Button} from "~/components/ui/button";
+import {toast} from "~/components/ui/toast";
+import {deepObjectClone} from "@@/lib/utils";
+import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
+import {Input} from "~/components/ui/input";
+import {Label} from "~/components/ui/label";
+import {Textarea} from "~/components/ui/textarea";
 
 let events = ref([]);
 
@@ -69,6 +69,7 @@ const deleteEvent = async (id) => {
     toast({
       title: "Event deleted successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -112,6 +113,7 @@ const editEvent = async (modified) => {
     toast({
       title: "Event Modified successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -139,6 +141,7 @@ const addEvent = async (newEvent) => {
     toast({
       title: "Event created successfully",
     });
+    await fetch("api/v1/session", {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({

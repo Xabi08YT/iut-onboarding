@@ -1,10 +1,11 @@
 import fs from "fs";
-import data from "../../../data.json";
-import {getRole, verifyToken} from "~/server/jwt";
+import {getRole, verifyToken} from "~~/server/jwt";
+import {updateConfigValue,getConfigValue} from "~~/server/database"
 
 async function handler(req) {
     let body;
     let token = parseCookies(req)?.onboardingToken
+    let data
 
     try {
         switch(req.method) {
@@ -19,13 +20,13 @@ async function handler(req) {
                     return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
                 }
                 body = await readBody(req);
-                let tmp = await body.json();
-                data.BDEDiscordLink = tmp.link;
-                fs.writeFileSync("../../../data.json", JSON.stringify(data));
+                let tmp = JSON.parse(body)
+                let data = {key: "BDEdiscord", value: tmp.link}
+                await updateConfigValue(data);
                 return new Response(JSON.stringify({message:null}), {status: 200});
             case "GET":
-                let {BDEDiscordLink} = data;
-                return new Response(BDEDiscordLink, {status: 200});
+                let BDEDiscordLink = await getConfigValue("BDEdiscord");
+                return new Response(BDEDiscordLink.value, {status: 200});
             default:
                 return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
         }

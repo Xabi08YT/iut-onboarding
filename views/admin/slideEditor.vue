@@ -1,12 +1,12 @@
 <script setup>
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../components/ui/table";
-import {Input} from "../../components/ui/input";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../components/ui/card";
-import {Switch} from "../../components/ui/switch";
-import {ScrollArea} from "../../components/ui/scroll-area";
-import {toast} from "../../components/ui/toast";
-import {deepObjectClone} from "../../lib/utils";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
+import {Input} from "~/components/ui/input";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
+import {Switch} from "~/components/ui/switch";
+import {ScrollArea} from "~/components/ui/scroll-area";
+import {toast} from "~/components/ui/toast";
+import {deepObjectClone} from "@@/lib/utils";
 
 let slides = ref([]);
 let compareSlidesUser = ref([]);
@@ -41,6 +41,7 @@ const init = async () => {
           toast({
             title: "Slide updated successfully",
           });
+          await fetch("api/v1/session", {method: "PUT"});
         } else {
           toast({
             title: "Slide was not updated",

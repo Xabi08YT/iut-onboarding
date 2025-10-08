@@ -1,4 +1,4 @@
-import {getCultureOngoingEvents} from "~/server/database";
+import {getCultureOngoingEvents} from "~~/server/database";
 
 export default defineEventHandler(async (event) => {
   if (event.req.method === "GET") {

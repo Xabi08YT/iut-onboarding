@@ -22,7 +22,7 @@
             {{
               data.teacher[group === "seconde" ? 1 : 0]
                 ? data.teacher[group === "seconde" ? 1 : 0]
-                : "Pas de prof"
+                : "Autonomie"
             }}
           </p>
         </div>
@@ -50,6 +50,11 @@ export default {
       type: Object,
       required: true,
     },
+    dsMode: {
+      type: Boolean,
+      default: false,
+      required: false,
+    }
   },
   data() {
     return {

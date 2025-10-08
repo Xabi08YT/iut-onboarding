@@ -14,11 +14,10 @@ let refreshInterval = undefined;
 let promos;
 let proxyUrl = `${useRequestURL()}api/hp/`;
 let classes = [];
-let version;
+let {HPversion} = hpSettings;
 let infobut1_DSMODE = ref(false);
 let infobut2_DSMODE = ref(false);
 let infobut3_DSMODE = ref(false);
-let icals;
 
 const props = defineProps({
   isActive: Boolean,
@@ -53,7 +52,7 @@ let generateGroupsSchedulers = () => {
 
     classes.push({
       promotion: promo, className: promo, classIcal: new HyperplanningScheduler(icals[promo].ical,
-          {proxyUrl, version: version}),
+          {proxyUrl, version: HPversion}),
       groups: undefined
     });
 
@@ -77,11 +76,11 @@ let generateGroupsSchedulers = () => {
             ? {
               prime: new HyperplanningScheduler(c.groups.prime, {
                 proxyUrl,
-                version: version,
+                version: HPversion,
               }),
               seconde: new HyperplanningScheduler(c.groups.seconde, {
                 proxyUrl,
-                version: version,
+                version: HPversion,
               }),
             }
             : [],
@@ -166,11 +165,11 @@ let getAllPlannings = async () => {
             room: [
               primeEvent
                   ? primeEvent.locations
-                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
                   : undefined,
               secondeEvent
                   ? secondeEvent.locations
-                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
                   : undefined,
             ],
           });
@@ -200,11 +199,11 @@ let getAllPlannings = async () => {
             room: [
               primeEvent
                   ? primeEvent.locations
-                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
                   : undefined,
               secondeEvent
                   ? secondeEvent.locations
-                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
                   : undefined,
             ],
           });
@@ -241,11 +240,11 @@ let getAllPlannings = async () => {
             room: [
               primeEvent
                   ? primeEvent.locations
-                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
                   : undefined,
               secondeEvent
                   ? secondeEvent.locations
-                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
                   : undefined,
             ],
           });

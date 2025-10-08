@@ -17,9 +17,13 @@ const defaultSlides = [
   {name: "cultureclub", active: true, time: 7},
 ];
 const defaultConfigs = [
+<<<<<<< HEAD
   {key: "BDEdiscord", value:"Undefined"},
   {key: "HPVersion", value:"2025.5.6"},
   {key: "HPIcals", value:"Undefined"}
+=======
+  {key: "BDEdiscord", value:"Undefined"}
+>>>>>>> 6fc1d52 (Changed setup script name to populate.js and added config to the script. Made it more reliable by ignoring errors.)
 ]
 
 function createRandomString(length) {

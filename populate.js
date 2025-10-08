@@ -16,6 +16,9 @@ const defaultSlides = [
   {name: "weather", active: true, time: 7},
   {name: "cultureclub", active: true, time: 7},
 ];
+const defaultConfigs = [
+  {key: "BDEdiscord", value:"Undefined"}
+]
 
 function createRandomString(length) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#_!";
@@ -33,16 +36,34 @@ console.log("Username: admin");
 console.log(`Password:${password}`);
 
 client.$connect();
+
+for(let line of defaultConfigs) {
+  try {
+    client.config.create({data: line}).then();
+  } catch {
+    console.log(`Default config line skipped: ${line}.`)
+  }
+}
+
 //Creating user
-client.user.create({
-  data:
-      {username: "admin",
-        password: bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(cfg.parsed.SALT_ROUNDS))),
-        role: ["ADMIN"],}
-}).then();
+try {
+  client.user.create({
+    data:
+        {username: "admin",
+          password: bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(cfg.parsed.SALT_ROUNDS))),
+          role: ["ADMIN"],}
+  }).then();
+} catch {
+  console.log("Skipped admin user creation.")
+}
 
 //Adding all default slides to database
 for(let slide of defaultSlides) {
-  client.slide.create({data: slide}).then();
+  try {
+    client.slide.create({data: slide}).then();
+  } catch {
+    console.log(`Skipped setup for default slide ${slide.name}`)
+  }
 }
+
 client.$disconnect();

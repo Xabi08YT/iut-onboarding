@@ -239,11 +239,11 @@ let getAllPlannings = async () => {
             room: [
               primeEvent
                   ? primeEvent.locations
-                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
+                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle de conseil","") : ""
                   : undefined,
               secondeEvent
                   ? secondeEvent.locations
-                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ") : ""
+                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle de conseil","") : ""
                   : undefined,
             ],
           });

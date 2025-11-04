@@ -377,7 +377,7 @@ export async function getCultureEvents() {
 /**
  * Get the value of the key from the database
  * @param key
- * @returns {Promise<void>} all the culture events
+ * @returns {Promise<void>} the config values
  */
 export async function getConfigValue(key) {
   client.$connect();
@@ -408,4 +408,152 @@ export async function updateConfigValue(data) {
   });
   client.$disconnect();
   cache.set("discord", result)
+}
+
+/**
+ * Get the conferences from the database
+ * @returns {Promise<void>} all the conferences
+ */
+export async function getConference() {
+  client.$connect();
+  let results = await client.conferences.findMany({
+    where: {
+        when: {
+          gte: new Date((new Date()).getTime()-1000*60*30)
+        }
+      },
+    orderBy: {when: "asc"}
+  });
+  client.$disconnect();
+  return results;
+}
+
+/**
+ * Update a conference
+ * @param data
+ * @returns null
+ */
+export async function updateConference(data) {
+  client.$connect();
+  await client.conferences.update({
+    where: {
+      id: parseInt(data.id),
+    },
+    data: data
+  })
+  client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let result = client.conferences.findMany({
+    orderBy: {when: "asc"}
+  });
+  client.$disconnect();
+  cache.set("conference", result)
+}
+
+/**
+ * Delete a conference
+ * @param id
+ * @returns null
+ */
+export async function deleteConference(id) {
+  client.$connect();
+  await client.conferences.delete({
+    where: {id: parseInt(id),}
+  })
+  client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let result = client.conferences.findMany({
+    orderBy: {when: "asc"}
+  });
+  client.$disconnect();
+  cache.set("conference", result)
+}
+
+/**
+ * Create a conference
+ * @param data
+ * @returns null
+ */
+export async function createConference(data) {
+  client.$connect();
+  await client.conferences.create({data})
+  client.$disconnect();
+}
+
+/**
+ * Get the ateliers from the database
+ * @returns {Promise<void>} all the ateliers
+ */
+export async function getAtelier() {
+  client.$connect();
+  let results = await client.atelier.findMany({
+    where: {
+        end: {
+          lte: new Date()
+        }
+      },
+    orderBy: {when: "asc"}
+  });
+  client.$disconnect();
+  return results;
+}
+
+/**
+ * Update a atelier
+ * @param data
+ * @returns null
+ */
+export async function updateAtelier(data) {
+  client.$connect();
+  await client.atelier.update({
+    where: {
+      id: parseInt(data.id),
+    },
+    data: data
+  })
+  client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let result = client.atelier.findMany({
+    orderBy: {name: "asc"}
+  });
+  client.$disconnect();
+  cache.set("atelier", result)
+}
+
+/**
+ * Delete a conference
+ * @param id
+ * @returns null
+ */
+export async function deleteAtelier(id) {
+  client.$connect();
+  await client.atelier.delete({
+    where: {id: parseInt(id),}
+  })
+  client.$disconnect();
+
+  //Update cache
+  client.$connect();
+  let result = client.atelier.findMany({
+    orderBy: {name: "asc"}
+  });
+  client.$disconnect();
+  cache.set("atelier", result)
+}
+
+/**
+ * Create a atelier
+ * @param data
+ * @returns null
+ */
+export async function createAtelier(data) {
+  client.$connect();
+  await client.atelier.create({data})
+  client.$disconnect();
 }

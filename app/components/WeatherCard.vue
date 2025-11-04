@@ -32,15 +32,15 @@ export default {
     };
   },
   methods: {
-    fetchWeather() {
+    async fetchWeather() {
       console.log("Refreshing weather");
-      fetch("/api/v1/getCurrentWeather")
+      await fetch("/api/v1/getCurrentWeather")
       .then((response) => response.json())
       .then((weatherinfos) => {
         this.currentTemperature = weatherinfos.temperature;
         this.currentWeather = weatherinfos.weatherText;
       });
-      fetch("/api/v1/getNext12hWeather")
+      await fetch("/api/v1/getNext12hWeather")
       .then((response) => response.json())
       .then((tab) => {
         this.info_meteo = tab;

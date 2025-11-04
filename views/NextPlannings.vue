@@ -1,9 +1,7 @@
 <script setup>
 import {defineComponent, onMounted, onUnmounted, reactive} from "vue";
 import PlanningCard from "~/components/PlanningCard.vue";
-import icals from "~~/icals.json";
 import {HyperplanningScheduler} from "@xabi08yt/iutgradignanhpscheduler";
-import hpSettings from "~~/data.json";
 
 const edt = reactive({info_but1: [], info_but2: [], info_but3: []});
 const delay = 1000 * 60 * 5; // Refresh toutes les 5 minutes
@@ -13,10 +11,11 @@ let refreshInterval = undefined;
 let promos;
 let proxyUrl = `${useRequestURL()}api/hp/`;
 let classes = [];
-let {HPversion} = hpSettings;
+let version;
 let infobut1_DSMODE = ref(false);
 let infobut2_DSMODE = ref(false);
 let infobut3_DSMODE = ref(false);
+let icals;
 
 const props = defineProps({
   isActive: Boolean,
@@ -51,7 +50,7 @@ let generateGroupsSchedulers = () => {
 
     classes.push({
       promotion: promo, className: promo, classIcal: new HyperplanningScheduler(icals[promo].ical,
-          {proxyUrl, version: HPversion}),
+          {proxyUrl, version: version}),
       groups: undefined
     });
 
@@ -70,16 +69,16 @@ let generateGroupsSchedulers = () => {
       classes.push({
         promotion: promo,
         className: c.className,
-        classIcal: new HyperplanningScheduler(c.classIcal, {proxyUrl, version: HPversion}),
+        classIcal: new HyperplanningScheduler(c.classIcal, {proxyUrl, version: version}),
         groups: c.groups
             ? {
               prime: new HyperplanningScheduler(c.groups.prime, {
                 proxyUrl,
-                version: HPversion,
+                version: version,
               }),
               seconde: new HyperplanningScheduler(c.groups.seconde, {
                 proxyUrl,
-                version: HPversion,
+                version: version,
               }),
             }
             : [],
@@ -297,6 +296,12 @@ let refresh = async () => {
 };
 
 onMounted(async () => {
+  let res = await fetch("api/v1/hyperplanningEndpoint");
+  if (res.status === 200) {
+    let body = await res.json();
+    icals = JSON.parse(JSON.parse(body.icals.value));
+    version = body.version.value.replaceAll("\"", "");
+  }
   setCurrentHourRange();
   generateGroupsSchedulers();
   getAllPlannings();

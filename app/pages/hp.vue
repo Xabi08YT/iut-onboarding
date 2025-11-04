@@ -6,18 +6,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { navigateTo } from "nuxt/app";
 import { ref } from "vue";
 import Input from "../components/ui/input/Input.vue";
+import {toast} from "../components/ui/toast";
 
 let admin = ref(false);
 let hpVersion = ref("")
 let hpIcals = ref("")
 
-const send = () => {
+const send = async () => {
   let object = {version: hpVersion.value, icals: hpIcals.value};
   let res = await fetch("api/v1/hyperplanningEndpoint", {method:"PUT",body: JSON.stringify(object)})
   if (res.status === 200) {
-    toast({titre:"Paramètres mis à jour avec succès"});
+    toast({title:"Paramètres mis à jour avec succès"});
   } else {
-    toast({titre: "Une erreur est survenue", description: await res.json(), variant: "destructive"});
+    toast({title: "Une erreur est survenue", description: await res.json(), variant: "destructive"});
   }
 }
 
@@ -27,9 +28,10 @@ const get = async () => {
     toast({title: "Impossible de récuperer les paramètres Hyperplanning", description: await res.json(), variant: "destructive"});
   }
   console.log(res);
-  let body = res.json()
-  hpVersion.value =  body.version
-  hpIcals.value = body.icals
+  let body = await  res.json()
+  console.log(body)
+  hpVersion.value =  body.version.value.replaceAll("\"","");
+  hpIcals.value = body.icals.value.slice(1,-1).replaceAll("\\","");
 }
 
 const init = async () => {

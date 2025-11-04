@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
             return new Response(JSON.stringify({version: hp_version, icals: hp_icals}), {status: 200});
         case "PUT":
-            let token = parseCookies(req)?.onboardingToken
+            let token = parseCookies(event)?.onboardingToken
             if (await verifyToken(token) === false) {
                 return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
             }
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
                 return new Response(JSON.stringify({message: "Permission denied."}), {status: 403});
             }
 
-            let body = readBody(event);
+            let body = await readBody(event);
             let parsed = JSON.parse(body);
 
             try {

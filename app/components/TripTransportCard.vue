@@ -24,7 +24,6 @@
 
 
 <script>
-import * as api from "@@/api";
 import CircleProgress from "vue3-circle-progress";
 
 export default {
@@ -76,9 +75,14 @@ export default {
       return Math.abs(Date.now() - new Date(src));
     },
     async setTimeRemaining() {
-      const res = await api.fetchTBM(
-        this.busData.stops[this.index],
-      );
+      const params = new URLSearchParams(
+        {
+          stopId: this.busData.stops[this.index]
+        }
+      )
+      const apiresult = await fetch(`/api/v1/getTBM?${params}`);
+      const res = await apiresult.json();
+
       let found = false;
       let i = 0;
       while (!found && i < res.length) {
@@ -112,11 +116,13 @@ export default {
     this.setTimeRemaining();
     this.timeRemainingInterval = setInterval(this.setTimeRemaining, 5000);
     this.refreshProgressInterval = setInterval(this.refreshProgressBar, 1000);
-    api
-      .getTBMLineWaitInterval(
-        this.busData.stops[this.index],
-        this.busData.lineId
-      ).then((time) => {
+
+    const params = new URLSearchParams({
+      stopId: this.busData.stops[this.index],
+      lineId: this.busData.lineId
+    })
+    fetch(`/api/v1/getTBM?${params}`)
+      .then((time) => {
         this.waitInterval = time;
       }).catch((err) => {
         console.error(err);

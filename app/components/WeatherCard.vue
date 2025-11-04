@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import * as api from "../api";
 export default {
   data() {
     return {
@@ -35,11 +34,15 @@ export default {
   methods: {
     fetchWeather() {
       console.log("Refreshing weather");
-      api.fetchCurrentWeather().then((weatherinfos) => {
+      fetch("/api/v1/getCurrentWeather")
+      .then((response) => response.json())
+      .then((weatherinfos) => {
         this.currentTemperature = weatherinfos.temperature;
         this.currentWeather = weatherinfos.weatherText;
       });
-      api.fetch12HoursWeather().then((tab) => {
+      fetch("/api/v1/getNext12hWeather")
+      .then((response) => response.json())
+      .then((tab) => {
         this.info_meteo = tab;
       });
     },

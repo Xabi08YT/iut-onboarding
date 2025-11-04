@@ -12,6 +12,10 @@ const goToCulture = () => {
   return navigateTo("/culturepanel");
 };
 
+const goToHP = () => {
+  return navigateTo("/hp");
+};
+
 </script>
 
 <template>
@@ -25,7 +29,8 @@ const goToCulture = () => {
       <CardFooter>
         <div class="flex flex-row w-full">
           <Button class="mt-[5px] w-full space" @click="goToAdmin">Admin</Button>
-          <Button class="mt-[5px] w-full" @click="goToCulture">Culture club</Button>
+          <Button class="mt-[5px] w-full space" @click="goToCulture">Culture club</Button>
+          <Button class="mt-[5px] w-full" @click="goToHP">Hyperplanning setup</Button>
         </div>
       </CardFooter>
     </Card>

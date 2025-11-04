@@ -5,11 +5,31 @@ import {Toaster} from "~/components/ui/toast";
 import { Textarea } from '@/components/ui/textarea';
 import { navigateTo } from "nuxt/app";
 import { ref } from "vue";
+import Input from "../components/ui/input/Input.vue";
 
 let admin = ref(false);
+let hpVersion = ref("")
+let hpIcals = ref("")
 
 const send = () => {
-    // TODO
+  let object = {version: hpVersion.value, icals: hpIcals.value};
+  let res = await fetch("api/v1/hyperplanningEndpoint", {method:"PUT",body: JSON.stringify(object)})
+  if (res.status === 200) {
+    toast({titre:"Paramètres mis à jour avec succès"});
+  } else {
+    toast({titre: "Une erreur est survenue", description: await res.json(), variant: "destructive"});
+  }
+}
+
+const get = async () => {
+  let res = await fetch("api/v1/hyperplanningEndpoint");
+  if (!res.ok) {
+    toast({title: "Impossible de récuperer les paramètres Hyperplanning", description: await res.json(), variant: "destructive"});
+  }
+  console.log(res);
+  let body = res.json()
+  hpVersion.value =  body.version
+  hpIcals.value = body.icals
 }
 
 const init = async () => {
@@ -19,12 +39,12 @@ const init = async () => {
     return navigateTo("/login");
   }
   let {roles} = await loggedIn.json();
-  if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("CULTURE")) {
+  if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("ENSEIGNANT")) {
     return navigateTo("/login");
   }
-  if(roles.includes("ADMIN")){
-    admin.value = true;
-  }
+
+  await get();
+
 };
 
 const goToAdmin = () => {
@@ -48,11 +68,14 @@ init();
     <Toaster />
     <Card class="max-w-md">
       <CardHeader>
-        <CardTitle>Envoi de fichier ical.</CardTitle>
-        <CardDescription>Veuillez renseigner le texte ical que vous souhaitez soumettre.</CardDescription>
+        <CardTitle>Paramètres Hyperplanning</CardTitle>
+        <CardDescription>Changement des paramètres relatifs aux emplois du temps HyperPlanning.</CardDescription>
       </CardHeader>
       <CardContent class="">
-        <Textarea placeholder="Content" />
+        <Label for="hpver">Version d'hyperplanning</Label>
+        <Input id="hpver" type="text" placeholder="Version" v-model="hpVersion" />
+        <Label for="hpical">Contenu du fichier JSON des icals</Label>
+        <Textarea id="hpical" placeholder="Contenu" v-model="hpIcals"/>
       </CardContent>
       <CardFooter>
         <Button class="mt-[5px] w-full" @click="send">Envoyer</Button>

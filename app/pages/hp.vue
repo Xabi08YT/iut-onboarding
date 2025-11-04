@@ -44,6 +44,7 @@ const init = async () => {
   if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("ENSEIGNANT")) {
     return navigateTo("/login");
   }
+  admin.value = roles.includes("ADMIN") || roles.includes("MAINTAINER");
 
   await get();
 

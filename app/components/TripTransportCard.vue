@@ -122,13 +122,15 @@ export default {
       lineId: this.busData.lineId
     })
     fetch(`/api/v1/getTBM?${params}`)
-      .then((time) => {
-        this.waitInterval = time;
-      }).catch((err) => {
-        console.error(err);
-        this.waitInterval = 6000000;
-        this.error = 1;
-      });
+    .then(res => res.json())
+    .then(data => {
+      this.waitInterval = data;
+    })
+    .catch(err => {
+      console.error(err);
+      this.waitInterval = 6000000;
+      this.error = 1;
+    });
   },
   unmounted() {
     clearInterval(this.refreshProgressInterval);

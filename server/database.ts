@@ -3,9 +3,10 @@ import * as bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
 import NodeCache from "node-cache";
 
-const cfg = dotenv.config();
+dotenv.config();
+
 const client = new PrismaClient();
-const saltRounds = cfg.parsed.SALT_ROUNDS ? parseInt(cfg.parsed.SALT_ROUNDS) : 10;
+const saltRounds = process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 // Setting a cache with a 10 mn TTL for each item
 const cache = new NodeCache({stdTTL: 10 * 60});
@@ -16,14 +17,14 @@ const cache = new NodeCache({stdTTL: 10 * 60});
  * @param username username of the user
  * @param password password of this same user
  */
-export async function login(username, password) {
-    client.$connect();
-    let user = await client.user.findFirst({where: {username}});
-    client.$disconnect();
-    if (!user) {
-        return {ok: false, user: null};
-    }
-    return {ok: bcrypt.compare(password, user.password), user};
+export async function login(username: string, password: string) {
+  client.$connect();
+  let user = await client.user.findFirst({where: {username}});
+  client.$disconnect();
+  if (!user) {
+    return {ok: false, user: null};
+  }
+  return {ok: bcrypt.compare(password, user.password), user};
 }
 
 /**
@@ -48,14 +49,14 @@ export async function getSlides() {
  * @param data
  * @returns {Promise<void>}
  */
-export async function updateSlide(data) {
-    data.time = parseInt(data.time);
-    client.$connect();
-    await client.slide.update({
-        where: {id: data.id},
-        data,
-    });
-    client.$disconnect();
+export async function updateSlide(data: any) {
+  data.time = parseInt(data.time);
+  client.$connect();
+  await client.slide.update({
+    where: {id: data.id},
+    data,
+  });
+  client.$disconnect();
 
     //Updating the cache
     client.$connect();
@@ -89,11 +90,11 @@ export async function getUsers() {
  * @param data
  * @returns {Promise<void>}
  */
-export async function createUser(data) {
-    data.password = await bcrypt.hash(data.password, salt);
-    client.$connect();
-    await client.user.create({data});
-    client.$disconnect();
+export async function createUser(data: any) {
+  data.password = await bcrypt.hash(data.password, salt);
+  client.$connect();
+  await client.user.create({data});
+  client.$disconnect();
 }
 
 /**
@@ -101,14 +102,14 @@ export async function createUser(data) {
  * @param data
  * @returns {Promise<void>}
  */
-export async function updateUser(data) {
-    data.password = await bcrypt.hash(data.password, salt);
-    client.$connect();
-    await client.user.update({
-        where: {id: parseInt(data.id)},
-        data,
-    });
-    client.$disconnect();
+export async function updateUser(data: any) {
+  data.password = await bcrypt.hash(data.password, salt);
+  client.$connect();
+  await client.user.update({
+    where: {id: parseInt(data.id)},
+    data,
+  });
+  client.$disconnect();
 }
 
 /**
@@ -116,10 +117,10 @@ export async function updateUser(data) {
  * @param id ID of the user
  * @returns null
  */
-export async function deleteUser(id) {
-    client.$connect();
-    await client.user.delete({where: {id}});
-    client.$disconnect();
+export async function deleteUser(id: number) {
+  client.$connect();
+  await client.user.delete({where: {id}});
+  client.$disconnect();
 }
 
 /**
@@ -135,7 +136,7 @@ export async function getEvents() {
 }
 
 export async function getOngoingEvents() {
-    const cachedData = cache.get("events");
+  const cachedData = cache.get<Event[]>("events");
 
     if (!cachedData || cachedData.length === 0) {
         client.$connect();
@@ -160,12 +161,12 @@ export async function getOngoingEvents() {
  * @param data data necessary to create the event
  * @returns null
  */
-export async function createEvent(data) {
-    data.startTS = new Date(data.startTS);
-    data.endTS = new Date(data.endTS);
-    client.$connect();
-    await client.event.create({data});
-    client.$disconnect();
+export async function createEvent(data: any) {
+  data.startTS = new Date(data.startTS);
+  data.endTS = new Date(data.endTS);
+  client.$connect();
+  await client.event.create({data});
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -187,23 +188,23 @@ export async function createEvent(data) {
  * @param data
  * @returns null
  */
-export async function updateEvent(data) {
-    client.$connect();
-    await client.event.update({
-        where: {
-            id: parseInt(data.id),
-        },
-        data: {
-            id: data.id,
-            title: data.title,
-            description: data.description,
-            startTS: new Date(data.startts),
-            endTS: new Date(data.endts),
-            image: data.image,
-            channel: data.channel
-        },
-    });
-    client.$disconnect();
+export async function updateEvent(data: any) {
+  client.$connect();
+  await client.event.update({
+    where: {
+      id: parseInt(data.id),
+    },
+    data: {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      startTS: new Date(data.startts),
+      endTS: new Date(data.endts),
+      image: data.image,
+      channel: data.channel
+    },
+  });
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -225,23 +226,23 @@ export async function updateEvent(data) {
  * @param id ID of the event to remove
  * @returns null
  */
-export async function deleteEvent(id) {
-    client.$connect();
-    await client.event.delete({where: {id: parseInt(id)}});
-    client.$disconnect();
-    //Update cache
-    client.$connect();
-    let results = await client.event.findMany({
-        where: {
-            startTS: {
-                lte: new Date()
-            }, endTS: {
-                gte: new Date()
-            }
-        }, orderBy: {channel: "asc"}
-    });
-    client.$disconnect();
-    cache.set("events", results);
+export async function deleteEvent(id: string) {
+  client.$connect();
+  await client.event.delete({where: {id: parseInt(id)}});
+  client.$disconnect();
+  //Update cache
+  client.$connect();
+  let results = await client.event.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {channel: "asc"}
+  });
+  client.$disconnect();
+  cache.set("events", results);
 }
 
 /**
@@ -249,15 +250,15 @@ export async function deleteEvent(id) {
  * @param data
  * @returns {Promise<void>}
  */
-export async function createCultureEvent(data) {
-    data.startTS = new Date(data.startTS);
-    data.endTS = new Date(data.endTS);
-    if (data.eventTS) {
-        data.eventTS = new Date(data.eventTS);
-    }
-    client.$connect();
-    await client.cultureEvent.create({data});
-    client.$disconnect();
+export async function createCultureEvent(data: any) {
+  data.startTS = new Date(data.startTS);
+  data.endTS = new Date(data.endTS);
+  if(data.eventTS) {
+    data.eventTS = new Date(data.eventTS);
+  }
+  client.$connect();
+  await client.cultureEvent.create({data});
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -279,24 +280,23 @@ export async function createCultureEvent(data) {
  * @param data
  * @returns null
  */
-export async function updateCultureEvent(data) {
-    client.$connect();
-    await client.cultureEvent.update({
-        where: {
-            id: parseInt(data.id),
-        },
-        data: {
-            id: data.id,
-            title: data.title,
-            description: data.description,
-            startTS: new Date(data.startts),
-            endTS: new Date(data.endts),
-            eventTS: data.eventTS ? new Date(data.eventTS) : undefined,
-            image: data.image,
-            channel: data.channel
-        },
-    });
-    client.$disconnect();
+export async function updateCultureEvent(data: any) {
+  client.$connect();
+  await client.cultureEvent.update({
+    where: {
+      id: parseInt(data.id),
+    },
+    data: {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      startTS: new Date(data.startts),
+      endTS: new Date(data.endts),
+      eventTS: data.eventTS ? new Date(data.eventTS) : undefined,
+      image: data.image
+    },
+  });
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -318,23 +318,23 @@ export async function updateCultureEvent(data) {
  * @param id ID of the event to remove
  * @returns null
  */
-export async function deleteCultureEvent(id) {
-    client.$connect();
-    await client.cultureEvent.delete({where: {id: parseInt(id)}});
-    client.$disconnect();
-    //Update cache
-    client.$connect();
-    let results = await client.cultureEvent.findMany({
-        where: {
-            startTS: {
-                lte: new Date()
-            }, endTS: {
-                gte: new Date()
-            }
-        }, orderBy: {eventTS: "asc"}
-    });
-    client.$disconnect();
-    cache.set("cevents", results);
+export async function deleteCultureEvent(id: string) {
+  client.$connect();
+  await client.cultureEvent.delete({where: {id: parseInt(id)}});
+  client.$disconnect();
+  //Update cache
+  client.$connect();
+  let results = await client.cultureEvent.findMany({
+    where: {
+      startTS: {
+        lte: new Date()
+      }, endTS: {
+        gte: new Date()
+      }
+    }, orderBy: {eventTS: "asc"}
+  });
+  client.$disconnect();
+  cache.set("cevents", results);
 }
 
 /**
@@ -342,7 +342,7 @@ export async function deleteCultureEvent(id) {
  * @returns {Promise<unknown>}
  */
 export async function getCultureOngoingEvents() {
-    const cachedData = cache.get("cevents");
+  const cachedData = cache.get<Event[]>("events");
 
     if (!cachedData || cachedData.length === 0) {
         client.$connect();
@@ -379,11 +379,13 @@ export async function getCultureEvents() {
  * @param key
  * @returns {Promise<void>} the config values
  */
-export async function getConfigValue(key) {
-    client.$connect();
-    let results = await client.config.findFirst({where: {key}});
-    client.$disconnect();
-    return results;
+export async function getConfigValue(key: string) {
+  client.$connect();
+  console.log("dkjagzjbrhcegzhrb ",key)
+  let results = await client.config.findFirst({where: {key}});
+  console.log("lmao ",results)
+  client.$disconnect();
+  return results;
 }
 
 /**
@@ -391,15 +393,15 @@ export async function getConfigValue(key) {
  * @param data
  * @returns null
  */
-export async function updateConfigValue(data) {
-    client.$connect();
-    await client.config.update({
-        where: {
-            key: data.key,
-        },
-        data: data
-    })
-    client.$disconnect();
+export async function updateConfigValue(data: any) {
+  client.$connect();
+  await client.config.update({
+    where: {
+      key: data.key,
+    },
+    data: data
+  })
+  client.$disconnect();
 
     //Update cache
     client.$connect();

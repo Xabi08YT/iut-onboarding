@@ -182,7 +182,7 @@ import {parseCookies, setCookie} from "h3";
  *       410:
  *         description: "This event does not exist."
  */
-async function handler(req) {
+async function handler(req: any): Promise<Response> {
     let body;
     let token = parseCookies(req)?.onboardingToken
     if (await verifyToken(token) === false) {
@@ -222,8 +222,8 @@ async function handler(req) {
             default:
                 return new Response(JSON.stringify({message: "Method not allowed. Please read the documentation."}), {status: 405});
         }
-    } catch (error) {
-        return new Response(JSON.stringify({message: `Internal Server Error: ${error.message}`}), {status: 500});
+    } catch (error: any) {
+        return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
     }
 }
 

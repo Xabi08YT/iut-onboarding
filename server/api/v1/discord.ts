@@ -47,7 +47,7 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  *             500:
  *                 description: "Unknown error"
  */
-async function handler(req) {
+async function handler(req: any) {
     let body;
     let token = parseCookies(req)?.onboardingToken
 
@@ -64,27 +64,18 @@ async function handler(req) {
                     return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
                 }
                 body = await readBody(req);
-<<<<<<< HEAD
                 let tmp = JSON.parse(body)
                 let data = {key: "BDEdiscord", value: tmp.link}
                 await updateConfigValue(data);
                 return new Response(JSON.stringify({message:null}), {status: 200});
             case "GET":
                 let BDEDiscordLink = await getConfigValue("BDEdiscord");
+                if (!BDEDiscordLink) throw Error("No value found");
                 return new Response(BDEDiscordLink.value, {status: 200});
-=======
-                let tmp = await body.json();
-                updateConfigValue({key: "BDEdiscord", value: tmp.link});
-                fs.writeFileSync("../../../data.json", JSON.stringify(data));
-                return new Response(JSON.stringify({message:null}), {status: 200});
-            case "GET":
-                let BDEDiscordLink = getConfigValue("BDEdiscord");
-                return new Response(BDEDiscordLink, {status: 200});
->>>>>>> 3049cd7 (started storing link in data base)
             default:
                 return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
         }
-    } catch (error) {
+    } catch (error: any) {
         return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
     }
 }

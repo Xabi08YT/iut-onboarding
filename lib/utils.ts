@@ -10,6 +10,6 @@ export function cn(...inputs: ClassValue[]) {
  * @param o object to clone
  * @returns {any} cloned object
  */
-export const deepObjectClone = (o) => {
+export const deepObjectClone = (o: any): any => {
   return JSON.parse(JSON.stringify(o));
 };

@@ -14,7 +14,7 @@
         :key="index"
       >
         <p>{{ meteo.Heure }}h00</p>
-        <img :src="meteo.icone" />
+        <img :src="meteo.icone"/>
         <p>{{ meteo.Temperature }}°</p>
       </div>
     </div>

@@ -55,4 +55,7 @@ export default {
     tailwindcss: {
         viewer: false,
     },
+    nitro: {
+        preset: 'bun',
+    }
 };

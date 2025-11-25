@@ -12,7 +12,7 @@ export default {
       active: false,
       duration: 3000,
       logoIut: ref(""),
-      logoGP: "assets/images/gitpoule.png",
+      logoGP: "assets/gitpoule.png",
       currentLogo: null,
       logoto: null
     };

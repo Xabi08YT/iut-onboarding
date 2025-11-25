@@ -185,7 +185,7 @@ import {parseCookies, setCookie} from "h3";
 export default defineEventHandler(async (event) => {
     const method = event.method;
     const cookies = parseCookies(event);
-    const token = cookies?.onboardingToken;
+    const token: string = cookies?.onboardingToken;
     let body;
 
     if(await verifyToken(token) === false) {

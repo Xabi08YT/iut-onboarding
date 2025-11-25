@@ -54,28 +54,28 @@ export default defineEventHandler(async (event) => {
   const token: string = cookies?.onboardingToken;
 
   try {
-      switch(method) {
-          case "PUT":
-              if(await verifyToken(token) === false) {
-                  return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
-              }
+    switch(method) {
+        case "PUT":
+            if(await verifyToken(token) === false) {
+                return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+            }
 
-              let roles = await getRole(token);
+            let roles = await getRole(token);
 
-              if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER"))) {
-                  return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
-              }
-              const body = await readBody<{ link: string }>(event)
-              let tmp = JSON.parse(body)
-              let data = {key: "BDEdiscord", value: tmp.link}
-              await updateConfigValue(data);
-              return new Response(JSON.stringify({message:null}), {status: 200});
-          case "GET":
-              let BDEDiscordLink = await getConfigValue("BDEdiscord");
-              return new Response(BDEDiscordLink.value, {status: 200});
-          default:
-              return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
-      }
+            if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER"))) {
+                return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
+            }
+            const body = await readBody<{ link: string }>(event)
+            let tmp = JSON.parse(body)
+            let data = {key: "BDEdiscord", value: tmp.link}
+            await updateConfigValue(data);
+            return new Response(JSON.stringify({message:null}), {status: 200});
+        case "GET":
+            let BDEDiscordLink = await getConfigValue("BDEdiscord");
+            return new Response(BDEDiscordLink.value, {status: 200});
+        default:
+            return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
+    }
   } catch (error) {
       return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
   }

@@ -1,6 +1,6 @@
 import swaggerJSDoc from "swagger-jsdoc";
 
-let handler =  (_req, _res) => {
+let handler =  (_req: any, _res: any) => {
   const swaggerDefinition = {
     openapi: "3.0.1",
     info: {

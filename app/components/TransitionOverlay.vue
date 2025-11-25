@@ -30,6 +30,7 @@ export default {
     },
     refreshLogo() {
       fetch("api/v1/getLogo").then(async (res) => this.logoIut = await res.text());
+      console.log(this.logoIut);
     }
   },
   computed: {

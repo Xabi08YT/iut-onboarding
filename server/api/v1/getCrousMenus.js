@@ -6,6 +6,45 @@ const CROUS_RESTAURANT_BASE_URL = "https://www.crous-bordeaux.fr/restaurant/";
 const SIRTAKI_URL = `${CROUS_RESTAURANT_BASE_URL}crous-cafet-le-sirtaki`;
 const SPACE_URL = `${CROUS_RESTAURANT_BASE_URL}space-campus-resto-u-3`;
 
+
+/**
+ * @openapi
+ * /getCrousMenus:
+ *    get:
+ *      tags: 
+ *        - Crous menus fetch
+ *      security:
+ *      - JWT: []
+ *     description: "Get a json data with crous menus from sirtaki and "
+ *     responses:
+ *       200:
+ *         description: "Return a JSON array containing every event stored in the database"
+ *          content:
+ *              application/json:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                    sirtakiEnabled:
+ *                      type: boolean
+ *                      description: "indicate if the sirtaki menu is enabled or not"
+ *                      example:true
+ *                    spaceEnabled:
+ *                      type: boolean
+ *                      description: "indicate if the space menu is enabled or not"
+ *                      example:true
+ *                    sirtaki:
+ *                      schema:
+ *                        type: array:
+ *                        items: 
+ *                          type: string
+ *                      description: "the menu of the sirtaki restaurant"
+ *                    space:
+ *                      schema:
+ *                        type: array:
+ *                        items: 
+ *                          type: string
+ *                      description: "the menu of the space restaurant"
+ */
 /**
  * Sélectionne tous les plats du menu du jour actuel, sans les entrées ni les desserts
  * @param {string} URL

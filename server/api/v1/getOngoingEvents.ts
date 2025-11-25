@@ -50,12 +50,12 @@ import {getOngoingEvents} from "~~/server/database";
  *                                          example: "https://img.com/event.png"
  */
 export default defineEventHandler(async (event) => {
-    if (event.req.method === "GET") {
-        try {
-            const events = await getOngoingEvents();
-            return { statusCode: 200, body: JSON.stringify(events) };
-        } catch (error) {
-            return { statusCode: 500, body: JSON.stringify(error) };
-        }
+  if (event.method === "GET") {
+    try {
+      const events = await getOngoingEvents();
+      return { statusCode: 200, body: JSON.stringify(events) };
+    } catch (error: any) {
+      return { statusCode: 500, body: JSON.stringify(error) };
     }
+  }
 });

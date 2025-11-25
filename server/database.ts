@@ -1,4 +1,5 @@
 import {PrismaClient} from "@prisma/client";
+import { JsonValue } from "@prisma/client/runtime/library";
 import * as bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
 import NodeCache from "node-cache";
@@ -16,21 +17,51 @@ export interface PrismaKeyValue {
   value: string
 }
 
+export interface AuthenticatedUser {
+  id: number;
+  username: string;
+  password: string;
+  role: JsonValue;
+}
+
+export interface LoginResult {
+  ok: boolean;
+  user: AuthenticatedUser|null;
+}
+
 
 /**
  * Check if the username is correct or not
  * @param username username of the user
  * @param password password of this same user
  */
-export async function login(username: string, password: string) {
-  client.$connect();
-  let user = await client.user.findFirst({where: {username}});
-  client.$disconnect();
+export async function login(username: string, password: string): Promise<LoginResult> {
+  await client.$connect();
+  const user = await client.user.findFirst({where: { username },});
+  await client.$disconnect();
+
   if (!user) {
-    return {ok: false, user: null};
+    return { ok: false, user: null };
   }
-  return {ok: bcrypt.compare(password, user.password), user};
+
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) {
+    return { ok: false, user: null };
+  }
+
+  const typedUser: AuthenticatedUser = {
+    id: user.id,
+    username: user.username,
+    password: user.password,
+    role: user.role,
+  };
+
+  return {
+    ok: true,
+    user: typedUser,
+  };
 }
+
 
 /**
  * Gets all the slides

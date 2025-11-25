@@ -182,11 +182,14 @@ import {parseCookies, setCookie} from "h3";
  *       410:
  *         description: "This event does not exist."
  */
-async function handler(req: any): Promise<Response> {
+export default defineEventHandler(async (event) => {
+    const method = event.method;
+    const cookies = parseCookies(event);
+    const token = cookies?.onboardingToken;
     let body;
-    let token = parseCookies(req)?.onboardingToken
-    if (await verifyToken(token) === false) {
-        return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
+
+    if(await verifyToken(token) === false) {
+        return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
     }
 
     let roles = await getRole(token);
@@ -195,26 +198,17 @@ async function handler(req: any): Promise<Response> {
         return new Response(JSON.stringify({message: "Permission denied."}), {status: 403});
     }
     try {
-        switch (req.method) {
+        switch(method) {
             case "POST":
-                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
-                }
-                body = await readBody(req);
+                body = await readBody(event);
                 await createCultureEvent(body);
                 return new Response(JSON.stringify({message: "Event created successfully."}), {status: 201});
             case "PUT":
-                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
-                }
-                body = await readBody(req);
+                body = await readBody(event);
                 await updateCultureEvent(body);
                 return new Response(JSON.stringify({message: null}), {status: 200});
             case "DELETE":
-                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
-                }
-                body = await readBody(req);
+                body = await readBody(event);
                 await deleteCultureEvent(body);
                 return new Response(JSON.stringify({message: null}), {status: 200});
             case "GET":
@@ -225,6 +219,4 @@ async function handler(req: any): Promise<Response> {
     } catch (error: any) {
         return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
     }
-}
-
-export default eventHandler(handler);
+})

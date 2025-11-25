@@ -30,16 +30,16 @@ const CURRENT_WEATHER_URL =
  */
 
 export default defineEventHandler(async (event) => {
-    if (event.method == "GET") {
-        try {
-            const result = await fetch(CURRENT_WEATHER_URL);
-            const data = await result.json();
-            return new Response(JSON.stringify({
-                weatherText: data.current.condition.text,
-                temperature: data.current.temp_c,
-            }));
-        } catch (e) {
-            throw `Erreur de récupération des données météo : ${e}`;
-        }
+  if (event.method == "GET") {
+    try {
+      const result = await fetch(CURRENT_WEATHER_URL);
+      const data = await result.json();
+      return { statusCode: 200, body: JSON.stringify({
+        weatherText: data.current.condition.text,
+        temperature: data.current.temp_c,
+      })}
+    } catch (error: any) {
+      return { statusCode: 500, body: JSON.stringify(error) };
     }
+  }
 });

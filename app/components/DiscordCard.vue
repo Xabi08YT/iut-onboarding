@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="logoDiscordContainer">
-      <NuxtImg src="@@/public/assets/logo_discord.png" alt="Discord Banner 2" loading="lazy"/>
+      <NuxtImg src="assets/logo_discord.png" alt="Discord Banner 2" loading="lazy"/>
     </div>
     <ClientOnly>
       <div class="qrCodeContainer">

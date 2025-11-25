@@ -1,6 +1,12 @@
 const WEATHER_URL_NEXT_12_HOURS =
   "https://api.weatherapi.com/v1/forecast.json?key=72687f6b06f94afa9f7103056220603&q=Gradignan&aqi=no&lang=fr&hour=";
 
+interface WeatherEntry {
+    Heure: number,
+    icone: string,
+    Temperature: number
+};
+
 /**
  * @openapi
  * /getNext12hWeather:
@@ -34,7 +40,7 @@ const WEATHER_URL_NEXT_12_HOURS =
  */
 export default defineEventHandler(async (event) => {
     if (event.method == "GET") {
-        let weathertab = [];
+        let weathertab: WeatherEntry[] = [];
         let dateT = new Date();
         let hour = dateT.getHours() + 2;
         if (hour % 2 === 1) {
@@ -46,15 +52,15 @@ export default defineEventHandler(async (event) => {
                 hourloop = hourloop - 24;
             }
             try {
-                const result = await fetch(WEATHER_URL_NEXT_12_HOURS + hourloop, {mode: "cors"});
-                const data = await result.json();
-                weathertab.push({
-                    Heure: hourloop,
-                    icone: data.forecast.forecastday[0].hour[0].condition.icon,
-                    Temperature: data.forecast.forecastday[0].hour[0].temp_c,
-                });
-            } catch (e) {
-                throw `Erreur de récupération des données météo : ${e}`;
+            const result = await fetch(WEATHER_URL_NEXT_12_HOURS + hourloop, {mode: "cors"});
+            const data = await result.json();
+            weathertab.push({
+                Heure: hourloop,
+                icone: data.forecast.forecastday[0].hour[0].condition.icon,
+                Temperature: data.forecast.forecastday[0].hour[0].temp_c,
+            });
+            } catch (e: any) {
+                return new Response(JSON.stringify({message:`Erreur lors de la récupération des données météo: ${e}`}), {status: 500})
             }
         }
         return new Response(JSON.stringify(weathertab));

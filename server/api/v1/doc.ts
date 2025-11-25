@@ -1,6 +1,6 @@
 import swaggerJSDoc from "swagger-jsdoc";
 
-let handler =  (_req: any, _res: any) => {
+export default defineEventHandler(async (event) => {
   const swaggerDefinition = {
     openapi: "3.0.1",
     info: {
@@ -9,9 +9,9 @@ let handler =  (_req: any, _res: any) => {
     },
     servers: [{ url: "/info/api/v1" }],
     schemes:
-            process.env.SWAGGER_SCHEMA_HTTPS === "true"
-              ? ["https"]
-              : ["http", "https"],
+      process.env.SWAGGER_SCHEMA_HTTPS === "true"
+        ? ["https"]
+        : ["http", "https"],
     components: {
       securitySchemes: {
         JWT: {
@@ -23,7 +23,7 @@ let handler =  (_req: any, _res: any) => {
       },
     },
     security: {
-      JWT: []
+      JWT: [],
     },
   };
 
@@ -33,6 +33,4 @@ let handler =  (_req: any, _res: any) => {
   };
 
   return swaggerJSDoc(options);
-};
-
-export default eventHandler(handler);
+});

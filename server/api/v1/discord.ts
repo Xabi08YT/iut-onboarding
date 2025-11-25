@@ -1,5 +1,6 @@
-import {getRole, verifyToken} from "~~/server/jwt";
-import {updateConfigValue,getConfigValue} from "~~/server/database"
+import { getRole, verifyToken } from '~~/server/jwt'
+import { updateConfigValue, getConfigValue } from '~~/server/database'
+import { parseCookies } from 'h3'
 
 /**
  * @openapi
@@ -47,38 +48,35 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  *             500:
  *                 description: "Unknown error"
  */
-async function handler(req: any) {
-    let body;
-    let token = parseCookies(req)?.onboardingToken
+export default defineEventHandler(async (event) => {
+  const method = event.method;
+  const cookies = parseCookies(event);
+  const token: string = cookies?.onboardingToken;
 
-    try {
-        switch(req.method) {
-            case "PUT":
-                if(await verifyToken(token) === false) {
-                    return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
-                }
+  try {
+      switch(method) {
+          case "PUT":
+              if(await verifyToken(token) === false) {
+                  return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+              }
 
-                let roles = await getRole(token);
+              let roles = await getRole(token);
 
-                if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER"))) {
-                    return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
-                }
-                body = await readBody(req);
-                let tmp = JSON.parse(body)
-                let data = {key: "BDEdiscord", value: tmp.link}
-                await updateConfigValue(data);
-                return new Response(JSON.stringify({message:null}), {status: 200});
-            case "GET":
-                let BDEDiscordLink = await getConfigValue("BDEdiscord");
-                if (!BDEDiscordLink) throw Error("No value found");
-                return new Response(BDEDiscordLink.value, {status: 200});
-            default:
-                return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
-        }
-    } catch (error: any) {
-        return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
-    }
-}
-
-export default eventHandler(handler);
-
+              if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER"))) {
+                  return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
+              }
+              const body = await readBody<{ link: string }>(event)
+              let tmp = JSON.parse(body)
+              let data = {key: "BDEdiscord", value: tmp.link}
+              await updateConfigValue(data);
+              return new Response(JSON.stringify({message:null}), {status: 200});
+          case "GET":
+              let BDEDiscordLink = await getConfigValue("BDEdiscord");
+              return new Response(BDEDiscordLink.value, {status: 200});
+          default:
+              return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
+      }
+  } catch (error) {
+      return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
+  }
+})

@@ -1,5 +1,5 @@
 import { getRole, verifyToken } from '~~/server/jwt'
-import { updateConfigValue, getConfigValue } from '~~/server/database'
+import { updateConfigValue, getConfigValue, PrismaKeyValue } from '~~/server/database'
 import { parseCookies } from 'h3'
 
 /**

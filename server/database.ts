@@ -11,6 +11,11 @@ const salt = bcrypt.genSaltSync(saltRounds);
 // Setting a cache with a 10 mn TTL for each item
 const cache = new NodeCache({stdTTL: 10 * 60});
 
+export interface PrismaKeyValue {
+  key: string,
+  value: string
+}
+
 
 /**
  * Check if the username is correct or not
@@ -379,7 +384,7 @@ export async function getCultureEvents() {
  * @param key
  * @returns {Promise<void>} the config values
  */
-export async function getConfigValue(key: string) {
+export async function getConfigValue(key: string): Promise<PrismaKeyValue|null> {
   client.$connect();
   console.log("dkjagzjbrhcegzhrb ",key)
   let results = await client.config.findFirst({where: {key}});

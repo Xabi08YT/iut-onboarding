@@ -1,4 +1,4 @@
-FROM bun:alpine
+FROM docker.io/oven/bun:alpine
 WORKDIR /server
 COPY . /server
 RUN apk update && apk add openssl musl zlib libgcc

@@ -188,7 +188,7 @@ export default {
 .room {
   color: rgb(41, 154, 189);
   /* font-size: 35px; */
-  font-weight: 900;
+  font-weight: 300;
 }
 
 .teacher {

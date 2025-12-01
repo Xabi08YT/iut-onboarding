@@ -18,9 +18,9 @@ export interface PrismaKeyValue {
 }
 
 export interface AuthenticatedUser {
-  id: number;
-  username: string;
-  password: string;
+  id: number,
+  username: string,
+  password: string,
   role: JsonValue;
 }
 
@@ -29,6 +29,38 @@ export interface LoginResult {
   user: AuthenticatedUser|null;
 }
 
+export interface Slide {
+  id: number,
+  name: string,
+  active: boolean,
+  time: number;
+}
+
+export interface PanelUser {
+  id: number,
+  username: string,
+  role: JsonValue;
+}
+
+export interface RegularEvent {
+  id: number,
+  title: string,
+  startTS: Date,
+  endTS: Date,
+  description: string,
+  image: string|null,
+  channel: number; // difference between CultureEvent and this
+}
+
+export interface CultureEvent {
+  id: number,
+  title: string,
+  startTS: Date,
+  endTS: Date,
+  eventTS: Date|null, // difference between Event and this
+  description: string,
+  image: string|null,
+}
 
 /**
  * Check if the username is correct or not
@@ -67,17 +99,17 @@ export async function login(username: string, password: string): Promise<LoginRe
  * Gets all the slides
  * @returns {Promise<*>} Return all slides
  */
-export async function getSlides() {
-    const cachedData = cache.get("slides");
+export async function getSlides(): Promise<Slide[]> {
+  const cachedData = cache.get("slides");
 
-    if (!cachedData) {
-        client.$connect();
-        let results = await client.slide.findMany({orderBy: {name: "asc"}});
-        client.$disconnect();
-        cache.set("slides", results);
-        return results;
-    }
-    return cachedData;
+  if (!cachedData) {
+    client.$connect();
+    let results = await client.slide.findMany({orderBy: {name: "asc"}});
+    client.$disconnect();
+    cache.set("slides", results);
+    return results;
+  }
+  return cachedData as Slide[];
 }
 
 /**
@@ -85,7 +117,7 @@ export async function getSlides() {
  * @param data
  * @returns {Promise<void>}
  */
-export async function updateSlide(data: any) {
+export async function updateSlide(data: any): Promise<void> {
   data.time = parseInt(data.time);
   client.$connect();
   await client.slide.update({
@@ -105,20 +137,20 @@ export async function updateSlide(data: any) {
  * Get all the users from the database
  * @returns {Promise<void>} All users
  */
-export async function getUsers() {
-    client.$connect();
-    let results = await client.user.findMany({
-        select: {
-            id: true,
-            username: true,
-            role: true,
-        },
-        orderBy: {
-            username: "asc",
-        }
-    });
-    client.$disconnect();
-    return results;
+export async function getUsers(): Promise<PanelUser[]> {
+  client.$connect();
+  let results = await client.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      role: true,
+    },
+    orderBy: {
+      username: "asc",
+    }
+  });
+  client.$disconnect();
+  return results as PanelUser[];
 }
 
 /**
@@ -126,7 +158,7 @@ export async function getUsers() {
  * @param data
  * @returns {Promise<void>}
  */
-export async function createUser(data: any) {
+export async function createUser(data: any): Promise<void> {
   data.password = await bcrypt.hash(data.password, salt);
   client.$connect();
   await client.user.create({data});
@@ -138,7 +170,7 @@ export async function createUser(data: any) {
  * @param data
  * @returns {Promise<void>}
  */
-export async function updateUser(data: any) {
+export async function updateUser(data: any): Promise<void> {
   data.password = await bcrypt.hash(data.password, salt);
   client.$connect();
   await client.user.update({
@@ -153,7 +185,7 @@ export async function updateUser(data: any) {
  * @param id ID of the user
  * @returns null
  */
-export async function deleteUser(id: number) {
+export async function deleteUser(id: number): Promise<void> {
   client.$connect();
   await client.user.delete({where: {id}});
   client.$disconnect();
@@ -163,33 +195,33 @@ export async function deleteUser(id: number) {
  * Get all events from the database
  * @returns {Promise<void>} all the events
  */
-export async function getEvents() {
-    client.$connect();
-    let results = await client.event.findMany({orderBy: {startTS: "asc"}});
-    client.$disconnect();
+export async function getEvents(): Promise<RegularEvent[]> {
+  client.$connect();
+  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+  client.$disconnect();
 
     return results;
 }
 
-export async function getOngoingEvents() {
-  const cachedData = cache.get<Event[]>("events");
+export async function getOngoingEvents(): Promise<RegularEvent[]> {
+  const cachedData = cache.get<RegularEvent[]>("events");
 
-    if (!cachedData || cachedData.length === 0) {
-        client.$connect();
-        let results = await client.event.findMany({
-            where: {
-                startTS: {
-                    lte: new Date()
-                }, endTS: {
-                    gte: new Date()
-                }
-            }, orderBy: {channel: "asc"}
-        });
-        client.$disconnect();
-        cache.set("events", results);
-        return results;
-    }
-    return cachedData;
+  if (!cachedData || cachedData.length === 0) {
+    client.$connect();
+    let results = await client.event.findMany({
+      where: {
+        startTS: {
+          lte: new Date()
+        }, endTS: {
+          gte: new Date()
+        }
+      }, orderBy: {channel: "asc"}
+    });
+    client.$disconnect();
+    cache.set("events", results);
+    return results;
+  }
+  return cachedData as RegularEvent[];
 }
 
 /**
@@ -197,7 +229,7 @@ export async function getOngoingEvents() {
  * @param data data necessary to create the event
  * @returns null
  */
-export async function createEvent(data: any) {
+export async function createEvent(data: any): Promise<void> {
   data.startTS = new Date(data.startTS);
   data.endTS = new Date(data.endTS);
   client.$connect();
@@ -224,7 +256,7 @@ export async function createEvent(data: any) {
  * @param data
  * @returns null
  */
-export async function updateEvent(data: any) {
+export async function updateEvent(data: any): Promise<void> {
   client.$connect();
   await client.event.update({
     where: {
@@ -262,7 +294,7 @@ export async function updateEvent(data: any) {
  * @param id ID of the event to remove
  * @returns null
  */
-export async function deleteEvent(id: string) {
+export async function deleteEvent(id: string): Promise<void> {
   client.$connect();
   await client.event.delete({where: {id: parseInt(id)}});
   client.$disconnect();
@@ -377,35 +409,35 @@ export async function deleteCultureEvent(id: string) {
  * Get all ongoing Culture Events
  * @returns {Promise<unknown>}
  */
-export async function getCultureOngoingEvents() {
-  const cachedData = cache.get<Event[]>("events");
+export async function getCultureOngoingEvents(): Promise<CultureEvent[]> {
+  const cachedData = cache.get<CultureEvent[]>("events");
 
-    if (!cachedData || cachedData.length === 0) {
-        client.$connect();
-        let results = await client.cultureEvent.findMany({
-            where: {
-                startTS: {
-                    lte: new Date()
-                }, endTS: {
-                    gte: new Date()
-                }
-            }, orderBy: {eventTS: "asc"}
-        });
-        client.$disconnect();
-        cache.set("cevents", results);
-        return results;
-    }
-    return cachedData;
+  if (!cachedData || cachedData.length === 0) {
+    client.$connect();
+    let results = await client.cultureEvent.findMany({
+      where: {
+        startTS: {
+          lte: new Date()
+        }, endTS: {
+          gte: new Date()
+        }
+      }, orderBy: {eventTS: "asc"}
+    });
+    client.$disconnect();
+    cache.set("cevents", results);
+    return results;
+  }
+  return cachedData as CultureEvent[];
 }
 
 /**
  * Get all culture events from the database
  * @returns {Promise<void>} all the culture events
  */
-export async function getCultureEvents() {
-    client.$connect();
-    let results = await client.cultureEvent.findMany({orderBy: {startTS: "asc"}});
-    client.$disconnect();
+export async function getCultureEvents(): Promise<CultureEvent[]> {
+  client.$connect();
+  let results = await client.cultureEvent.findMany({orderBy: {startTS: "asc"}});
+  client.$disconnect();
 
     return results;
 }
@@ -429,7 +461,7 @@ export async function getConfigValue(key: string): Promise<PrismaKeyValue|null> 
  * @param data
  * @returns null
  */
-export async function updateConfigValue(data: any) {
+export async function updateConfigValue(data: any): Promise<void> {
   client.$connect();
   await client.config.update({
     where: {

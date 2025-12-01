@@ -381,7 +381,9 @@ export async function getCultureEvents() {
  */
 export async function getConfigValue(key) {
   client.$connect();
+  console.log("dkjagzjbrhcegzhrb ",key)
   let results = await client.config.findFirst({where: {key}});
+  console.log("lmao ",results)
   client.$disconnect();
   return results;
 }
@@ -411,12 +413,12 @@ export async function updateConfigValue(data) {
 }
 
 /**
- * Get the conferences from the database
- * @returns {Promise<void>} all the conferences
+ * Get the conference from the database
+ * @returns {Promise<void>} all the conference
  */
 export async function getConference() {
   client.$connect();
-  let results = await client.conferences.findMany({
+  let results = await client.conference.findMany({
     where: {
         when: {
           gte: new Date((new Date()).getTime()-1000*60*30)
@@ -434,8 +436,9 @@ export async function getConference() {
  * @returns null
  */
 export async function updateConference(data) {
+  data.when = new Date(data.when);
   client.$connect();
-  await client.conferences.update({
+  await client.conference.update({
     where: {
       id: parseInt(data.id),
     },
@@ -445,7 +448,7 @@ export async function updateConference(data) {
 
   //Update cache
   client.$connect();
-  let result = client.conferences.findMany({
+  let result = client.conference.findMany({
     orderBy: {when: "asc"}
   });
   client.$disconnect();
@@ -459,14 +462,14 @@ export async function updateConference(data) {
  */
 export async function deleteConference(id) {
   client.$connect();
-  await client.conferences.delete({
+  await client.conference.delete({
     where: {id: parseInt(id),}
   })
   client.$disconnect();
 
   //Update cache
   client.$connect();
-  let result = client.conferences.findMany({
+  let result = client.conference.findMany({
     orderBy: {when: "asc"}
   });
   client.$disconnect();
@@ -479,8 +482,9 @@ export async function deleteConference(id) {
  * @returns null
  */
 export async function createConference(data) {
+  data.when = new Date(data.when);
   client.$connect();
-  await client.conferences.create({data})
+  await client.conference.create({data})
   client.$disconnect();
 }
 
@@ -493,10 +497,10 @@ export async function getAtelier() {
   let results = await client.atelier.findMany({
     where: {
         end: {
-          lte: new Date()
+          gte: new Date((new Date()).getTime()-1000*60*30)
         }
       },
-    orderBy: {when: "asc"}
+    orderBy: {start: "asc"}
   });
   client.$disconnect();
   return results;
@@ -508,6 +512,8 @@ export async function getAtelier() {
  * @returns null
  */
 export async function updateAtelier(data) {
+  data.start = new Date(data.start);
+  data.end = new Date(data.end);
   client.$connect();
   await client.atelier.update({
     where: {
@@ -554,6 +560,8 @@ export async function deleteAtelier(id) {
  */
 export async function createAtelier(data) {
   client.$connect();
+  data.start = new Date(data.start);
+  data.end = new Date(data.end);
   await client.atelier.create({data})
   client.$disconnect();
 }

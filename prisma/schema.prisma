@@ -52,7 +52,7 @@ model Config{
   value  String
 }
 
-model Conferences{
+model Conference{
   id     Int     @id @default(autoincrement())
   room  String
   who   String

@@ -7,36 +7,19 @@ const props = defineProps({
 
 let refreshInterval;
 
-const ateliers = reactive([{
-  name: "Programmation IHM",
-  room: "206",
-  state: "FERME"
-},
-{
-  name: "Programmation Java",
-  room: "209",
-  state: "FERME"
-},
-{
-  name: "Programmation Web",
-  room: "207",
-  state: "FERME"
-},
-{
-  name: "Machine de Turing",
-  room: "201",
-  state: "FERME"
-},
-{
-  name: "Exposition JPO",
-  room: "203",
-  state: "FERME"
-},
-{
-  name: "Découverte DU Robotique",
-  room: "210",
-  state: "FERME"
-}].sort((a,b) => a.name > b.name ? 1 : a.name === b.name ? 0 : -1),);
+let ateliers = ref([]);
+
+let getAterliersJpo = () => {
+  fetch("api/v1/atelier", { method: "GET" })
+    .then(async (res) => {
+      const data = await res.json();
+      ateliers.value = data.content || []; 
+      refresh(); 
+    })
+    .catch(error => console.error('Error fetching ateliers:', error));
+};
+
+getAterliersJpo();
 
 let getClass = (item) => {
   return item.state.toString() === "FERME" ? "red" : item.state.toString() === "OUVERT" ? "green" : "orange";
@@ -46,18 +29,21 @@ let refresh = () => {
   let ts = new Date();
   let hours = ts.getHours();
   let mins = ts.getMinutes();
+  let currentTimeInMins = hours * 60 + mins;
 
-  ateliers.forEach((value) => {
-    if(hours > 8 && hours < 9 && value.toString().includes("Programmation")) {
+  ateliers.value.forEach((value) => {
+    let startTime = new Date(value.start);
+    let endTime = new Date(value.end);
+    
+    let startTimeInMins = startTime.getHours() * 60 + startTime.getMinutes();
+    let endTimeInMins = endTime.getHours() * 60 + endTime.getMinutes();
+        if (currentTimeInMins < startTimeInMins && currentTimeInMins >= startTimeInMins - 60) {
       value.state = "OUVRE BIENTOT";
-    }
-    if(hours >= 9 && hours < 12 ) {
-      value.state = "OUVERT";
-    }
-    if(hours === 12 && mins < 30) {
+    } else if (currentTimeInMins >= endTimeInMins - 30 && currentTimeInMins < endTimeInMins) {
       value.state = "FERME BIENTOT";
-    }
-    if(hours > 12 || hours === 12 && mins > 30) {
+    }else if (currentTimeInMins >= startTimeInMins && currentTimeInMins < endTimeInMins) {
+      value.state = "OUVERT";
+    }   else {
       value.state = "FERME";
     }
   });

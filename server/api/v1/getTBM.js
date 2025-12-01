@@ -2,6 +2,36 @@ import * as cheerio from "cheerio";
 
 const TBM_URL = "https://gateway-apim.infotbm.com/maas-web/web/v1/timetables/stops/stop_area:";
 
+
+/**
+ * @openapi
+ * /getTBM:
+ *    get:
+ *      tags:
+ *        - fetch bus stop data 
+ *      responses:
+ *        '200':
+ *          description: Prochains départs à l'arrêt
+ *          content:
+ *              application/json:
+ *                schema:
+ *                  type: array
+ *                  maxItems: 4
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      line:
+ *                        type: string
+ *                        example: "L1"
+ *                      destination:
+ *                        type: string
+ *                        example: "Centre Ville"
+ *                      departure:
+ *                        type: string
+ *                        format: date-time
+ *                        example: "2025-12-01T14:25:00+01:00"
+ */
+
 const fetchTBM = async (stopId) => {
   try {
     const result = await fetch(`${TBM_URL}${stopId}`);

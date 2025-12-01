@@ -2,6 +2,45 @@ import {getConfigValue, updateConfigValue} from "~~/server/database";
 import {parseCookies} from "h3";
 import {getRole, verifyToken} from "~~/server/jwt";
 
+/**
+ * @openapi
+ * /hyperplanningEndpoint:
+ *      get:
+ *          tags:
+ *              - fetch the hyperplanning version and icals main data
+ *          responses:
+ *              200:
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              properties:
+ *                                  version:
+ *                                      schema:
+ *                                          key:
+ *                                              type: string
+ *                                              description: "allow to dinstinguish version from icals"
+ *                                              example: "HPVersion"
+ *                                          value:
+ *                                              type: string
+ *                                              example: "2025.5.6"
+ *                                  icals:
+ *                                      schema:
+ *                                          key: 
+ *                                              type: string
+ *                                              description: "allow to dinstinguish icals from version"
+ *                                              example: "HPIcals"
+ *                                          value:
+ *                                              type: string
+ *     put:
+ *          tags:
+ *              - Culture meetings management                        
+ *          401:
+ *              description: "User token has expired"
+ *          403:
+ *              description: "Access denied."
+ *          500:
+ *              description: "Unknown error"
+ */
 export default defineEventHandler(async (event) => {
     switch (event.method) {
         case "GET":

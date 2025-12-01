@@ -28,7 +28,7 @@ export default {
                 wght: ["75..125", 500]
             },
             Poppins: {
-                wght: 300
+                wght: [300,400,800,900]
             }
         }
     },

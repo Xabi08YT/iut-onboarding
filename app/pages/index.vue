@@ -458,7 +458,7 @@ body {
   line-height: 43px;
 
   font-size: 37px;
-  font-weight: 300;
+  font-weight: 400;
   padding: 30px 50px;
   border-radius: 30px;
 }

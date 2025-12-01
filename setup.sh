@@ -1,11 +1,11 @@
 #!/bin/bash
-npx prisma db push
+bunx prisma db push
 
 if [ ! -f ./.setupfinished ]; then
-  npx prisma generate
-  bun populate.js
+  bunx prisma generate
+  bunx populate.js
   touch .setupfinished
-  bun .output/server/index.mjs
+  bunx .output/server/index.mjs
   exit
 fi;
 

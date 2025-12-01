@@ -413,7 +413,7 @@ export default {
 <style>
 body {
   font-family: Poppins, sans-serif;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 1.2em;
 
   -webkit-font-smoothing: antialiased;
@@ -458,7 +458,7 @@ body {
   line-height: 43px;
 
   font-size: 37px;
-  font-weight: 800;
+  font-weight: 300;
   padding: 30px 50px;
   border-radius: 30px;
 }

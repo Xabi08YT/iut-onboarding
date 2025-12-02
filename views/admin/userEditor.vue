@@ -1,14 +1,15 @@
-<script setup>
+<script setup lang="ts">
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {ScrollArea} from "~/components/ui/scroll-area";
-import {Button} from "~/components/ui/button";
-import {deepObjectClone} from "@@/lib/utils";
-import {toast} from "~/components/ui/toast";
-import {Label} from "~/components/ui/label";
-import {Input} from "~/components/ui/input";
-import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {ScrollArea} from "../../app/components/ui/scroll-area";
+import {Button} from "../../app/components/ui/button";
+import {deepObjectClone} from "../../lib/utils";
+import {toast} from "../../app/components/ui/toast";
+import {Label} from "../../app/components/ui/label";
+import {Input} from "../../app/components/ui/input";
+import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "../../app/components/ui/dialog";
+import { ref, watch } from "vue";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
@@ -20,14 +21,14 @@ let users = ref([]);
 let cUsername = ref("");
 let cPassword = ref("");
 let cPasswordConfirm = ref("");
-let cRoles = ref([""]);
+let cRoles = ref("");
 let cValid = ref(false);
 
 // Vars to store user entry for account modification
 let mUsername = ref("");
 let mPassword = ref("");
 let mPasswordConfirm = ref("");
-let mRoles = ref([""]);
+let mRoles = ref("");
 let mValid = ref(false);
 
 /**
@@ -204,7 +205,7 @@ initUsers();
                     <Label for="roleModify">Roles (ADMIN, MAINTAINER, BDE, ENSEIGNANT, CULTURE)</Label>
                     <Input id="roleModify" v-model="mRoles" />
                     <DialogClose as-child>
-                      <Button v-show="mValid" @click="editUser(mPassword.value !== '' ? {id: item.id, username:mUsername, password: mPassword, role: mRoles} :{id: item.id, username:mUsername, role: mRoles.split(',')})">Appliquer</Button>
+                      <Button v-show="mValid" @click="editUser(mPassword.valueOf() !== '' ? {id: item.id, username:mUsername, password: mPassword, role: mRoles} :{id: item.id, username:mUsername, role: mRoles.split(',')})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

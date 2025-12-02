@@ -1,12 +1,13 @@
-<script setup>
+<script setup lang="ts">
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
-import {Input} from "~/components/ui/input";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {Switch} from "~/components/ui/switch";
-import {ScrollArea} from "~/components/ui/scroll-area";
-import {toast} from "~/components/ui/toast";
-import {deepObjectClone} from "@@/lib/utils";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import {Input} from "../../app/components/ui/input";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {Switch} from "../../app/components/ui/switch";
+import {ScrollArea} from "../../app/components/ui/scroll-area";
+import {toast} from "../../app/components/ui/toast";
+import {deepObjectClone} from "../../lib/utils";
+import { ref, watch } from "vue";
 
 let slides = ref([]);
 let compareSlidesUser = ref([]);

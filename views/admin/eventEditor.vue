@@ -1,15 +1,17 @@
-<script setup>
+<script setup lang="ts">
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {ScrollArea} from "~/components/ui/scroll-area";
-import {Button} from "~/components/ui/button";
-import {toast} from "~/components/ui/toast";
-import {deepObjectClone} from "@@/lib/utils";
-import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
-import {Input} from "~/components/ui/input";
-import {Label} from "~/components/ui/label";
-import {Textarea} from "~/components/ui/textarea";
+import { ref, watch } from "vue";
+import { navigateTo } from "nuxt/app";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {ScrollArea} from "../../app/components/ui/scroll-area";
+import {Button} from "../../app/components/ui/button";
+import {toast} from "../../app/components/ui/toast";
+import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "../../app/components/ui/dialog";
+import {Input} from "../../app/components/ui/input";
+import {Label} from "../../app/components/ui/label";
+import {Textarea} from "../../app/components/ui/textarea";
+import { deepObjectClone } from "../../lib/utils";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
@@ -40,7 +42,7 @@ const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
  * @param date date string
  * @returns string Date in the readable format
  */
-const formatDate = (date) => {
+const formatDate = (date): string => {
   let dt = date.split("T");
   dt[1] = dt[1].replace("Z", "");
   let dp = dt[0].split("-");
@@ -159,11 +161,23 @@ const addEvent = async (newEvent) => {
 };
 
 watch([modTitle,modDescription,modDateEnd,modDateBeg], () => {
-  modValid.value = (new Date(modDateBeg.value) < new Date(modDateEnd.value) && 0 < modTitle.value.length < 101 && 0 < modDescription.value.length < 201);
+  modValid.value = (
+    new Date(modDateBeg.value) < new Date(modDateEnd.value) &&
+    modTitle.value.length > 0 &&
+    modTitle.value.length < 101 &&
+    modDescription.value.length > 0 &&
+    modDescription.value.length < 201
+  );
 });
 
 watch([createTitle,createDescription,createDateEnd,createDateBeg], () => {
-  createValid.value = (new Date(createDateBeg.value) < new Date(createDateEnd.value) && 0 < createTitle.value.length < 101 && 0 < createDescription.value.length < 201);
+  createValid.value = (
+    new Date(createDateBeg.value) < new Date(createDateEnd.value) &&
+    createTitle.value.length > 0 &&
+    createTitle.value.length < 101 &&
+    createDescription.value.length > 0 &&
+    createDescription.value.length < 201
+  );
 });
 
 initEvents();
@@ -196,7 +210,7 @@ initEvents();
             <Label for="imageURLEventCreate">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
             <Input id="imageURLEventCreate" type="text" v-model="createIMGURL"/>
             <DialogClose as-child>
-              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.value, channel: 1})">Ajouter</Button>
+              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.valueOf(), channel: 1})">Ajouter</Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -245,7 +259,7 @@ initEvents();
                     <Label for="imageURLEventModify">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
                     <Input id="imageURLEventModify" type="text" v-model="modIMGURL"/>
                     <DialogClose as-child>
-                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.value, channel: 1})">Appliquer</Button>
+                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.valueOf(), channel: 1})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

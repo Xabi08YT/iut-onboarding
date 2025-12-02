@@ -3,16 +3,18 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "build": "bunx nuxt build",
+    "dev": "bunx nuxt dev",
+    "generate": "bunx nuxt generate",
+    "preview": "bunx nuxt preview",
+    "postinstall": "bunx nuxt prepare"
   },
   "dependencies": {
     "@libsql/client": "^0.5.6",
     "@nuxt/eslint": "^0.6.0",
+    "@nuxt/image": "^2.0.0",
     "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.12.2",
     "@prisma/client": "^5.20.0",
     "@prisma/nuxt": "^0.3.0",
     "@vee-validate/zod": "^4.14.6",
@@ -50,7 +52,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.12.2",
     "prisma": "^5.20.0",
     "typescript": "^5.6.3"
   }

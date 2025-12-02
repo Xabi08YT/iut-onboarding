@@ -1,12 +1,10 @@
 <template>
   <div v-if="active" :style="backgroundStyle" id="loading-overlay-container">
-    <img :src="currentLogo" :style="imageStyle" />
+    <NuxtImg :src="currentLogo" :style="imageStyle" loading="lazy" />
   </div>
 </template>
 
 <script>
-import logoIUT from "../public/assets/logo_iut.png";
-import logoGP from "../public/assets/gitpoule.png";
 
 export default {
   data() {
@@ -14,7 +12,7 @@ export default {
       active: false,
       duration: 3000,
       logoIut: ref(""),
-      logoGP: logoGP,
+      logoGP: "assets/gitpoule.png",
       currentLogo: null,
       logoto: null
     };
@@ -32,6 +30,7 @@ export default {
     },
     refreshLogo() {
       fetch("api/v1/getLogo").then(async (res) => this.logoIut = await res.text());
+      console.log(this.logoIut);
     }
   },
   computed: {

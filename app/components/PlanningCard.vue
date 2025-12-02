@@ -34,7 +34,7 @@
       </div>
       <div v-else style="opacity: 0.5" class="data-container">
         <div class="subject-info">
-          <img style="width: 35%; margin-left: 33.5%" :src="noClassLogo" />
+          <NuxtImg style="width: 35%; margin-left: 33.5%" src="assets/robot.png" loading="lazy" />
           <p>Pas cours</p>
         </div>
       </div>
@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import robot from "~~/public/assets/robot.png";
 export default {
   props: {
     data: {
@@ -55,11 +54,6 @@ export default {
       default: false,
       required: false,
     }
-  },
-  data() {
-    return {
-      noClassLogo: robot,
-    };
   },
   methods: {
     getGroupsComponent() {
@@ -194,7 +188,7 @@ export default {
 .room {
   color: rgb(41, 154, 189);
   /* font-size: 35px; */
-  font-weight: 900;
+  font-weight: 400;
 }
 
 .teacher {

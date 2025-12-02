@@ -15,7 +15,7 @@
         >{{ msToWaitTime(remainingTime)[1]
         }}<span>s</span>
       </p>
-      <img src="@@/public/assets/Warning.png" height="128px" width="128px" v-if="error == 1"/>
+      <NuxtImg src="assets/Warning.png" height="128px" width="128px" v-if="error === 1"/>
     </div>
     <p class="infos" v-if="error == 0">{{ formatDirectionString() }}</p>
     <p class="infos" v-if="error == 1">Impossible de récuperer les informations pour cet arrêt.</p>
@@ -80,7 +80,7 @@ export default {
           stopId: this.busData.stops[this.index]
         }
       )
-      const apiresult = await fetch(`/api/v1/getTBM?${params}`);
+      const apiresult = await fetch(`api/v1/getTBM?${params}`);
       const res = await apiresult.json();
 
       let found = false;
@@ -121,7 +121,7 @@ export default {
       stopId: this.busData.stops[this.index],
       lineId: this.busData.lineId
     })
-    fetch(`/api/v1/getTBM?${params}`)
+    fetch(`api/v1/getTBM?${params}`)
     .then(res => res.json())
     .then(data => {
       this.waitInterval = data;

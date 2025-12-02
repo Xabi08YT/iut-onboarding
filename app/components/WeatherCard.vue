@@ -14,7 +14,7 @@
         :key="index"
       >
         <p>{{ meteo.Heure }}h00</p>
-        <img :src="meteo.icone" />
+        <img :src="meteo.icone"/>
         <p>{{ meteo.Temperature }}°</p>
       </div>
     </div>
@@ -34,13 +34,13 @@ export default {
   methods: {
     async fetchWeather() {
       console.log("Refreshing weather");
-      await fetch("/api/v1/getCurrentWeather")
+      await fetch("api/v1/getCurrentWeather")
       .then((response) => response.json())
       .then((weatherinfos) => {
         this.currentTemperature = weatherinfos.temperature;
         this.currentWeather = weatherinfos.weatherText;
       });
-      await fetch("/api/v1/getNext12hWeather")
+      await fetch("api/v1/getNext12hWeather")
       .then((response) => response.json())
       .then((tab) => {
         this.info_meteo = tab;

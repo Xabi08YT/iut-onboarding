@@ -7,6 +7,7 @@ export default {
         "@nuxtjs/tailwindcss",
         "shadcn-nuxt",
         "nuxt-lucide-icons",
+        "@nuxt/image"
     ],
 
     lucide: {
@@ -55,4 +56,7 @@ export default {
     tailwindcss: {
         viewer: false,
     },
+    nitro: {
+        preset: 'bun',
+    }
 };

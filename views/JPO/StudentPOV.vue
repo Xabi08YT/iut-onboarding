@@ -11,10 +11,23 @@ const props = defineProps({
       <h2>
         Si vous scannez ce code QR, vous pourrez visionner une vidéo <br/> de présentation du BUT INFO réalisée par un étudiant d'ici !
       </h2>
-      <img src="/assets/VideoPresentationIUT.png"/>
+      <jpo-card />
     </div>
   </div>
 </template>
+
+<script>
+import JpoCard from "~/components/JpoCard";
+
+export default {
+  props: {
+    isActive: Boolean,
+  },
+  components: {
+    JpoCard,
+  },
+};
+</script>
 
 <style scoped>
 #StudentPOVMSG {

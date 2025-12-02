@@ -107,7 +107,13 @@ import StudentPOV from "../views/JPO/StudentPOV.vue";
 import CultureClub from "../views/CultureClub.vue";
 
 const DEVELOPEMENT_MODE = false;
-const JPO_DATESTRING = "2025-02-15";
+let jpoDateString = ref("2024-02-15");
+
+let getvideJpo = () => {
+  fetch("api/v1/dateJpo", { method: "GET" }).then(async (res) => jpoDateString.value = await res.text())
+};
+
+getvideJpo(); 
 
 export default {
   data() {
@@ -185,7 +191,10 @@ export default {
             // 6h to 17h30
             const currentTime =
                 new Date().getHours() * 60 + new Date().getMinutes();
-            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30;
+            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30 && 
+              (new Date().getUTCDate() !== new Date(jpoDateString.value).getUTCDate() ||
+              new Date().getUTCMonth() !== new Date(jpoDateString.value).getUTCMonth() ||
+              new Date().getUTCFullYear() !== new Date(jpoDateString.value).getUTCFullYear());
           }
         },
         transport: {
@@ -207,7 +216,10 @@ export default {
         /* Enable this at the start of each year (The QR code has to be updated)*/
         discord: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.discord.time * 1000,
-          allowed: () => this.slidesParameters.discord.active,
+          allowed: () => this.slidesParameters.discord.active && (
+              new Date().getUTCDate() !== new Date(jpoDateString.value).getUTCDate() ||
+              new Date().getUTCMonth() !== new Date(jpoDateString.value).getUTCMonth() ||
+              new Date().getUTCFullYear() !== new Date(jpoDateString.value).getUTCFullYear())
         },
         /* Enable when looking for new maintainers */
         maintainer: {
@@ -226,27 +238,27 @@ export default {
         /*      RESERVED FOR JPO        */
         welcome: {
           time: () => 7 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
+          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
         },
         nextConference: {
           time: () => 10 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
+          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
         },
         ateliers: {
           time: () => 10 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
+          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
         },
         studentPOV: {
           time: () => 10 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(JPO_DATESTRING).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(JPO_DATESTRING).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(JPO_DATESTRING).getUTCFullYear(),
+          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
+              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
+              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
         }
       },
     };

@@ -3,9 +3,9 @@ bunx prisma db push
 
 if [ ! -f ./.setupfinished ]; then
   bunx prisma generate
-  bunx populate.js
+  bun populate.js
   touch .setupfinished
-  bunx .output/server/index.mjs
+  bun .output/server/index.mjs
   exit
 fi;
 

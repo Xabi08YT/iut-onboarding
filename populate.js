@@ -19,9 +19,9 @@ const defaultSlides = [
 const defaultConfigs = [
   {key: "BDEdiscord", value:"Undefined"},
   {key: "HPVersion", value:"2025.5.6"},
-  {key: "HPIcals", value:"Undefined"}
-  { key: "dateJpo", value: "bruh" },
-  { key: "lienVideoJpo", value: "Undefined" },
+  {key: "HPIcals", value:"Undefined"},
+  {key: "dateJpo", value: "bruh" },
+  {key: "lienVideoJpo", value: "Undefined" },
   ]
 
 function createRandomString(length) {

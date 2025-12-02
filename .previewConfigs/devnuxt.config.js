@@ -56,10 +56,7 @@ export default {
     tailwindcss: {
         viewer: false,
     },
-<<<<<<< HEAD
     nitro: {
         preset: 'bun',
     }
-=======
->>>>>>> f0b3cf2 (TailwindCSS repaired)
 };

@@ -66,17 +66,23 @@ export default defineEventHandler(async (event) => {
                 return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
             }
             const body = await readBody<{ link: string }>(event)
-            let tmp = JSON.parse(body)
+            let tmp = JSON.parse(body.link)
             let data = {key: "BDEdiscord", value: tmp.link}
             await updateConfigValue(data);
             return new Response(JSON.stringify({message:null}), {status: 200});
         case "GET":
             let BDEDiscordLink = await getConfigValue("BDEdiscord");
+            if (!BDEDiscordLink) {
+              return new Response(
+                JSON.stringify({ message: 'No value found' }),
+                { status: 404 }
+              )
+            }
             return new Response(BDEDiscordLink.value, {status: 200});
         default:
             return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
     }
-  } catch (error) {
+  } catch (error: any) {
       return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
   }
 })

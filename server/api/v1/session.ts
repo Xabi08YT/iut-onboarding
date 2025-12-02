@@ -110,7 +110,6 @@ interface LoginBody {
  *                   type: string
  *                   example: "Internal Server Error: {error message}"
  */
-
 export default defineEventHandler(async (event): Promise<Response> => {
   try {
     const method = event.method;

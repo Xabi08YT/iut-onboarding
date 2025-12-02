@@ -5,41 +5,65 @@ import {getRole, verifyToken} from "~~/server/jwt";
 /**
  * @openapi
  * /hyperplanningEndpoint:
- *      get:
- *          tags:
- *              - fetch the hyperplanning version and icals main data
- *          responses:
- *              200:
- *                  content:
- *                      application/json:
- *                          schema:
- *                              properties:
- *                                  version:
- *                                      schema:
- *                                          key:
- *                                              type: string
- *                                              description: "allow to dinstinguish version from icals"
- *                                              example: "HPVersion"
- *                                          value:
- *                                              type: string
- *                                              example: "2025.5.6"
- *                                  icals:
- *                                      schema:
- *                                          key:
- *                                              type: string
- *                                              description: "allow to dinstinguish icals from version"
- *                                              example: "HPIcals"
- *                                          value:
- *                                              type: string
- *     put:
- *          tags:
- *              - Culture meetings management
+ *  get:
+ *      tags:
+ *          - Hyperplanning data
+ *      summary: "Get Hyperplanning version and ICALs IDs "
+ *      responses:
+ *          200:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              version:
+ *                                  type: object
+ *                                  description: "Contains the version object for the timetable software and the related key in DB"
+ *                                  properties:
+ *                                  key:
+ *                                      type: string
+ *                                      example: "HPVersion"
+ *                                  value:
+ *                                      type: string
+ *                                      example: "2025.5.6"
+ *                              icals:
+ *                                  type: object
+ *                                  description: "Object under the JSON string form containing all ical IDs"
+ *                                  properties:
+ *                                      key:
+ *                                          type: string
+ *                                          example: "HPIcals"
+ *                                      value:
+ *                                          type: string
+ *                                          example: "{}"
+ *  put:
+ *      tags:
+ *          - Hyperplanning data
+ *      summary: "Updates Hyperplanning version and ICALs IDs"
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          version:
+ *                              type: string
+ *                              description: "New Hyperplanning version to save"
+ *                              example: "2026.1.0"
+ *                          icals:
+ *                              type: string
+ *                              description: "Icals IDs under the JSON string form"
+ *                              example: "..."
+ *      responses:
+ *          200:
+ *              description: "Updated successfully."
  *          401:
- *              description: "User token has expired"
+ *              description: "Expired or missing user token."
  *          403:
  *              description: "Access denied."
  *          500:
- *              description: "Unknown error"
+ *              description: "Internal server error."
  */
 export default defineEventHandler(async (event) => {
     switch (event.method) {

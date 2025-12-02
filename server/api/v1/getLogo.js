@@ -1,17 +1,17 @@
 /**
  * @openapi
  * /getLogo:
- *      get:
- *          tags:
- *              - IUT logo fetch
- *          description: "Get a list containing all the events that are currently stored in the database"
- *          responses:
- *              200:
- *                  description: "return the path where is stored the IUT logo"
- *                  content:
- *                      application/json:
- *                          type:string
- *                          description:"path where is stored the IUT logo"
+ *  get:
+ *      tags:
+ *          - IUT logo fetch
+ *      summary: "Get the url path to fetch for the logo according to special events"
+ *      responses:
+ *          200:
+ *              description: "Return the path where is stored the IUT logo"
+ *              content:
+ *                  text/plain:
+ *                      schema:
+ *                          type: string
  *                          example:"assets/logo_iut.png"
  */
 

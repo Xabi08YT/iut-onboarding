@@ -8,9 +8,7 @@ import {parseCookies} from "h3";
  *   get:
  *     tags:
  *      - Slide management
- *     security:
- *      - JWT: []
- *     description: "Retrieve a list of slides."
+ *     summary: "Retrieve a list of slides."
  *     responses:
  *       200:
  *         description: "Returns an array of slides."
@@ -30,12 +28,34 @@ import {parseCookies} from "h3";
  *                   active:
  *                     type: boolean
  *                     example: true
+ *                   time:
+ *                     type: integer
+ *                     example: 10
  *   put:
  *     tags:
  *       - Slide management
  *     security:
  *       - JWT: []
- *     description: "Update an existing slide."
+ *     summary: "Update an existing slide."
+ *     requestBody:
+ *       required: true
+ *       content:
+ *          application/json:
+ *              schema:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     example: "Test"
+ *                   active:
+ *                     type: boolean
+ *                     example: true
+ *                   time:
+ *                     type: integer
+ *                     example: 10
  *     responses:
  *       200:
  *         description: "Slide updated successfully."

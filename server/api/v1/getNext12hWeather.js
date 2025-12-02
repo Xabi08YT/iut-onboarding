@@ -6,27 +6,30 @@ const WEATHER_URL_NEXT_12_HOURS =
  * /getNext12hWeather:
  *      get:
  *          tags:
- *              - fetch the next 12 hours weather data
- *          description: "Get a list containing weather data and images to display"
+ *              - Get Weather data
+ *          summary: "Get a list containing weather data and images to display"
  *          responses:
  *              200:
- *                  description: "return the descripted list"
+ *                  description: "Return the expected list"
  *                  content:
  *                      application/json:
  *                          schema:
- *                              properties:
- *                              Heure:
- *                                  type: integer
- *                                  description : "The hour of the forecast"
- *                                  example: 12
- *                              icone:
- *                                  type: string
- *                                  description: "A link which stores the icon"
- *                                  example: "//cdn.weatherapi.com/weather/64x64/day/113.png"
- *                              Temperature:
- *                                  type: number
- *                                  description : "The temperature of the forecast based on the hour"
- *                                  example: 8.7
+ *                              type: array
+ *                              items:
+ *                                  type: object
+ *                                  properties:
+ *                                      Heure:
+ *                                          type: integer
+ *                                          description : "The hour of the forecast"
+ *                                          example: 12
+ *                                      icone:
+ *                                          type: string
+ *                                          description: "A link which stores the icon"
+ *                                          example: "//cdn.weatherapi.com/weather/64x64/day/113.png"
+ *                                      Temperature:
+ *                                          type: number
+ *                                          description : "The temperature of the forecast based on the hour"
+ *                                          example: 8.7
  *                      
  */
 export default defineEventHandler(async (event) => {

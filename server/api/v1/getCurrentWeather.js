@@ -5,28 +5,28 @@ const CURRENT_WEATHER_URL =
 /**
  * @openapi
  * /getCurrentWeather:
- *    get:
+ *  get:
  *      tags:
- *        - Weather fetch
+ *        - Get Weather data
  *      security:
  *      - JWT: []
- *     description: "Get a json data with in time weather data"
- *     responses:
- *       200:
- *         description: "Return a JSON array containing every event stored in the database"
- *          content:
- *              application/json:
- *                schema:
- *                  type: object
- *                  properties:
- *                    weatherText:
- *                      type: string
- *                      description: "Describes the actual weather"
- *                      example: "Pluie légère"
- *                    temperature:
- *                      type: number
- *                      description: "Celcius degree temperature"
- *                      example: 11.1
+ *      summary: "Get the current Weather data in the JSON format"
+ *      responses:
+ *          200:
+ *              description: "Return a JSON array containing every event stored in the database"
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              weatherText:
+ *                                  type: string
+ *                                  description: "Describes the actual weather"
+ *                                  example: "Pluie légère"
+ *                              temperature:
+ *                                  type: number
+ *                                  description: "Celcius degree temperature"
+ *                                  example: 11.1
  */
 
 export default defineEventHandler(async (event) => {

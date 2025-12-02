@@ -7,8 +7,6 @@ import {updateConfigValue, getConfigValue} from "~~/server/database"
  *      get:
  *          tags:
  *              - Fetch the JPO video link
- *          security:
- *              - JWT: []
  *          description: Get the link of the JPO video
  *          responses:
  *              200:

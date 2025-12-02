@@ -40,7 +40,7 @@ export default {
         this.currentTemperature = weatherinfos.temperature;
         this.currentWeather = weatherinfos.weatherText;
       });
-      await fetch("/api/v1/getNext12hWeather")
+      await fetch("api/v1/getNext12hWeather")
       .then((response) => response.json())
       .then((tab) => {
         this.info_meteo = tab;

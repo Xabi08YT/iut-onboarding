@@ -121,7 +121,7 @@ export default {
       stopId: this.busData.stops[this.index],
       lineId: this.busData.lineId
     })
-    fetch(`/api/v1/getTBM?${params}`)
+    fetch(`api/v1/getTBM?${params}`)
     .then(res => res.json())
     .then(data => {
       this.waitInterval = data;

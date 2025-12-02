@@ -51,3 +51,18 @@ model Config{
   key    String   @id 
   value  String
 }
+
+model Conference{
+  id     Int     @id @default(autoincrement())
+  room  String
+  who   String
+  when  DateTime
+}
+
+model Atelier{
+  id     Int     @id @default(autoincrement())
+  name   String
+  room  String
+  start  DateTime
+  end  DateTime
+}

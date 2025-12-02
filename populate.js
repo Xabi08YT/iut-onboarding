@@ -6,25 +6,24 @@ const fs = require("fs");
 const cfg = dotenv.config();
 const client = new prisma.PrismaClient();
 const defaultSlides = [
-  {name: "plannings", active: true, time: 10},
-  {name: "meme", active: false, time: 7},
-  {name: "transport", active: true, time: 7},
-  {name: "menu", active: true, time: 10},
-  {name: "discord", active: false, time: 7},
-  {name: "maintainer", active: true, time: 10},
-  {name: "announcements", active: true, time: 7},
-  {name: "weather", active: true, time: 7},
-  {name: "cultureclub", active: true, time: 7},
+  { name: "plannings", active: true, time: 10 },
+  { name: "meme", active: false, time: 7 },
+  { name: "transport", active: true, time: 7 },
+  { name: "menu", active: true, time: 10 },
+  { name: "discord", active: false, time: 7 },
+  { name: "maintainer", active: true, time: 10 },
+  { name: "announcements", active: true, time: 7 },
+  { name: "weather", active: true, time: 7 },
+  { name: "cultureclub", active: true, time: 7 },
 ];
 const defaultConfigs = [
 <<<<<<< HEAD
   {key: "BDEdiscord", value:"Undefined"},
   {key: "HPVersion", value:"2025.5.6"},
-  {key: "HPIcals", value:"Undefined"}
-=======
-  {key: "BDEdiscord", value:"Undefined"}
->>>>>>> 6fc1d52 (Changed setup script name to populate.js and added config to the script. Made it more reliable by ignoring errors.)
-]
+  {key: "HPIcals", value:"Undefined"},
+  {key: "dateJpo", value: "bruh" },
+  {key: "lienVideoJpo", value: "Undefined" },
+  ]
 
 function createRandomString(length) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#_!";
@@ -43,33 +42,27 @@ console.log(`Password:${password}`);
 
 client.$connect();
 
-for(let line of defaultConfigs) {
-  try {
-    client.config.create({data: line}).then();
-  } catch {
-    console.log(`Default config line skipped: ${line}.`)
-  }
+for (let line of defaultConfigs) {
+  client.config.create({ data: line }).then().catch((e) => console.log(`Default config line skipped: ${line.key}`));
 }
 
 //Creating user
-try {
-  client.user.create({
-    data:
-        {username: "admin",
-          password: bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(cfg.parsed.SALT_ROUNDS))),
-          role: ["ADMIN"],}
-  }).then();
-} catch {
-  console.log("Skipped admin user creation.")
-}
+client.user.create({
+  data:
+  {
+    username: "admin",
+    password: bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(cfg.parsed.SALT_ROUNDS))),
+    role: ["ADMIN"],
+  }
+}).then(() => {
+  console.log("THIS WILL ONLY BE DISPLAYED ONCE");
+  console.log("Username: admin");
+  console.log(`Password:${password}`);
+}).catch(e => console.log("Skipped admin user creation."));
 
 //Adding all default slides to database
-for(let slide of defaultSlides) {
-  try {
-    client.slide.create({data: slide}).then();
-  } catch {
-    console.log(`Skipped setup for default slide ${slide.name}`)
-  }
+for (let slide of defaultSlides) {
+  client.slide.create({ data: slide }).then().catch(() => console.log(`Skipped setup for default slide ${slide.name}`));
 }
 
 client.$disconnect();

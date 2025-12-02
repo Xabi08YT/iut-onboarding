@@ -25,6 +25,14 @@ const goToAdmin = () => {
   return navigateTo("/admin")
 }
 
+const goToHP = () => {
+  return navigateTo("/hp");
+};
+
+const goToCulture = () => {
+  return navigateTo("/culturepanel");
+};
+
 init();
 </script>
 
@@ -32,6 +40,8 @@ init();
 <template>
   <div v-if="admin" class="flex justify-center m-2">
     <Button class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToAdmin()">Admin Panel</Button>
+    <Button class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToCulture()">Culture Panel</Button>
+    <Button class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToHP()">HP Panel</Button>
   </div>
   <div id="jpopanel" class="w-screen h-screen flex justify-center items-center">
     <div class="w-1/2 h-[90%]">

@@ -16,6 +16,10 @@ const goToHP = () => {
   return navigateTo("/hp");
 };
 
+const goToJPO = () => {
+  return navigateTo("/jpo");
+};
+
 </script>
 
 <template>
@@ -31,6 +35,7 @@ const goToHP = () => {
           <Button class="mt-[5px] w-full space" @click="goToAdmin">Admin</Button>
           <Button class="mt-[5px] w-full space" @click="goToCulture">Culture club</Button>
           <Button class="mt-[5px] w-full" @click="goToHP">Hyperplanning setup</Button>
+          <Button class="mt-[5px] w-full" @click="goToJPO">JPO setup</Button>
         </div>
       </CardFooter>
     </Card>

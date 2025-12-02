@@ -14,8 +14,8 @@ let applyDiscord = async () => {
     await fetch("api/v1/session", {method: "PUT"});
   } else {
     toast({title: "Une erreur est survenue.",
-    description:await res.json().then(data => data.message),
-    variant:"destructive"});
+      description:await res.json().then(data => data.message),
+      variant:"destructive"});
   }
 
 };

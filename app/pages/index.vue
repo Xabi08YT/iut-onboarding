@@ -55,25 +55,25 @@
         :eventData="events[(eventIndex-1)%events.length]"
     />
     <CultureClub
-      v-if="Object.keys(views).includes('culture')"
-      :isActive="currentView == 'culture'"
-      :eventData="cultureEvents[(cultureEventIndex-1)%cultureEvents.length]"
+        v-if="Object.keys(views).includes('culture')"
+        :isActive="currentView == 'culture'"
+        :eventData="cultureEvents[(cultureEventIndex-1)%cultureEvents.length]"
     />
     <Welcome
-      v-if="Object.keys(views).includes('welcome')"
-      :isActive="currentView == 'welcome'"
+        v-if="Object.keys(views).includes('welcome')"
+        :isActive="currentView == 'welcome'"
     />
     <NextConferences
         v-if="Object.keys(views).includes('nextConference')"
         :isActive="currentView == 'nextConference'"
     />
     <Ateliers
-      v-if="Object.keys(views).includes('ateliers')"
-      :isActive="currentView == 'ateliers'"
+        v-if="Object.keys(views).includes('ateliers')"
+        :isActive="currentView == 'ateliers'"
     />
     <StudentPOV
-      v-if="Object.keys(views).includes('studentPOV')"
-      :isActive="currentView == 'studentPOV'"
+        v-if="Object.keys(views).includes('studentPOV')"
+        :isActive="currentView == 'studentPOV'"
     />
     <LoadingBar :view="views[currentView]"/>
     <TransitionOverlay ref="loading"/>
@@ -113,7 +113,7 @@ let getvideJpo = () => {
   fetch("api/v1/dateJpo", { method: "GET" }).then(async (res) => jpoDateString.value = await res.text())
 };
 
-getvideJpo(); 
+getvideJpo();
 
 export default {
   data() {
@@ -191,10 +191,10 @@ export default {
             // 6h to 17h30
             const currentTime =
                 new Date().getHours() * 60 + new Date().getMinutes();
-            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30 && 
-              (new Date().getUTCDate() !== new Date(jpoDateString.value).getUTCDate() ||
-              new Date().getUTCMonth() !== new Date(jpoDateString.value).getUTCMonth() ||
-              new Date().getUTCFullYear() !== new Date(jpoDateString.value).getUTCFullYear());
+            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30 &&
+                (new Date().getUTCDate() !== new Date(jpoDateString.value).getUTCDate() ||
+                    new Date().getUTCMonth() !== new Date(jpoDateString.value).getUTCMonth() ||
+                    new Date().getUTCFullYear() !== new Date(jpoDateString.value).getUTCFullYear());
           }
         },
         transport: {
@@ -312,7 +312,7 @@ export default {
       }
 
       if (Object.keys(this.views).length <= 1)
-        //Detect we've commented all views except one
+          //Detect we've commented all views except one
         return; // (Disable slide show)
 
       setTimeout(() => {

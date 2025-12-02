@@ -30,22 +30,22 @@ let createDateEvent = ref("");
 let createIMGURL = ref("");
 let createValid = ref(false);
 
-  /**
-   * Format a date to a readable format
-   * @param date date string
-   * @returns string Date in the readable format
-   */
-  const formatDate = (date) => {
-    if(date === undefined || date === null){
-      return "";
-    }
-    let dt = date.split("T");
-    dt[1] = dt[1].replace("Z", "");
-    let dp = dt[0].split("-");
-    let newD = `${dp[2]}/${dp[1]}/${dp[0]} `;
-    let newT = dt[1].split(".")[0];
-    return `${newT} ${newD}`;
-  };
+/**
+ * Format a date to a readable format
+ * @param date date string
+ * @returns string Date in the readable format
+ */
+const formatDate = (date) => {
+  if(date === undefined || date === null){
+    return "";
+  }
+  let dt = date.split("T");
+  dt[1] = dt[1].replace("Z", "");
+  let dp = dt[0].split("-");
+  let newD = `${dp[2]}/${dp[1]}/${dp[0]} `;
+  let newT = dt[1].split(".")[0];
+  return `${newT} ${newD}`;
+};
 
 /**
  * Fill the content related to the events

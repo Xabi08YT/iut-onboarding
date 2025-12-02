@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import logoDiscord from "~~/public/assets/logo_discord.png";
 
 export default {
   data: () => {

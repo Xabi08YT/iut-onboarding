@@ -11,12 +11,12 @@ let ateliers = ref([]);
 
 let getAterliersJpo = () => {
   fetch("api/v1/atelier", { method: "GET" })
-    .then(async (res) => {
-      const data = await res.json();
-      ateliers.value = data.content || []; 
-      refresh(); 
-    })
-    .catch(error => console.error('Error fetching ateliers:', error));
+      .then(async (res) => {
+        const data = await res.json();
+        ateliers.value = data.content || [];
+        refresh();
+      })
+      .catch(error => console.error('Error fetching ateliers:', error));
 };
 
 getAterliersJpo();
@@ -34,10 +34,10 @@ let refresh = () => {
   ateliers.value.forEach((value) => {
     let startTime = new Date(value.start);
     let endTime = new Date(value.end);
-    
+
     let startTimeInMins = startTime.getHours() * 60 + startTime.getMinutes();
     let endTimeInMins = endTime.getHours() * 60 + endTime.getMinutes();
-        if (currentTimeInMins < startTimeInMins && currentTimeInMins >= startTimeInMins - 60) {
+    if (currentTimeInMins < startTimeInMins && currentTimeInMins >= startTimeInMins - 60) {
       value.state = "OUVRE BIENTOT";
     } else if (currentTimeInMins >= endTimeInMins - 30 && currentTimeInMins < endTimeInMins) {
       value.state = "FERME BIENTOT";

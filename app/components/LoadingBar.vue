@@ -18,7 +18,7 @@ export default {
   computed: {
     progress() {
       return `width: ${this.width}; transition: ${
-        this.transition
+          this.transition
       }; animation-duration: ${this.view ? this.view.time() : 0}ms;`;
     },
   },

@@ -1,10 +1,10 @@
 <template>
-    <div class="view-container" v-show="isActive">
-      <div class="view-content">
-          <NuxtImg class="image" src="@@/public/assets/lundi.png" alt="Lundi" loading="lazy" />
-      </div>
+  <div class="view-container" v-show="isActive">
+    <div class="view-content">
+      <NuxtImg class="image" src="@@/public/assets/lundi.png" alt="Lundi" loading="lazy" />
     </div>
- </template>
+  </div>
+</template>
 
 <script>
 export default {

@@ -7,7 +7,7 @@ const CURRENT_WEATHER_URL =
  * /getCurrentWeather:
  *  get:
  *      tags:
- *        - Get Weather data
+ *        - Retreive miscellaneous data
  *      security:
  *      - JWT: []
  *      summary: "Get the current Weather data in the JSON format"

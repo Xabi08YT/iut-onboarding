@@ -7,8 +7,8 @@ import {updateConference, createConference, getConference, deleteConference} fro
  * /conference:
  *      get:
  *          tags:
- *              - JPO conference management   # tags doit être une liste
- *          description: get a list containing all conferences stored in DB
+ *              - JPO management
+ *          summary: get a list containing all conferences stored in DB
  *          responses:
  *              200:
  *                  description: get a list containing all conferences stored in DB
@@ -41,10 +41,10 @@ import {updateConference, createConference, getConference, deleteConference} fro
  *
  *      put:
  *          tags:
- *              - JPO conference management
+ *              - JPO management
  *          security:
  *              - JWT: []
- *          description: update a conference
+ *          summary: update a conference
  *          requestBody:
  *              required: true
  *              content:
@@ -85,10 +85,10 @@ import {updateConference, createConference, getConference, deleteConference} fro
  *
  *      post:
  *          tags:
- *              - JPO conference management
+ *              - JPO management
  *          security:
  *              - JWT: []
- *          description: create a conference
+ *          summary: create a conference
  *          requestBody:
  *              required: true
  *              content:
@@ -130,11 +130,11 @@ import {updateConference, createConference, getConference, deleteConference} fro
  *                  description: unknown error
  *      delete:
  *          tags:
- *              - JPO conference management
+ *              - JPO management
  *          security:
  *              - JWT: []
- *          description: delete a conference by id
- *          requestBody:                     # DELETE reçoit aussi un body (cohérent avec POST/PUT)
+ *          summary: delete a conference by id
+ *          requestBody:
  *              required: true
  *              content:
  *                  application/json:
@@ -146,7 +146,7 @@ import {updateConference, createConference, getConference, deleteConference} fro
  *                                  description: id of the conference
  *                                  example: 1
  *                          required:
- *                              - id           # seul champ requis
+ *                              - id
  *          responses:
  *              200:
  *                  description: conference deleted successfully

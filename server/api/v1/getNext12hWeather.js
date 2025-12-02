@@ -6,7 +6,7 @@ const WEATHER_URL_NEXT_12_HOURS =
  * /getNext12hWeather:
  *      get:
  *          tags:
- *              - Get Weather data
+ *              - Retreive miscellaneous data
  *          summary: "Get a list containing weather data and images to display"
  *          responses:
  *              200:

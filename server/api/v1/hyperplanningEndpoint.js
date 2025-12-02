@@ -7,7 +7,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  * /hyperplanningEndpoint:
  *  get:
  *      tags:
- *          - Hyperplanning data
+ *          - Hyperplanning management
  *      summary: "Get Hyperplanning version and ICALs IDs "
  *      responses:
  *          200:
@@ -38,7 +38,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *                                          example: "{}"
  *  put:
  *      tags:
- *          - Hyperplanning data
+ *          - Hyperplanning management
  *      summary: "Updates Hyperplanning version and ICALs IDs"
  *      requestBody:
  *          required: true

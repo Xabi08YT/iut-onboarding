@@ -6,7 +6,7 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  * /dateJpo:
  *      get:
  *          tags:
- *              - Fetch the JPO date
+ *              - JPO management
  *          description: Get the date of the next JPO
  *          responses:
  *              200:
@@ -24,7 +24,7 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  *                  description: Unknown error
  *      put:
  *          tags:
- *              - Fetch the JPO date
+ *              - JPO management
  *          security:
  *              - JWT: []
  *          description: Change the date of the JPO

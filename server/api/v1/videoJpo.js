@@ -6,7 +6,7 @@ import {updateConfigValue, getConfigValue} from "~~/server/database"
  * /videoJpo:
  *      get:
  *          tags:
- *              - Fetch the JPO video link
+ *              - JPO management
  *          description: Get the link of the JPO video
  *          responses:
  *              200:
@@ -23,7 +23,7 @@ import {updateConfigValue, getConfigValue} from "~~/server/database"
  *                  description: Unknown error
  *      put:
  *          tags:
- *              - Fetch the JPO video link
+ *              - JPO management
  *          security:
  *              - JWT: []
  *          description: Change the link of the JPO video

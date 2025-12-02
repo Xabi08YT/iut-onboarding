@@ -8,7 +8,7 @@ import {updateAtelier, createAtelier, getAtelier, deleteAtelier} from "~~/server
  * /jpo
  *      get:
  *          tags:
- *              JPO activity management
+ *              - JPO management
  *          security:
  *              - JWT: []
  *          description: get a list containing all activities stored in DB
@@ -46,7 +46,7 @@ import {updateAtelier, createAtelier, getAtelier, deleteAtelier} from "~~/server
  *                  description : unknown error
  *      put:
  *          tags:
- *              JPO activity management
+ *              - JPO management
  *          security:
  *              - JWT: []
  *          request-body:
@@ -80,7 +80,7 @@ import {updateAtelier, createAtelier, getAtelier, deleteAtelier} from "~~/server
  *              example:"2025-12-02T19:20:00.000Z"
  *      post:
  *          tags:
- *              JPO activity management
+ *              - JPO management
  *          security:
  *              - JWT: []
  *          request-body:

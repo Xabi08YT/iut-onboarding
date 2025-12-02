@@ -8,28 +8,30 @@ const TBM_URL = "https://gateway-apim.infotbm.com/maas-web/web/v1/timetables/sto
  * /getTBM:
  *    get:
  *      tags:
- *        - fetch bus stop data 
+ *        - Retreive miscellaneous data
+ *      summary: "Get all data related to public transportation"
+ *      parameters:
+ *        - in: query
+ *          name: stopId
+ *          schema:
+ *          type: string
+ *          required: true
+ *          description: "ID of the TBM stop"
+ *          example: "BMA:SA:TMONTA"
+ *        - in: query
+ *          name: lineId
+ *          schema:
+ *          type: string
+ *          required: false
+ *          description: "ID of the TBM line (needed to get an idea of the frequency of the transport)."
+ *          example: "B"
  *      responses:
  *        '200':
- *          description: Prochains départs à l'arrêt
+ *          description: Time before next departure
  *          content:
- *              application/json:
- *                schema:
- *                  type: array
- *                  maxItems: 4
- *                  items:
- *                    type: object
- *                    properties:
- *                      line:
- *                        type: string
- *                        example: "L1"
- *                      destination:
- *                        type: string
- *                        example: "Centre Ville"
- *                      departure:
- *                        type: string
- *                        format: date-time
- *                        example: "2025-12-01T14:25:00+01:00"
+ *              text/plain:
+ *                  type: string
+ *                  example: 349000
  */
 
 const fetchTBM = async (stopId) => {

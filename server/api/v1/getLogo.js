@@ -3,16 +3,15 @@
  * /getLogo:
  *  get:
  *      tags:
- *          - IUT logo fetch
+ *          - Retreive miscellaneous data
  *      summary: "Get the url path to fetch for the logo according to special events"
  *      responses:
  *          200:
  *              description: "Return the path where is stored the IUT logo"
  *              content:
  *                  text/plain:
- *                      schema:
- *                          type: string
- *                          example:"assets/logo_iut.png"
+ *                      type: string
+ *                      example: assets/logo_iut.png
  */
 
 export default defineEventHandler(async (event) => {

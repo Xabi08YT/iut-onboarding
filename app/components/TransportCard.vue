@@ -11,7 +11,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { BusData } from "../../types/bus-data";
 import TripTransportCard from "./TripTransportCard.vue";
 
 export default {
@@ -19,7 +20,10 @@ export default {
     TripTransportCard,
   },
   props: {
-    busData: Object,
+    busData: {
+      type: Object as () => BusData,
+      required: true,
+    },
   },
 };
 </script>

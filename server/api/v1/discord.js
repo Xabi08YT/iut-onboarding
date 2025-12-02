@@ -1,4 +1,3 @@
-import fs from "fs";
 import {getRole, verifyToken} from "~~/server/jwt";
 import {updateConfigValue,getConfigValue} from "~~/server/database"
 /**
@@ -50,7 +49,6 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
 async function handler(req) {
     let body;
     let token = parseCookies(req)?.onboardingToken
-    let data;
 
     try {
         switch(req.method) {
@@ -65,12 +63,13 @@ async function handler(req) {
                     return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
                 }
                 body = await readBody(req);
-                data = await body.json();
-                await updateConfigValue({key: "BDEDiscordLink", value: data.link});
+                let tmp = JSON.parse(body)
+                let data = {key: "BDEdiscord", value: tmp.link}
+                await updateConfigValue(data);
                 return new Response(JSON.stringify({message:null}), {status: 200});
             case "GET":
-                let {BDEDiscordLink} = await getConfigValue("BDEDiscordLink");
-                return new Response(BDEDiscordLink, {status: 200});
+                let BDEDiscordLink = await getConfigValue("BDEdiscord");
+                return new Response(BDEDiscordLink.value, {status: 200});
             default:
                 return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
         }
@@ -80,3 +79,4 @@ async function handler(req) {
 }
 
 export default eventHandler(handler);
+

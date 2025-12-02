@@ -7,8 +7,6 @@ const WEATHER_URL_NEXT_12_HOURS =
  *      get:
  *          tags:
  *              - fetch the next 12 hours weather data
- *          security:
- *           - JWT: []
  *          description: "Get a list containing weather data and images to display"
  *          responses:
  *              200:
@@ -42,18 +40,18 @@ export default defineEventHandler(async (event) => {
         for (let i = hour; i <= hour + 12; i = i + 2) {
             let hourloop = i;
             if (hourloop >= 24) {
-            hourloop = hourloop - 24;
+                hourloop = hourloop - 24;
             }
             try {
-            const result = await fetch(WEATHER_URL_NEXT_12_HOURS + hourloop, {mode: "cors"});
-            const data = await result.json();
-            weathertab.push({
-                Heure: hourloop,
-                icone: data.forecast.forecastday[0].hour[0].condition.icon,
-                Temperature: data.forecast.forecastday[0].hour[0].temp_c,
-            });
+                const result = await fetch(WEATHER_URL_NEXT_12_HOURS + hourloop, {mode: "cors"});
+                const data = await result.json();
+                weathertab.push({
+                    Heure: hourloop,
+                    icone: data.forecast.forecastday[0].hour[0].condition.icon,
+                    Temperature: data.forecast.forecastday[0].hour[0].temp_c,
+                });
             } catch (e) {
-            throw `Erreur de récupération des données météo : ${e}`;
+                throw `Erreur de récupération des données météo : ${e}`;
             }
         }
         return new Response(JSON.stringify(weathertab));

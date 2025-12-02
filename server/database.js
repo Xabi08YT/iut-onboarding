@@ -17,13 +17,13 @@ const cache = new NodeCache({stdTTL: 10 * 60});
  * @param password password of this same user
  */
 export async function login(username, password) {
-  client.$connect();
-  let user = await client.user.findFirst({where: {username}});
-  client.$disconnect();
-  if (!user) {
-    return {ok: false, user: null};
-  }
-  return {ok: bcrypt.compare(password, user.password), user};
+    client.$connect();
+    let user = await client.user.findFirst({where: {username}});
+    client.$disconnect();
+    if (!user) {
+        return {ok: false, user: null};
+    }
+    return {ok: bcrypt.compare(password, user.password), user};
 }
 
 /**
@@ -31,16 +31,16 @@ export async function login(username, password) {
  * @returns {Promise<*>} Return all slides
  */
 export async function getSlides() {
-  const cachedData = cache.get("slides");
+    const cachedData = cache.get("slides");
 
-  if (!cachedData) {
-    client.$connect();
-    let results = await client.slide.findMany({orderBy: {name: "asc"}});
-    client.$disconnect();
-    cache.set("slides", results);
-    return results;
-  }
-  return cachedData;
+    if (!cachedData) {
+        client.$connect();
+        let results = await client.slide.findMany({orderBy: {name: "asc"}});
+        client.$disconnect();
+        cache.set("slides", results);
+        return results;
+    }
+    return cachedData;
 }
 
 /**
@@ -49,19 +49,19 @@ export async function getSlides() {
  * @returns {Promise<void>}
  */
 export async function updateSlide(data) {
-  data.time = parseInt(data.time);
-  client.$connect();
-  await client.slide.update({
-    where: {id: data.id},
-    data,
-  });
-  client.$disconnect();
+    data.time = parseInt(data.time);
+    client.$connect();
+    await client.slide.update({
+        where: {id: data.id},
+        data,
+    });
+    client.$disconnect();
 
-  //Updating the cache
-  client.$connect();
-  let results = await client.slide.findMany({orderBy: {name: "asc"}});
-  client.$disconnect();
-  cache.set("slides", results);
+    //Updating the cache
+    client.$connect();
+    let results = await client.slide.findMany({orderBy: {name: "asc"}});
+    client.$disconnect();
+    cache.set("slides", results);
 }
 
 /**
@@ -69,19 +69,19 @@ export async function updateSlide(data) {
  * @returns {Promise<void>} All users
  */
 export async function getUsers() {
-  client.$connect();
-  let results = await client.user.findMany({
-    select: {
-      id: true,
-      username: true,
-      role: true,
-    },
-    orderBy: {
-      username: "asc",
-    }
-  });
-  client.$disconnect();
-  return results;
+    client.$connect();
+    let results = await client.user.findMany({
+        select: {
+            id: true,
+            username: true,
+            role: true,
+        },
+        orderBy: {
+            username: "asc",
+        }
+    });
+    client.$disconnect();
+    return results;
 }
 
 /**
@@ -90,10 +90,10 @@ export async function getUsers() {
  * @returns {Promise<void>}
  */
 export async function createUser(data) {
-  data.password = await bcrypt.hash(data.password, salt);
-  client.$connect();
-  await client.user.create({data});
-  client.$disconnect();
+    data.password = await bcrypt.hash(data.password, salt);
+    client.$connect();
+    await client.user.create({data});
+    client.$disconnect();
 }
 
 /**
@@ -102,13 +102,13 @@ export async function createUser(data) {
  * @returns {Promise<void>}
  */
 export async function updateUser(data) {
-  data.password = await bcrypt.hash(data.password, salt);
-  client.$connect();
-  await client.user.update({
-    where: {id: parseInt(data.id)},
-    data,
-  });
-  client.$disconnect();
+    data.password = await bcrypt.hash(data.password, salt);
+    client.$connect();
+    await client.user.update({
+        where: {id: parseInt(data.id)},
+        data,
+    });
+    client.$disconnect();
 }
 
 /**
@@ -117,9 +117,9 @@ export async function updateUser(data) {
  * @returns null
  */
 export async function deleteUser(id) {
-  client.$connect();
-  await client.user.delete({where: {id}});
-  client.$disconnect();
+    client.$connect();
+    await client.user.delete({where: {id}});
+    client.$disconnect();
 }
 
 /**
@@ -127,32 +127,32 @@ export async function deleteUser(id) {
  * @returns {Promise<void>} all the events
  */
 export async function getEvents() {
-  client.$connect();
-  let results = await client.event.findMany({orderBy: {startTS: "asc"}});
-  client.$disconnect();
+    client.$connect();
+    let results = await client.event.findMany({orderBy: {startTS: "asc"}});
+    client.$disconnect();
 
-  return results;
+    return results;
 }
 
 export async function getOngoingEvents() {
-  const cachedData = cache.get("events");
+    const cachedData = cache.get("events");
 
-  if (!cachedData || cachedData.length === 0) {
-    client.$connect();
-    let results = await client.event.findMany({
-      where: {
-        startTS: {
-          lte: new Date()
-        }, endTS: {
-          gte: new Date()
-        }
-      }, orderBy: {channel: "asc"}
-    });
-    client.$disconnect();
-    cache.set("events", results);
-    return results;
-  }
-  return cachedData;
+    if (!cachedData || cachedData.length === 0) {
+        client.$connect();
+        let results = await client.event.findMany({
+            where: {
+                startTS: {
+                    lte: new Date()
+                }, endTS: {
+                    gte: new Date()
+                }
+            }, orderBy: {channel: "asc"}
+        });
+        client.$disconnect();
+        cache.set("events", results);
+        return results;
+    }
+    return cachedData;
 }
 
 /**
@@ -161,25 +161,25 @@ export async function getOngoingEvents() {
  * @returns null
  */
 export async function createEvent(data) {
-  data.startTS = new Date(data.startTS);
-  data.endTS = new Date(data.endTS);
-  client.$connect();
-  await client.event.create({data});
-  client.$disconnect();
+    data.startTS = new Date(data.startTS);
+    data.endTS = new Date(data.endTS);
+    client.$connect();
+    await client.event.create({data});
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let results = await client.event.findMany({
-    where: {
-      startTS: {
-        lte: new Date()
-      }, endTS: {
-        gte: new Date()
-      }
-    }, orderBy: {channel: "asc"}
-  });
-  client.$disconnect();
-  cache.set("events", results);
+    //Update cache
+    client.$connect();
+    let results = await client.event.findMany({
+        where: {
+            startTS: {
+                lte: new Date()
+            }, endTS: {
+                gte: new Date()
+            }
+        }, orderBy: {channel: "asc"}
+    });
+    client.$disconnect();
+    cache.set("events", results);
 }
 
 /**
@@ -188,36 +188,36 @@ export async function createEvent(data) {
  * @returns null
  */
 export async function updateEvent(data) {
-  client.$connect();
-  await client.event.update({
-    where: {
-      id: parseInt(data.id),
-    },
-    data: {
-      id: data.id,
-      title: data.title,
-      description: data.description,
-      startTS: new Date(data.startts),
-      endTS: new Date(data.endts),
-      image: data.image,
-      channel: data.channel
-    },
-  });
-  client.$disconnect();
+    client.$connect();
+    await client.event.update({
+        where: {
+            id: parseInt(data.id),
+        },
+        data: {
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            startTS: new Date(data.startts),
+            endTS: new Date(data.endts),
+            image: data.image,
+            channel: data.channel
+        },
+    });
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let results = await client.event.findMany({
-    where: {
-      startTS: {
-        lte: new Date()
-      }, endTS: {
-        gte: new Date()
-      }
-    }, orderBy: {channel: "asc"}
-  });
-  client.$disconnect();
-  cache.set("events", results);
+    //Update cache
+    client.$connect();
+    let results = await client.event.findMany({
+        where: {
+            startTS: {
+                lte: new Date()
+            }, endTS: {
+                gte: new Date()
+            }
+        }, orderBy: {channel: "asc"}
+    });
+    client.$disconnect();
+    cache.set("events", results);
 }
 
 /**
@@ -226,22 +226,22 @@ export async function updateEvent(data) {
  * @returns null
  */
 export async function deleteEvent(id) {
-  client.$connect();
-  await client.event.delete({where: {id: parseInt(id)}});
-  client.$disconnect();
-  //Update cache
-  client.$connect();
-  let results = await client.event.findMany({
-    where: {
-      startTS: {
-        lte: new Date()
-      }, endTS: {
-        gte: new Date()
-      }
-    }, orderBy: {channel: "asc"}
-  });
-  client.$disconnect();
-  cache.set("events", results);
+    client.$connect();
+    await client.event.delete({where: {id: parseInt(id)}});
+    client.$disconnect();
+    //Update cache
+    client.$connect();
+    let results = await client.event.findMany({
+        where: {
+            startTS: {
+                lte: new Date()
+            }, endTS: {
+                gte: new Date()
+            }
+        }, orderBy: {channel: "asc"}
+    });
+    client.$disconnect();
+    cache.set("events", results);
 }
 
 /**
@@ -250,28 +250,28 @@ export async function deleteEvent(id) {
  * @returns {Promise<void>}
  */
 export async function createCultureEvent(data) {
-  data.startTS = new Date(data.startTS);
-  data.endTS = new Date(data.endTS);
-  if(data.eventTS) {
-    data.eventTS = new Date(data.eventTS);
-  }
-  client.$connect();
-  await client.cultureEvent.create({data});
-  client.$disconnect();
+    data.startTS = new Date(data.startTS);
+    data.endTS = new Date(data.endTS);
+    if (data.eventTS) {
+        data.eventTS = new Date(data.eventTS);
+    }
+    client.$connect();
+    await client.cultureEvent.create({data});
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let results = await client.cultureEvent.findMany({
-    where: {
-      startTS: {
-        lte: new Date()
-      }, endTS: {
-        gte: new Date()
-      }
-    }, orderBy: {eventTS: "asc"}
-  });
-  client.$disconnect();
-  cache.set("cevents", results);
+    //Update cache
+    client.$connect();
+    let results = await client.cultureEvent.findMany({
+        where: {
+            startTS: {
+                lte: new Date()
+            }, endTS: {
+                gte: new Date()
+            }
+        }, orderBy: {eventTS: "asc"}
+    });
+    client.$disconnect();
+    cache.set("cevents", results);
 }
 
 /**
@@ -280,37 +280,37 @@ export async function createCultureEvent(data) {
  * @returns null
  */
 export async function updateCultureEvent(data) {
-  client.$connect();
-  await client.cultureEvent.update({
-    where: {
-      id: parseInt(data.id),
-    },
-    data: {
-      id: data.id,
-      title: data.title,
-      description: data.description,
-      startTS: new Date(data.startts),
-      endTS: new Date(data.endts),
-      eventTS: data.eventTS ? new Date(data.eventTS) : undefined,
-      image: data.image,
-      channel: data.channel
-    },
-  });
-  client.$disconnect();
+    client.$connect();
+    await client.cultureEvent.update({
+        where: {
+            id: parseInt(data.id),
+        },
+        data: {
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            startTS: new Date(data.startts),
+            endTS: new Date(data.endts),
+            eventTS: data.eventTS ? new Date(data.eventTS) : undefined,
+            image: data.image,
+            channel: data.channel
+        },
+    });
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let results = await client.cultureEvent.findMany({
-    where: {
-      startTS: {
-        lte: new Date()
-      }, endTS: {
-        gte: new Date()
-      }
-    }, orderBy: {eventTS: "asc"}
-  });
-  client.$disconnect();
-  cache.set("cevents", results);
+    //Update cache
+    client.$connect();
+    let results = await client.cultureEvent.findMany({
+        where: {
+            startTS: {
+                lte: new Date()
+            }, endTS: {
+                gte: new Date()
+            }
+        }, orderBy: {eventTS: "asc"}
+    });
+    client.$disconnect();
+    cache.set("cevents", results);
 }
 
 /**
@@ -319,22 +319,22 @@ export async function updateCultureEvent(data) {
  * @returns null
  */
 export async function deleteCultureEvent(id) {
-  client.$connect();
-  await client.cultureEvent.delete({where: {id: parseInt(id)}});
-  client.$disconnect();
-  //Update cache
-  client.$connect();
-  let results = await client.cultureEvent.findMany({
-    where: {
-      startTS: {
-        lte: new Date()
-      }, endTS: {
-        gte: new Date()
-      }
-    }, orderBy: {eventTS: "asc"}
-  });
-  client.$disconnect();
-  cache.set("cevents", results);
+    client.$connect();
+    await client.cultureEvent.delete({where: {id: parseInt(id)}});
+    client.$disconnect();
+    //Update cache
+    client.$connect();
+    let results = await client.cultureEvent.findMany({
+        where: {
+            startTS: {
+                lte: new Date()
+            }, endTS: {
+                gte: new Date()
+            }
+        }, orderBy: {eventTS: "asc"}
+    });
+    client.$disconnect();
+    cache.set("cevents", results);
 }
 
 /**
@@ -342,24 +342,24 @@ export async function deleteCultureEvent(id) {
  * @returns {Promise<unknown>}
  */
 export async function getCultureOngoingEvents() {
-  const cachedData = cache.get("cevents");
+    const cachedData = cache.get("cevents");
 
-  if (!cachedData || cachedData.length === 0) {
-    client.$connect();
-    let results = await client.cultureEvent.findMany({
-      where: {
-        startTS: {
-          lte: new Date()
-        }, endTS: {
-          gte: new Date()
-        }
-      }, orderBy: {eventTS: "asc"}
-    });
-    client.$disconnect();
-    cache.set("cevents", results);
-    return results;
-  }
-  return cachedData;
+    if (!cachedData || cachedData.length === 0) {
+        client.$connect();
+        let results = await client.cultureEvent.findMany({
+            where: {
+                startTS: {
+                    lte: new Date()
+                }, endTS: {
+                    gte: new Date()
+                }
+            }, orderBy: {eventTS: "asc"}
+        });
+        client.$disconnect();
+        cache.set("cevents", results);
+        return results;
+    }
+    return cachedData;
 }
 
 /**
@@ -367,11 +367,11 @@ export async function getCultureOngoingEvents() {
  * @returns {Promise<void>} all the culture events
  */
 export async function getCultureEvents() {
-  client.$connect();
-  let results = await client.cultureEvent.findMany({orderBy: {startTS: "asc"}});
-  client.$disconnect();
+    client.$connect();
+    let results = await client.cultureEvent.findMany({orderBy: {startTS: "asc"}});
+    client.$disconnect();
 
-  return results;
+    return results;
 }
 
 /**
@@ -380,11 +380,12 @@ export async function getCultureEvents() {
  * @returns {Promise<void>} the config values
  */
 export async function getConfigValue(key) {
-  client.$connect();
-  let results = await client.config.findFirst({where: {key}});
-  client.$disconnect();
-
-  return results;
+    client.$connect();
+    console.log("dkjagzjbrhcegzhrb ", key)
+    let results = await client.config.findFirst({where: {key}});
+    console.log("lmao ", results)
+    client.$disconnect();
+    return results;
 }
 
 /**
@@ -393,25 +394,22 @@ export async function getConfigValue(key) {
  * @returns null
  */
 export async function updateConfigValue(data) {
-  client.$connect();
-  await client.config.update({
-    where: {
-      key: data.key,
-    },
-    data: {
-      key: data.key,
-      value: data.value,
-    },
-  })
-  client.$disconnect();
+    client.$connect();
+    await client.config.update({
+        where: {
+            key: data.key,
+        },
+        data: data
+    })
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let result = client.config.findMany({
-    orderBy: {key: "asc"}
-  });
-  client.$disconnect();
-  cache.set("discord", result)
+    //Update cache
+    client.$connect();
+    let result = client.config.findMany({
+        orderBy: {key: "asc"}
+    });
+    client.$disconnect();
+    cache.set("discord", result)
 }
 
 /**
@@ -419,17 +417,17 @@ export async function updateConfigValue(data) {
  * @returns {Promise<void>} all the conference
  */
 export async function getConference() {
-  client.$connect();
-  let results = await client.conference.findMany({
-    where: {
-        when: {
-          gte: new Date((new Date()).getTime()-1000*60*30)
-        }
-      },
-    orderBy: {when: "asc"}
-  });
-  client.$disconnect();
-  return results;
+    client.$connect();
+    let results = await client.conference.findMany({
+        where: {
+            when: {
+                gte: new Date((new Date()).getTime() - 1000 * 60 * 30)
+            }
+        },
+        orderBy: {when: "asc"}
+    });
+    client.$disconnect();
+    return results;
 }
 
 /**
@@ -438,23 +436,23 @@ export async function getConference() {
  * @returns null
  */
 export async function updateConference(data) {
-  data.when = new Date(data.when);
-  client.$connect();
-  await client.conference.update({
-    where: {
-      id: parseInt(data.id),
-    },
-    data: data
-  })
-  client.$disconnect();
+    data.when = new Date(data.when);
+    client.$connect();
+    await client.conference.update({
+        where: {
+            id: parseInt(data.id),
+        },
+        data: data
+    })
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let result = client.conference.findMany({
-    orderBy: {when: "asc"}
-  });
-  client.$disconnect();
-  cache.set("conference", result)
+    //Update cache
+    client.$connect();
+    let result = client.conference.findMany({
+        orderBy: {when: "asc"}
+    });
+    client.$disconnect();
+    cache.set("conference", result)
 }
 
 /**
@@ -463,19 +461,19 @@ export async function updateConference(data) {
  * @returns null
  */
 export async function deleteConference(id) {
-  client.$connect();
-  await client.conference.delete({
-    where: {id: parseInt(id),}
-  })
-  client.$disconnect();
+    client.$connect();
+    await client.conference.delete({
+        where: {id: parseInt(id),}
+    })
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let result = client.conference.findMany({
-    orderBy: {when: "asc"}
-  });
-  client.$disconnect();
-  cache.set("conference", result)
+    //Update cache
+    client.$connect();
+    let result = client.conference.findMany({
+        orderBy: {when: "asc"}
+    });
+    client.$disconnect();
+    cache.set("conference", result)
 }
 
 /**
@@ -484,10 +482,10 @@ export async function deleteConference(id) {
  * @returns null
  */
 export async function createConference(data) {
-  data.when = new Date(data.when);
-  client.$connect();
-  await client.conference.create({data})
-  client.$disconnect();
+    data.when = new Date(data.when);
+    client.$connect();
+    await client.conference.create({data})
+    client.$disconnect();
 }
 
 /**
@@ -495,17 +493,17 @@ export async function createConference(data) {
  * @returns {Promise<void>} all the ateliers
  */
 export async function getAtelier() {
-  client.$connect();
-  let results = await client.atelier.findMany({
-    where: {
-        end: {
-          gte: new Date((new Date()).getTime()-1000*60*30)
-        }
-      },
-    orderBy: {start: "asc"}
-  });
-  client.$disconnect();
-  return results;
+    client.$connect();
+    let results = await client.atelier.findMany({
+        where: {
+            end: {
+                gte: new Date((new Date()).getTime() - 1000 * 60 * 30)
+            }
+        },
+        orderBy: {start: "asc"}
+    });
+    client.$disconnect();
+    return results;
 }
 
 /**
@@ -514,24 +512,24 @@ export async function getAtelier() {
  * @returns null
  */
 export async function updateAtelier(data) {
-  data.start = new Date(data.start);
-  data.end = new Date(data.end);
-  client.$connect();
-  await client.atelier.update({
-    where: {
-      id: parseInt(data.id),
-    },
-    data: data
-  })
-  client.$disconnect();
+    data.start = new Date(data.start);
+    data.end = new Date(data.end);
+    client.$connect();
+    await client.atelier.update({
+        where: {
+            id: parseInt(data.id),
+        },
+        data: data
+    })
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let result = client.atelier.findMany({
-    orderBy: {name: "asc"}
-  });
-  client.$disconnect();
-  cache.set("atelier", result)
+    //Update cache
+    client.$connect();
+    let result = client.atelier.findMany({
+        orderBy: {name: "asc"}
+    });
+    client.$disconnect();
+    cache.set("atelier", result)
 }
 
 /**
@@ -540,19 +538,19 @@ export async function updateAtelier(data) {
  * @returns null
  */
 export async function deleteAtelier(id) {
-  client.$connect();
-  await client.atelier.delete({
-    where: {id: parseInt(id),}
-  })
-  client.$disconnect();
+    client.$connect();
+    await client.atelier.delete({
+        where: {id: parseInt(id),}
+    })
+    client.$disconnect();
 
-  //Update cache
-  client.$connect();
-  let result = client.atelier.findMany({
-    orderBy: {name: "asc"}
-  });
-  client.$disconnect();
-  cache.set("atelier", result)
+    //Update cache
+    client.$connect();
+    let result = client.atelier.findMany({
+        orderBy: {name: "asc"}
+    });
+    client.$disconnect();
+    cache.set("atelier", result)
 }
 
 /**
@@ -561,9 +559,9 @@ export async function deleteAtelier(id) {
  * @returns null
  */
 export async function createAtelier(data) {
-  client.$connect();
-  data.start = new Date(data.start);
-  data.end = new Date(data.end);
-  await client.atelier.create({data})
-  client.$disconnect();
+    client.$connect();
+    data.start = new Date(data.start);
+    data.end = new Date(data.end);
+    await client.atelier.create({data})
+    client.$disconnect();
 }

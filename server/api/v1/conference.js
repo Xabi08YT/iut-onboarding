@@ -8,8 +8,6 @@ import {updateConference, createConference, getConference, deleteConference} fro
  *      get:
  *          tags:
  *              - JPO conference management   # tags doit être une liste
- *          security:
- *              - JWT: []
  *          description: get a list containing all conferences stored in DB
  *          responses:
  *              200:
@@ -21,7 +19,7 @@ import {updateConference, createConference, getConference, deleteConference} fro
  *                              items:
  *                                  type: object
  *                                  properties:
- *                                      id: 
+ *                                      id:
  *                                          type: integer
  *                                          description: "id of the conference"
  *                                          example: 1

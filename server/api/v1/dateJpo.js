@@ -1,4 +1,3 @@
-import fs from "fs";
 import {getRole, verifyToken} from "~~/server/jwt";
 import {updateConfigValue,getConfigValue} from "~~/server/database"
 
@@ -8,8 +7,6 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  *      get:
  *          tags:
  *              - Fetch the JPO date
- *          security:
- *              - JWT: []
  *          description: Get the date of the next JPO
  *          responses:
  *              200:
@@ -58,7 +55,6 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
 async function handler(req) {
     let body;
     let token = parseCookies(req)?.onboardingToken
-    let data
 
     try {
         switch(req.method) {
@@ -79,18 +75,16 @@ async function handler(req) {
                 console.error(data)
                 await updateConfigValue(data);
                 return new Response(JSON.stringify({message:null}), {status: 200});
-            
-                case "GET":
+
+            case "GET":
                 let dateJPO = await getConfigValue("dateJpo");
                 console.log(dateJPO)
                 return new Response(dateJPO.value, {status: 200});
-            
-                default:
+
+            default:
                 return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
         }
     } catch (error) {
         return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
     }
 }
-
-export default eventHandler(handler);

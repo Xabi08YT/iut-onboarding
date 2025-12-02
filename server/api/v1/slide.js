@@ -75,30 +75,30 @@ import {parseCookies} from "h3";
  *                   example: "{error message}"
  */
 async function handler(req) {
-  try {
-    switch(req.method) {
-      case "PUT":
+    try {
+        switch(req.method) {
+            case "PUT":
 
-        let token = parseCookies(req)?.onboardingToken
-        if(await verifyToken(token) === false) {
-          return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+                let token = parseCookies(req)?.onboardingToken
+                if(await verifyToken(token) === false) {
+                    return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+                }
+
+                let roles = await getRole(token);
+
+                if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("MAINTAINER"))) {
+                    return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
+                }
+                await updateSlide(await readBody(req));
+                return new Response(JSON.stringify({message:"Slide updated successfully."}), {status: 200});
+            case "GET":
+                return new Response(JSON.stringify(await getSlides()), {status: 200});
+            default:
+                return new Response(JSON.stringify({message:"Only PUT an GET methods allowed"}), {status: 405});
         }
-
-        let roles = await getRole(token);
-
-        if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("MAINTAINER"))) {
-          return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
-        }
-        await updateSlide(await readBody(req));
-        return new Response(JSON.stringify({message:"Slide updated successfully."}), {status: 200});
-      case "GET":
-        return new Response(JSON.stringify(await getSlides()), {status: 200});
-      default:
-        return new Response(JSON.stringify({message:"Only PUT an GET methods allowed"}), {status: 405});
+    } catch(err) {
+        return new Response(JSON.stringify({message:err.message}), {status: 500});
     }
-  } catch(err) {
-    return new Response(JSON.stringify({message:err.message}), {status: 500});
-  }
 }
 
 export default eventHandler(handler);

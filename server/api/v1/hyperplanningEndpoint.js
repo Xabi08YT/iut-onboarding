@@ -25,7 +25,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *                                              example: "2025.5.6"
  *                                  icals:
  *                                      schema:
- *                                          key: 
+ *                                          key:
  *                                              type: string
  *                                              description: "allow to dinstinguish icals from version"
  *                                              example: "HPIcals"
@@ -33,7 +33,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *                                              type: string
  *     put:
  *          tags:
- *              - Culture meetings management                        
+ *              - Culture meetings management
  *          401:
  *              description: "User token has expired"
  *          403:
@@ -72,3 +72,4 @@ export default defineEventHandler(async (event) => {
             }
     }
 });
+

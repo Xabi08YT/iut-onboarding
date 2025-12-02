@@ -4,8 +4,6 @@
  *      get:
  *          tags:
  *              - IUT logo fetch
- *          security:
- *           - JWT: []
  *          description: "Get a list containing all the events that are currently stored in the database"
  *          responses:
  *              200:

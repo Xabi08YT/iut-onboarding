@@ -1,6 +1,6 @@
 import {createEvent, getEvents, updateEvent, deleteEvent} from "~~/server/database";
 import {getRole, verifyToken} from "~~/server/jwt";
-import {parseCookies, setCookie } from "h3";
+import {parseCookies, setCookie} from "h3";
 
 /**
  * @openapi
@@ -159,48 +159,48 @@ import {parseCookies, setCookie } from "h3";
  *         description: "This event does not exist."
  */
 async function handler(req) {
-  let body;
-  let token = parseCookies(req)?.onboardingToken
-  if(await verifyToken(token) === false) {
-    return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
-  }
-
-  let roles = await getRole(token);
-
-  if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER") || !roles.includes("ENSEIGNANT"))) {
-    return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
-  }
-  try {
-    switch(req.method) {
-      case "POST":
-        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-          return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
-        }
-        body = await readBody(req);
-        await createEvent(body);
-        return new Response(JSON.stringify({message:"Event created successfully."}), {status: 201});
-      case "PUT":
-        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-          return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
-        }
-        body = await readBody(req);
-        await updateEvent(body);
-        return new Response(JSON.stringify({message:null}), {status: 200});
-      case "DELETE":
-        if(await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-          return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
-        }
-        body = await readBody(req);
-        await deleteEvent(body);
-        return new Response(JSON.stringify({message:null}), {status: 200});
-      case "GET":
-        return new Response(JSON.stringify(await getEvents()), {status: 200});
-      default:
-        return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
+    let body;
+    let token = parseCookies(req)?.onboardingToken
+    if (await verifyToken(token) === false) {
+        return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
     }
-  } catch (error) {
-    return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
-  }
+
+    let roles = await getRole(token);
+
+    if (roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER") || !roles.includes("ENSEIGNANT"))) {
+        return new Response(JSON.stringify({message: "Permission denied."}), {status: 403});
+    }
+    try {
+        switch (req.method) {
+            case "POST":
+                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
+                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
+                }
+                body = await readBody(req);
+                await createEvent(body);
+                return new Response(JSON.stringify({message: "Event created successfully."}), {status: 201});
+            case "PUT":
+                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
+                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
+                }
+                body = await readBody(req);
+                await updateEvent(body);
+                return new Response(JSON.stringify({message: null}), {status: 200});
+            case "DELETE":
+                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
+                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
+                }
+                body = await readBody(req);
+                await deleteEvent(body);
+                return new Response(JSON.stringify({message: null}), {status: 200});
+            case "GET":
+                return new Response(JSON.stringify(await getEvents()), {status: 200});
+            default:
+                return new Response(JSON.stringify({message: "Method not allowed. Please read the documentation."}), {status: 405});
+        }
+    } catch (error) {
+        return new Response(JSON.stringify({message: `Internal Server Error: ${error.message}`}), {status: 500});
+    }
 }
 
 export default eventHandler(handler);

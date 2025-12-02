@@ -80,7 +80,7 @@ export default {
           stopId: this.busData.stops[this.index]
         }
       )
-      const apiresult = await fetch(`/api/v1/getTBM?${params}`);
+      const apiresult = await fetch(`api/v1/getTBM?${params}`);
       const res = await apiresult.json();
 
       let found = false;

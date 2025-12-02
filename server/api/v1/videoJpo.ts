@@ -65,6 +65,7 @@ export default defineEventHandler(async (event) => {
                     return new Response(JSON.stringify({message: "Permission denied."}), {status: 403});
                 }
                 let body = await readBody(event);
+                if (!body) return new Response(JSON.stringify({message: "Missing request body"}), {status: 400});
                 let tmp = JSON.parse(body);
                 let data = {key: "lienVideoJpo", value: tmp.value}
                 await updateConfigValue(data);

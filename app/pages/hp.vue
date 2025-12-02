@@ -79,7 +79,7 @@ init();
 </script>
 
 <template>
-  <AdminTopBar :access="admin"/>
+  <AdminTopBar/>
   <div class="flex justify-center items-center gap-2 w-screen" id="login">
     <Toaster />
     <Card class="max-w-md">

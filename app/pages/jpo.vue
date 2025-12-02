@@ -48,7 +48,7 @@ init();
 
 
 <template>
-  <AdminTopBar :access="admin"/>
+  <AdminTopBar/>
   <div id="jpopanel" class="w-screen h-screen flex justify-center items-center">
     <JPOEventEditor/>
   </div>

@@ -66,7 +66,7 @@ init();
 </script>
 
 <template>
-  <AdminTopBar :access="admin"/>
+  <AdminTopBar/>
   <div id="container"
        class="w-screen min-h-screen lg:h-dvh lg:max-h-dvh flex flex-col lg:flex-row p-[25px] justify-center items-center">
     <Toaster/>

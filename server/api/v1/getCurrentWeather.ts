@@ -34,12 +34,12 @@ export default defineEventHandler(async (event) => {
     try {
       const result = await fetch(CURRENT_WEATHER_URL);
       const data = await result.json();
-      return { statusCode: 200, body: JSON.stringify({
+      return new Response (JSON.stringify({
         weatherText: data.current.condition.text,
         temperature: data.current.temp_c,
-      })}
+      }))
     } catch (error: any) {
-      return { statusCode: 500, body: JSON.stringify(error) };
+      return new Response(JSON.stringify({message:`Erreur lors de la récupération des données météo: ${error}`}), {status: 500})
     }
   }
 });

@@ -20,8 +20,10 @@ const defaultConfigs = [
 <<<<<<< HEAD
   {key: "BDEdiscord", value:"Undefined"},
   {key: "HPVersion", value:"2025.5.6"},
-  {key: "HPIcals", value:"Undefined"}
-]
+  {key: "HPIcals", value:"Undefined"},
+  {key: "dateJpo", value: "bruh" },
+  {key: "lienVideoJpo", value: "Undefined" },
+  ]
 
 function createRandomString(length) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#_!";

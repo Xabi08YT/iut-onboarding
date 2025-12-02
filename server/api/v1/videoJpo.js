@@ -2,6 +2,57 @@ import fs from "fs";
 import {getRole, verifyToken} from "~~/server/jwt";
 import {updateConfigValue,getConfigValue} from "~~/server/database"
 
+/**
+ * @openapi
+ * /videoJpo:
+ *      get:
+ *          tags:
+ *              - Fetch the JPO video link
+ *          security:
+ *              - JWT: []
+ *          description: Get the link of the JPO video
+ *          responses:
+ *              200:
+ *                  description: Get the link of the JPO video
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: string
+ *                              description: The link of the JPO video
+ *                              example: "youtube.com/linkofthevideo"
+ *              405:
+ *                  description: Method not allowed
+ *              500:
+ *                  description: Unknown error
+ *      put:
+ *          tags:
+ *              - Fetch the JPO video link
+ *          security:
+ *              - JWT: []
+ *          description: Change the link of the JPO video
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              value:
+ *                                  type: string
+ *                                  description: The new link of the JPO video
+ *                                  example: "youtube.com/newlinkofthevideo"
+ *                          required:
+ *                              - value
+ *          responses:
+ *              200:
+ *                  description: Change the link of the JPO video
+ *              401:
+ *                  description: Invalid token
+ *              403:
+ *                  description: Permission denied
+ *              500:  
+ *                  description: Unknown error
+ */
 async function handler(req) {
     let body;
     let token = parseCookies(req)?.onboardingToken

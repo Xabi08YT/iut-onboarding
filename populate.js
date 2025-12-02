@@ -17,7 +17,6 @@ const defaultSlides = [
   { name: "cultureclub", active: true, time: 7 },
 ];
 const defaultConfigs = [
-<<<<<<< HEAD
   {key: "BDEdiscord", value:"Undefined"},
   {key: "HPVersion", value:"2025.5.6"},
   {key: "HPIcals", value:"Undefined"},

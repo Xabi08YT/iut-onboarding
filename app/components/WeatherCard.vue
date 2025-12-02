@@ -34,7 +34,7 @@ export default {
   methods: {
     async fetchWeather() {
       console.log("Refreshing weather");
-      await fetch("/api/v1/getCurrentWeather")
+      await fetch("api/v1/getCurrentWeather")
       .then((response) => response.json())
       .then((weatherinfos) => {
         this.currentTemperature = weatherinfos.temperature;

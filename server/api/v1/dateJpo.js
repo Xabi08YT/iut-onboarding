@@ -7,7 +7,7 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  *      get:
  *          tags:
  *              - JPO management
- *          description: Get the date of the next JPO
+ *          summary: Get the date of the next JPO
  *          responses:
  *              200:
  *                  description: Get the date of the next JPO
@@ -27,7 +27,7 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  *              - JPO management
  *          security:
  *              - JWT: []
- *          description: Change the date of the JPO
+ *          summary: Change the date of the JPO
  *          requestBody:
  *              required: true
  *              content:

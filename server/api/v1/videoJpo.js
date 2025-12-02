@@ -7,7 +7,7 @@ import {updateConfigValue, getConfigValue} from "~~/server/database"
  *      get:
  *          tags:
  *              - JPO management
- *          description: Get the link of the JPO video
+ *          summary: Get the link of the JPO video
  *          responses:
  *              200:
  *                  description: Get the link of the JPO video
@@ -26,7 +26,7 @@ import {updateConfigValue, getConfigValue} from "~~/server/database"
  *              - JPO management
  *          security:
  *              - JWT: []
- *          description: Change the link of the JPO video
+ *          summary: Change the link of the JPO video
  *          requestBody:
  *              required: true
  *              content:

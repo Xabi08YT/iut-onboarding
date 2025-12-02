@@ -1,117 +1,164 @@
-import fs from "fs";
 import {getRole, verifyToken} from "~~/server/jwt";
 import {updateAtelier, createAtelier, getAtelier, deleteAtelier} from "~~/server/database"
 
-
 /**
  * @openapi
- * /jpo
- *      get:
- *          tags:
- *              - JPO management
- *          security:
- *              - JWT: []
- *          description: get a list containing all activities stored in DB
- *          responses:
- *              200:
- *                  description: get a list containing all activities stored in DB
- *                  content:
- *                      application/json:
- *                          schema:
+ * /atelier:
+ *  get:
+ *      tags:
+ *      - JPO management
+ *      summary: "Get the list of all workshops"
+ *      responses:
+ *          200:
+ *              description: "List of all the workshops in the DB"
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
  *                              type: object
  *                              properties:
  *                                  id:
  *                                      type: integer
- *                                      description: "id of the activity"
+ *                                      description: "ID of the workshop"
  *                                      example: 1
  *                                  name:
  *                                      type: string
- *                                      description: "name of teacher holding the activity"
- *                                      example: "Stéphane FOSSE"
+ *                                      description: "Name of the workshop"
+ *                                      example: "C# programming"
  *                                  room:
  *                                      type: string
- *                                      description: "name of the room where the activity will take place"
+ *                                      description: "Room of the workshop"
  *                                      example: "204"
  *                                  start:
  *                                      type: string
- *                                      format: datetime
- *                                      description: "date and hour when the activity will start"
+ *                                      format: date-time
+ *                                      description: "Beginning Timestamp of the workshop (ISO 8601)"
  *                                      example: "2025-12-02T09:10:00.000Z"
  *                                  end:
  *                                      type: string
- *                                      format: datetime
- *                                      description: "date and hour when the activity will end"
+ *                                      format: date-time
+ *                                      description: "Ending Timestamp of the workshop (ISO 8601)"
  *                                      example: "2025-12-02T19:20:00.000Z"
- *              500:
- *                  description : unknown error
- *      put:
- *          tags:
- *              - JPO management
- *          security:
- *              - JWT: []
- *          request-body:
- *              required: true
- *          parameters:
- *              -in:query
- *              name: "id"
- *              required: false
- *              type: integer
- *              description: id of the activity
- *              example: 1
- *              -in:query
- *              name:"name"
- *              required: false
- *              type: string
- *              description: "name of teacher holding the activity"
- *              example: "Stéphane FOSSE"
- *              -in:query
- *              name:"start"
- *              required: false
- *              type:string
- *              format:date-time
- *              description: "date and hour when the activity will start"
- *              example:"2025-12-02T09:10:00.000Z"
- *              -in:query
- *              name:"end"
- *              required: false
- *              type:string
- *              format:date-time
- *              description: "date and hour when the activity will end"
- *              example:"2025-12-02T19:20:00.000Z"
- *      post:
- *          tags:
- *              - JPO management
- *          security:
- *              - JWT: []
- *          request-body:
- *              required: true
- *          parameters:
- *              -in:query
- *              name: "id"
- *              required: true
- *              type: integer
- *              description: id of the activity
- *              example: 1
- *              -in:query
- *              name:"name"
- *              required: true
- *              type: string
- *              description: "name of teacher holding the activity"
- *              example: "Stéphane FOSSE"
- *              -in:query
- *              name:"start"
- *              required: true
- *              type:string
- *              format:date-time
- *              description: "date and hour when the activity will start"
- *              example:"2025-12-02T09:10:00.000Z"
- *              -in:query
- *              name:"end"
- *              required: true
- *              type:string
- *              format:date-time
- *              description: "date and hour when the activity will end"
- *              example:"2025-12-02T19:20:00.000Z"
+ *          500:
+ *              description : "Internal server error"
+ *  put:
+ *      tags:
+ *      - JPO management
+ *      summary: "Update an existing workshop"
+ *      security:
+ *      - JWT: []
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          id:
+ *                              type: integer
+ *                              description: "ID of the workshop to update"
+ *                              example: 1
+ *                          name:
+ *                              type: string
+ *                              description: "New workshop name"
+ *                              example: "Java programming"
+ *                          room:
+ *                              type: string
+ *                              description: "New room"
+ *                              example: "205"
+ *                          start:
+ *                              type: string
+ *                              format: date-time
+ *                              description: "New beginning timestamp"
+ *                              example: "2025-12-02T10:00:00.000Z"
+ *                          end:
+ *                              type: string
+ *                              format: date-time
+ *                              description: "New ending timestamp"
+ *                              example: "2025-12-02T18:00:00.000Z"
+ *      responses:
+ *          200:
+ *              description: "Successfully updated"
+ *          401:
+ *              description: "Missing or expired token"
+ *          403:
+ *              description: "Access denied"
+ *          500:
+ *              description: "Intenral server error"
+ *  post:
+ *      tags:
+ *      - JPO management
+ *      summary: "Create a new workshop"
+ *      security:
+ *      - JWT: []
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      required:
+ *                          - name
+ *                          - start
+ *                          - end
+ *                          - room
+ *                      properties:
+ *                          name:
+ *                              type: string
+ *                              description: "Name of the workshop"
+ *                              example: "Web programming"
+ *                          room:
+ *                              type: string
+ *                              description: "Room"
+ *                              example: "207"
+ *                          start:
+ *                              type: string
+ *                              format: date-time
+ *                              description: "Beginning timestamp"
+ *                              example: "2025-12-03T09:00:00.000Z"
+ *                          end:
+ *                              type: string
+ *                              format: date-time
+ *                              description: "Ending timestamp"
+ *                              example: "2025-12-03T17:00:00.000Z"
+ *      responses:
+ *          201:
+ *              description: "Created successfully"
+ *          401:
+ *              description: "Missing or expired token"
+ *          403:
+ *              description: "Access Denied"
+ *          500:
+ *              description: "Internal server error"
+ *  delete:
+ *      tags:
+ *      - JPO management
+ *      summary: "Delete a workshop"
+ *      security:
+ *      - JWT: []
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      required:
+ *                          - id
+ *                      properties:
+ *                          id:
+ *                              type: integer
+ *                              description: "ID of the workshop to delete"
+ *                              example: 1
+ *      responses:
+ *          200:
+ *              description: "Deleted successfully"
+ *          401:
+ *              description: "Missing or expired token"
+ *          403:
+ *              description: "Access Denied"
+ *          500:
+ *              description: "Internal server error"
  */
 async function handler(req) {
     let body;

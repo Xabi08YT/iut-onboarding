@@ -1,7 +1,7 @@
-<script setup>
-import {defineComponent, onMounted, onUnmounted, reactive} from "vue";
-import PlanningCard from "~/components/PlanningCard.vue";
+<script setup lang="ts">
+import {defineComponent, onMounted, onUnmounted, reactive, ref} from "vue";
 import {HyperplanningScheduler} from "@xabi08yt/iutgradignanhpscheduler";
+import { useRequestURL } from "nuxt/app";
 
 const edt = reactive({info_but1: [], info_but2: [], info_but3: []});
 const delay = 1000 * 60 * 5; // Refresh toutes les 5 minutes
@@ -19,10 +19,6 @@ let icals;
 
 const props = defineProps({
   isActive: Boolean,
-});
-
-const components = defineComponent({
-  PlanningCard
 });
 
 function setCurrentHourRange() {
@@ -265,7 +261,7 @@ let getAllPlannings = async () => {
       edt.info_but2 = edt.info_but2.slice(0, 1)
       infobut2_DSMODE.value = true;
     } else {
-      edt.info_but2 = edt.info_but2.slice([1])
+      edt.info_but2 = edt.info_but2.slice(1)
     }
 
 
@@ -273,7 +269,7 @@ let getAllPlannings = async () => {
       edt.info_but3 = edt.info_but3.slice(0, 1)
       infobut3_DSMODE.value = true;
     } else {
-      edt.info_but3 = edt.info_but3.slice([1])
+      edt.info_but3 = edt.info_but3.slice(1)
     }
 
 

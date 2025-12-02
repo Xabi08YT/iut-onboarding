@@ -12,6 +12,8 @@ import {Textarea} from "../../app/components/ui/textarea";
 import {Toaster} from "../../app/components/ui/toast";
 import { useRequestURL, useRuntimeConfig } from "nuxt/app";
 import { ref, watch } from "vue";
+import { navigateTo } from "nuxt/app";
+import AdminTopBar from "../../app/components/AdminTopBar.vue";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
@@ -290,6 +292,21 @@ const deleteAtelier = async (id) => {
   }
 };
 
+/**
+ * Initializes the page
+ * @returns {Promise<void>}
+ */
+const init = async () => {
+  let loggedIn = await fetch("api/v1/session");
+
+  if (!loggedIn.ok) {
+    return navigateTo("/login");
+  }
+
+  await initAtelier();
+  await initConferences();
+};
+
 watch([modRoom,modNomEnseignant,modDateWhen], () => {
   modValid.value = (modRoom.value.length > 0 && modNomEnseignant.value.length > 0 && new Date(modDateWhen.value).getTime() > 0);
 });
@@ -308,8 +325,7 @@ watch([createRoomA, createNameA, createDateWhenAStart, createDateWhenAEnd], () =
       new Date(createDateWhenAStart.value) > 0 && new Date(createDateWhenAEnd.value) > 0);
 });
 
-await initAtelier();
-await initConferences();
+init();
 </script>
 
 <template >
@@ -421,6 +437,8 @@ await initConferences();
       </CardContent>
     </Card>
 
+                <Label for="descriptionEventModify">Nom Enseignant ({{createNomEnseignant.length}}/30)</Label>
+                <Textarea id="descriptionEventModify" v-model="createNomEnseignant"/>
 
 
 
@@ -520,7 +538,3 @@ await initConferences();
     </Card>
   </div>
 </template>
-
-<style scoped>
-
-</style>

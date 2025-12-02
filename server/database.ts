@@ -62,6 +62,21 @@ export interface CultureEvent {
   image: string|null,
 }
 
+export interface AtelierPrisma {
+  id: number,
+  name: string,
+  room: string,
+  start: Date,
+  end: Date
+}
+
+export interface ConferencePrisma {
+  id: number,
+  room: string,
+  who: string,
+  when: Date
+}
+
 /**
  * Check if the username is correct or not
  * @param username username of the user
@@ -503,16 +518,16 @@ export async function getConference() {
  * @param data
  * @returns null
  */
-export async function updateConference(data) {
-    data.when = new Date(data.when);
-    client.$connect();
-    await client.conference.update({
-        where: {
-            id: parseInt(data.id),
-        },
-        data: data
-    })
-    client.$disconnect();
+export async function updateConference(data: ConferencePrisma) {
+  data.when = new Date(data.when);
+  client.$connect();
+  await client.conference.update({
+    where: {
+      id: data.id,
+    },
+    data: data
+  })
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -528,12 +543,12 @@ export async function updateConference(data) {
  * @param id
  * @returns null
  */
-export async function deleteConference(id) {
-    client.$connect();
-    await client.conference.delete({
-        where: {id: parseInt(id),}
-    })
-    client.$disconnect();
+export async function deleteConference(id: string) {
+  client.$connect();
+  await client.conference.delete({
+    where: {id: parseInt(id),}
+  })
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -549,29 +564,29 @@ export async function deleteConference(id) {
  * @param data
  * @returns null
  */
-export async function createConference(data) {
-    data.when = new Date(data.when);
-    client.$connect();
-    await client.conference.create({data})
-    client.$disconnect();
+export async function createConference(data: ConferencePrisma) {
+  data.when = new Date(data.when);
+  client.$connect();
+  await client.conference.create({data})
+  client.$disconnect();
 }
 
 /**
  * Get the ateliers from the database
  * @returns {Promise<void>} all the ateliers
  */
-export async function getAtelier() {
-    client.$connect();
-    let results = await client.atelier.findMany({
-        where: {
-            end: {
-                gte: new Date((new Date()).getTime() - 1000 * 60 * 30)
-            }
-        },
-        orderBy: {start: "asc"}
-    });
-    client.$disconnect();
-    return results;
+export async function getAtelier(): Promise<AtelierPrisma[]> {
+  client.$connect();
+  let results = await client.atelier.findMany({
+    where: {
+        end: {
+          gte: new Date((new Date()).getTime()-1000*60*30)
+        }
+      },
+    orderBy: {start: "asc"}
+  });
+  client.$disconnect();
+  return results;
 }
 
 /**
@@ -579,17 +594,17 @@ export async function getAtelier() {
  * @param data
  * @returns null
  */
-export async function updateAtelier(data) {
-    data.start = new Date(data.start);
-    data.end = new Date(data.end);
-    client.$connect();
-    await client.atelier.update({
-        where: {
-            id: parseInt(data.id),
-        },
-        data: data
-    })
-    client.$disconnect();
+export async function updateAtelier(data: AtelierPrisma) {
+  data.start = new Date(data.start);
+  data.end = new Date(data.end);
+  client.$connect();
+  await client.atelier.update({
+    where: {
+      id: data.id,
+    },
+    data: data
+  })
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -605,12 +620,12 @@ export async function updateAtelier(data) {
  * @param id
  * @returns null
  */
-export async function deleteAtelier(id) {
-    client.$connect();
-    await client.atelier.delete({
-        where: {id: parseInt(id),}
-    })
-    client.$disconnect();
+export async function deleteAtelier(id: string) {
+  client.$connect();
+  await client.atelier.delete({
+    where: {id: parseInt(id),}
+  })
+  client.$disconnect();
 
     //Update cache
     client.$connect();
@@ -626,10 +641,10 @@ export async function deleteAtelier(id) {
  * @param data
  * @returns null
  */
-export async function createAtelier(data) {
-    client.$connect();
-    data.start = new Date(data.start);
-    data.end = new Date(data.end);
-    await client.atelier.create({data})
-    client.$disconnect();
+export async function createAtelier(data: AtelierPrisma) {
+  client.$connect();
+  data.start = new Date(data.start);
+  data.end = new Date(data.end);
+  await client.atelier.create({data})
+  client.$disconnect();
 }

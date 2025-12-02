@@ -1,16 +1,17 @@
-<script setup>
+<script setup lang="ts">
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {ScrollArea} from "~/components/ui/scroll-area";
-import {Button} from "~/components/ui/button";
-import {toast} from "~/components/ui/toast";
-import {deepObjectClone} from "@@/lib/utils";
-import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
-import {Input} from "~/components/ui/input";
-import {Label} from "~/components/ui/label";
-import {Textarea} from "~/components/ui/textarea";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {ScrollArea} from "../../app/components/ui/scroll-area";
+import {Button} from "../../app/components/ui/button";
+import {toast} from "../../app/components/ui/toast";
+import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "../../app/components/ui/dialog";
+import {Input} from "../../app/components/ui/input";
+import {Label} from "../../app/components/ui/label";
+import {Textarea} from "../../app/components/ui/textarea";
 import {Toaster} from "../../app/components/ui/toast";
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
+import { ref, watch } from "vue";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
@@ -290,11 +291,11 @@ const deleteAtelier = async (id) => {
 };
 
 watch([modRoom,modNomEnseignant,modDateWhen], () => {
-  modValid.value = (modRoom.value.length > 0 && modNomEnseignant.value.length > 0 && new Date(modDateWhen.value) > 0);
+  modValid.value = (modRoom.value.length > 0 && modNomEnseignant.value.length > 0 && new Date(modDateWhen.value).getTime() > 0);
 });
 
 watch([createNomEnseignant,createRoom,createDateWhen], () => {
-  createValid.value = (createRoom.value.length > 0 && createNomEnseignant.value.length > 0 && new Date(createDateWhen.value) > 0);
+  createValid.value = (createRoom.value.length > 0 && createNomEnseignant.value.length > 0 && new Date(createDateWhen.value).getTime() > 0);
 });
 
 watch([modRoomA, modNameA, modDateWhenAStart, modDateWhenAEnd], () => {

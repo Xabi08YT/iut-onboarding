@@ -1,17 +1,16 @@
 <template>
   <div class="container">
     <div class="qrCodeContainer">
-      <ClientOnly><img :src="`https://api.qrserver.com/v1/create-qr-code/?data=${link}&amp;size=400x400`" class="qrCode"/></ClientOnly>
+      <ClientOnly>
+        <img :src="`https://api.qrserver.com/v1/create-qr-code/?data=${link}&amp;size=400x400`" class="qrCode"/>
+      </ClientOnly>
     </div>
   </div>
 </template>
 
 <script>
 
-import ClientOnly from "../../.output/server/chunks/build/client-only-DR9lpFKm.mjs";
-
 export default {
-  components: {ClientOnly},
   data: () => {
     return {
       interval: null,

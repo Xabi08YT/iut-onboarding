@@ -6,49 +6,138 @@ import {getRole, verifyToken} from "~~/server/jwt";
  * /user:
  *   get:
  *     tags:
- *      - User management
+ *       - User management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Get a list containing all the users that are currently stored in the database"
  *     responses:
  *       200:
  *         description: "Returns a JSON array containing every user stored in the database"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   firstname:
+ *                     type: string
+ *                     example: "John"
+ *                   lastname:
+ *                     type: string
+ *                     example: "Doe"
+ *                   email:
+ *                     type: string
+ *                     format: email
+ *                     example: "john.doe@mail.com"
+ *                   role:
+ *                     type: string
+ *                     example: "ADMIN"
  *       401:
  *         description: "User token has expired"
  *       403:
  *         description: "Insufficient access"
+ *
  *   post:
  *     tags:
- *      - User management
+ *       - User management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Create and save a new user to the database"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstname:
+ *                 type: string
+ *               lastname:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *               role:
+ *                 type: string
+ *             required:
+ *               - firstname
+ *               - lastname
+ *               - email
+ *               - password
  *     responses:
  *       201:
  *         description: "The object has been saved"
+ *       400:
+ *         description: "Invalid input"
  *       401:
  *         description: "User token has expired"
  *       403:
  *         description: "Insufficient access"
+ *
  *   put:
  *     tags:
- *      - User management
+ *       - User management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Modify an existing user"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 example: 1
+ *               firstname:
+ *                 type: string
+ *               lastname:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               role:
+ *                 type: string
+ *             required:
+ *               - id
  *     responses:
  *       200:
  *         description: "User modified successfully"
+ *       400:
+ *         description: "Invalid input"
  *       401:
  *         description: "User token has expired"
  *       403:
  *         description: "Insufficient access"
+ *       404:
+ *         description: "User not found"
+ *
  *   delete:
  *     tags:
- *      - User management
+ *       - User management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Delete an existing user"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 example: 1
+ *             required:
+ *               - id
  *     responses:
  *       200:
  *         description: "User deleted successfully"

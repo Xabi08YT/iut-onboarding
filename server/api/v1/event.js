@@ -7,62 +7,74 @@ import {parseCookies, setCookie} from "h3";
  * /event:
  *   get:
  *     tags:
- *      - Event management
+ *       - Event management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Get a list containing all the events that are currently stored in the database"
  *     responses:
  *       200:
  *         description: "Return a JSON array containing every event stored in the database"
- *          content:
- *              application/json:
- *                schema:
- *                  type: object
- *                  properties:
- *                    events:
- *                      type: string
- *                      description: list of all the eventes stored in database
- *                      example: ["JPO", "NDI"]
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   title:
+ *                     type: string
+ *                     example: "JPO"
+ *                   startTS:
+ *                     type: string
+ *                     format: date-time
+ *                   endTS:
+ *                     type: string
+ *                     format: date-time
+ *                   eventTS:
+ *                     type: string
+ *                     format: date-time
+ *                   image:
+ *                     type: string
+ *                     example: "https://img.com/jpo.png"
+ *
  *   post:
  *     tags:
- *      - Event management
+ *       - Event management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Create and save a new event to the database"
- *     request-body:
- *        required:true
- *    parameters:
- *          -in:query
- *          name: "title"
- *          required : true
- *          schema:
- *              type:string
- *          description: "event cultural envent title to add"
- *          example:"template title"
- *          -in:query
- *          name: "startTS"
- *          required:true
- *          schema:
- *              type:string
- *              format:date-time
- *          description: "starting date of the cultural event"
- *          example:"2025-12-31T12:55:15.000Z"
- *          -in:query
- *          name:"endTS"
- *          required:true
- *          schema:
- *              type:string
- *              format:date-time
- *          description : "ending date of the cultural event"
- *          example:"2025-12-31T12:55:15.000Z"
- *          -in:query
- *          name:"eventTS"
- *          required:true
- *          schema:
- *              type:string
- *              format:date-time
- *          description:"day of the cultural event"
- *          example:"2025-12-31T12:55:15.000Z"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: "event title to add"
+ *                 example: "Template title"
+ *               startTS:
+ *                 type: string
+ *                 format: date-time
+ *               endTS:
+ *                 type: string
+ *                 format: date-time
+ *               eventTS:
+ *                 type: string
+ *                 format: date-time
+ *               image:
+ *                 type: string
+ *                 description: "image link associated with the event"
+ *                 example: "https://img.com/event.png"
+ *             required:
+ *               - title
+ *               - startTS
+ *               - endTS
+ *               - eventTS
  *     responses:
  *       201:
  *         description: "The object has been saved"
@@ -70,59 +82,40 @@ import {parseCookies, setCookie} from "h3";
  *         description: "User token has expired"
  *       403:
  *         description: "Insufficient access"
+ *
  *   put:
  *     tags:
- *      - Event management
+ *       - Event management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Modify an existing event"
- *     request-body:
- *        required:true
- *     parameters:
- *          -in:query
- *          name:"id"
- *          required:true
- *          schema:
- *              type:integer
- *          description:"id of the culural event"
- *          example: 1
- *          -in:query
- *          name: "title"
- *          required : true
- *          schema:
- *              type:string
- *          description: "event cultural envent title to add"
- *          example:"template title"
- *          -in:query
- *          name: "startTS"
- *          required:true
- *          schema:
- *              type:string
- *              format:date-time
- *          description: "starting date of the cultural event"
- *          example:"2025-12-31T12:55:15.000Z"
- *          -in:query
- *          name:"endTS"
- *          required:true
- *          schema:
- *              type:string
- *              format:date-time
- *          description : "ending date of the cultural event"
- *          example:"2025-12-31T12:55:15.000Z"
- *          -in:query
- *          name:"eventTS"
- *          required:true
- *          schema:
- *              type:string
- *              format:date-time
- *          description:"day of the cultural event"
- *          example:"2025-12-31T12:55:15.000Z"
- *          -in:query
- *          name:"image"
- *          required:true
- *          schema:
- *              type:string
- *          description: "image link associated for a cultural event"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: "id of the event"
+ *                 example: 1
+ *               title:
+ *                 type: string
+ *               startTS:
+ *                 type: string
+ *                 format: date-time
+ *               endTS:
+ *                 type: string
+ *                 format: date-time
+ *               eventTS:
+ *                 type: string
+ *                 format: date-time
+ *               image:
+ *                 type: string
+ *                 description: "image link associated with the event"
+ *             required:
+ *               - id
  *     responses:
  *       200:
  *         description: "Event modified"
@@ -132,22 +125,26 @@ import {parseCookies, setCookie} from "h3";
  *         description: "Insufficient access"
  *       410:
  *         description: "This event does not exist."
+ *
  *   delete:
  *     tags:
- *      - Event management
+ *       - Event management
  *     security:
- *      - JWT: []
+ *       - JWT: []
  *     description: "Deletes an existing event"
- *     request-body:
- *        required:true
- *     parameters:
- *          -in:query
- *          name:id
- *          required:true
- *          schema:
- *              type:integer
- *          description: "event id to delete"
- *          example : 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: "event id to delete"
+ *                 example: 1
+ *             required:
+ *               - id
  *     responses:
  *       200:
  *         description: "Event deleted"

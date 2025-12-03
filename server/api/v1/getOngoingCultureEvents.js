@@ -5,47 +5,50 @@ import {getCultureOngoingEvents} from "~~/server/database";
  * /getOngoingCultureEvents:
  *      get:
  *          tags:
- *              - fetch all the cultural events stored in database
+ *              - Culture meetings management
  *          security:
- *           - JWT: []
+ *              - JWT: []
  *          description: "Get a list containing all cultural events stored in database"
  *          responses:
  *              200:
- *                  description: "return the descripted list"
+ *                  description: "Return the list of ongoing cultural events"
  *                  content:
  *                      application/json:
  *                          schema:
- *                              properties:
- *                              id:
- *                                  type: integer
- *                                  description : "The id of the cultural event"
- *                                  example: 1
- *                              title:
- *                                  type: string
- *                                  description: "The title of the cultural event"
- *                                  example: "here is my title"
- *                              startTS:
- *                                  type: number
- *                                  format: date-time
- *                                  description : "starting date of the cultural event"
- *                                  example:"2025-12-31T12:55:15.000Z"
- *                              endTS:
- *                                  type: number
- *                                  format: date-time
- *                                  description : "ending date of the cultural event"
- *                                  example:"2025-12-31T12:55:15.000Z"
- *                              startTS:
- *                                  type: number
- *                                  format: date-time
- *                                  description : "day of the cultural event"
- *                                  example:"2025-12-31T12:55:15.000Z"
- *                              description:
- *                                  type: string
- *                                  description: "description of the cultural event"
- *                              image:
- *                                  type: string
- *                                  description: "link of the image linked to the cultural event"
- *                                  example:"image.png"
+ *                              type: array
+ *                              items:
+ *                                  type: object
+ *                                  properties:
+ *                                      id:
+ *                                          type: integer
+ *                                          description: "The id of the cultural event"
+ *                                          example: 1
+ *                                      title:
+ *                                          type: string
+ *                                          description: "The title of the cultural event"
+ *                                          example: "Here is my title"
+ *                                      startTS:
+ *                                          type: string    # date-time = string
+ *                                          format: date-time
+ *                                          description: "starting date of the cultural event"
+ *                                          example: "2025-12-31T12:55:15.000Z"
+ *                                      endTS:
+ *                                          type: string
+ *                                          format: date-time
+ *                                          description: "ending date of the cultural event"
+ *                                          example: "2025-12-31T12:55:15.000Z"
+ *                                      eventTS:            # correction duplication startTS
+ *                                          type: string
+ *                                          format: date-time
+ *                                          description: "day of the cultural event"
+ *                                          example: "2025-12-31T12:55:15.000Z"
+ *                                      description:
+ *                                          type: string
+ *                                          description: "description of the cultural event"
+ *                                      image:
+ *                                          type: string
+ *                                          description: "link of the image linked to the cultural event"
+ *                                          example: "image.png"
  */
 
 export default defineEventHandler(async (event) => {

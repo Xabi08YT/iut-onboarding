@@ -52,14 +52,11 @@ import {updateConfigValue,getConfigValue} from "~~/server/database"
  *              500:  
  *                  description: Unknown error
  */
-async function handler(req) {
-    let body;
-    let token = parseCookies(req)?.onboardingToken
-
+export default defineEventHandler(async (event) => {
     try {
-        switch(req.method) {
-
+        switch(event.method) {
             case "PUT":
+                let token = parseCookies(event)?.onboardingToken;
                 if(await verifyToken(token) === false) {
                     return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
                 }
@@ -69,22 +66,22 @@ async function handler(req) {
                 if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER"))) {
                     return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
                 }
-                body = await readBody(req);
+                let body = await readBody(event);
+                if (!body) return new Response(JSON.stringify({message: "Missing request body"}), {status: 400});
                 let tmp = JSON.parse(body);
                 let data = {key: "dateJpo", value: tmp.value}
                 await updateConfigValue(data);
                 return new Response(JSON.stringify({message:null}), {status: 200});
-
+            
             case "GET":
                 let dateJPO = await getConfigValue("dateJpo");
+                if (!dateJPO) return new Response(JSON.stringify({message:`JPO Date not found`}), {status: 404});
                 return new Response(dateJPO.value, {status: 200});
-
+            
             default:
                 return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
         }
-    } catch (error) {
+    } catch (error: any) {
         return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
     }
-}
-
-export default eventHandler(handler);
+})

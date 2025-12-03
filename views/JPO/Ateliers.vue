@@ -1,5 +1,7 @@
-<script setup>
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
+<script setup lang="ts">
+import { onMounted, onUnmounted, reactive, ref } from "vue";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import { Atelier } from "../../types/atelier";
 
 const props = defineProps({
   isActive: Boolean,

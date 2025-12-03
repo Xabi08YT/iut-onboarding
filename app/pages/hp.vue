@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "~/components/ui/card";
-import {Button} from "~/components/ui/button";
-import {Toaster} from "~/components/ui/toast";
-import { Textarea } from '@/components/ui/textarea';
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {Button} from "../../app/components/ui/button";
+import {Toaster} from "../../app/components/ui/toast";
+import { Textarea } from '../../app/components/ui/textarea';
 import { navigateTo } from "nuxt/app";
 import { ref } from "vue";
 import Input from "../components/ui/input/Input.vue";
 import {toast} from "../components/ui/toast";
+import AdminTopBar from "../components/AdminTopBar.vue";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
@@ -78,11 +79,7 @@ init();
 </script>
 
 <template>
-  <div v-if="admin" class="flex justify-center m-2">
-    <Button class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToAdmin()">Admin Panel</Button>
-    <Button class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200 ml-2" @click="goToCulture()">Culture Panel</Button>
-    <Button class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToJPO()">JPO Panel</Button>
-  </div>
+  <AdminTopBar/>
   <div class="flex justify-center items-center gap-2 w-screen" id="login">
     <Toaster />
     <Card class="max-w-md">

@@ -1,8 +1,10 @@
-<script setup>
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {Input} from "~/components/ui/input";
-import {Button} from "~/components/ui/button";
-import {toast, Toaster, useToast} from "~/components/ui/toast";
+<script setup lang="ts">
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {Input} from "../../app/components/ui/input";
+import {Button} from "../../app/components/ui/button";
+import {toast, Toaster, useToast} from "../../app/components/ui/toast";
+import { ref } from "vue";
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();

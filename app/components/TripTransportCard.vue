@@ -9,7 +9,7 @@
           :fill-color="busData.lineColor"
           empty-color="#ddd"
       />
-      <p v-if="this.error == 0">
+      <p v-if="error === 0">
         {{ msToWaitTime(remainingTime)[0]
         }}<span>m</span
       >{{ msToWaitTime(remainingTime)[1]
@@ -23,7 +23,7 @@
 </template>
 
 
-<script>
+<script lang="ts">
 import CircleProgress from "vue3-circle-progress";
 
 export default {
@@ -31,19 +31,29 @@ export default {
     CircleProgress,
   },
   props: {
-    busData: Object,
-    index: Number,
+    busData: {
+      type: Object as () => {
+        stops: string[];
+        lineId: string;
+        lineColor: string;
+      },
+      required: true
+    },
+    index: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
-      refreshProgressInterval: undefined,
-      timeRemainingInterval: undefined,
-      updatedAt: undefined,
-      remainingPercent: 0,
-      remainingTime: 0,
-      lineName: "",
-      waitInterval: 60000,
-      error: 0
+      refreshProgressInterval: undefined as any,
+      timeRemainingInterval: undefined as any,
+      updatedAt: undefined as Date | undefined,
+      remainingPercent: 0 as number,
+      remainingTime: 0 as number,
+      lineName: "" as string,
+      waitInterval: 60000 as number,
+      error: 0 as number
     };
   },
   methods: {
@@ -58,21 +68,20 @@ export default {
           })
           .join(" ");
     },
-    msToWaitTime(ms) {
+    msToWaitTime(ms: number): [string, string] {
       let minutes = Math.floor(ms / 60000);
-      let seconds = ((ms % 60000) / 1000).toFixed(0);
+      let seconds = Number(((ms % 60000) / 1000).toFixed(0));
+
       minutes = Math.round(minutes);
       seconds = Math.round(seconds);
-      if (seconds < 10) {
-        seconds = `0${seconds}`;
-      }
-      if (minutes < 10) {
-        minutes = `0${minutes}`;
-      }
-      return [minutes, seconds];
+
+      const s = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      const m = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+      return [m, s];
     },
     waitTimeStringToMs(src) {
-      return Math.abs(Date.now() - new Date(src));
+      return Math.abs(Date.now() - new Date(src).getTime());
     },
     async setTimeRemaining() {
       const params = new URLSearchParams(

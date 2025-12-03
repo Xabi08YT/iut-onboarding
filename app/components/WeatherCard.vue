@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="current_infos">
-      <p>{{ this.currentTemperature }}°C</p>
+      <p>{{ currentTemperature }}°C</p>
       <div class="ville-temps">
         <p>Gradignan</p>
-        <p>{{ this.currentWeather }}</p>
+        <p>{{ currentWeather }}</p>
       </div>
     </div>
     <div class="infos-meteo">
@@ -21,14 +21,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   data() {
     return {
-      refreshInterval: undefined,
-      currentWeather: undefined,
-      currentTemperature: undefined,
-      info_meteo: [],
+      refreshInterval: undefined as number | undefined,
+      currentWeather: "" as string,
+      currentTemperature: 0 as number,
+      info_meteo: [] as any[],
     };
   },
   methods: {

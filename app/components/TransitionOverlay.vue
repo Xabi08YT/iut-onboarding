@@ -4,7 +4,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import logoIUT from "../public/assets/logo_iut.png";
+import logoGP from "../public/assets/gitpoule.png";
+import { ref } from "vue";
 
 export default {
   data() {

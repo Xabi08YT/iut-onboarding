@@ -15,7 +15,7 @@
  */
 
 export default defineEventHandler(async (event) => {
-    if (event.req.method === "GET") {
+    if (event.method === "GET") {
         let logo;
         let month = new Date().getMonth().toString();
         switch (month) {

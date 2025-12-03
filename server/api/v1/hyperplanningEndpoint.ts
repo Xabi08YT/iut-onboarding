@@ -1,4 +1,4 @@
-import {getConfigValue, updateConfigValue} from "~~/server/database";
+import {getConfigValue, PrismaKeyValue, updateConfigValue} from "~~/server/database";
 import {parseCookies} from "h3";
 import {getRole, verifyToken} from "~~/server/jwt";
 
@@ -68,12 +68,12 @@ import {getRole, verifyToken} from "~~/server/jwt";
 export default defineEventHandler(async (event) => {
     switch (event.method) {
         case "GET":
-            let hp_version = await getConfigValue("HPVersion");
-            let hp_icals = await getConfigValue("HPIcals");
+            let hp_version: PrismaKeyValue|null = await getConfigValue("HPVersion");
+            let hp_icals: PrismaKeyValue|null = await getConfigValue("HPIcals");
 
             return new Response(JSON.stringify({version: hp_version, icals: hp_icals}), {status: 200});
         case "PUT":
-            let token = parseCookies(event)?.onboardingToken
+            let token: string = parseCookies(event)?.onboardingToken
             if (await verifyToken(token) === false) {
                 return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
             }

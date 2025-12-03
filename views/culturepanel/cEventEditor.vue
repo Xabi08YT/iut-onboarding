@@ -1,15 +1,17 @@
-<script setup>
+<script setup lang="ts">
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {ScrollArea} from "~/components/ui/scroll-area";
-import {Button} from "~/components/ui/button";
-import {toast} from "~/components/ui/toast";
-import {deepObjectClone} from "@@/lib/utils";
-import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
-import {Input} from "~/components/ui/input";
-import {Label} from "~/components/ui/label";
-import {Textarea} from "~/components/ui/textarea";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {ScrollArea} from "../../app/components/ui/scroll-area";
+import {Button} from "../../app/components/ui/button";
+import {toast} from "../../app/components/ui/toast";
+import {deepObjectClone} from "../../lib/utils";
+import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "../../app/components/ui/dialog";
+import {Input} from "../../app/components/ui/input";
+import {Label} from "../../app/components/ui/label";
+import {Textarea} from "../../app/components/ui/textarea";
+import { ref, watch } from "vue";
+import { navigateTo, useRequestURL, useRuntimeConfig } from "nuxt/app";
 let events = ref([]);
 
 const runtimeConfig = useRuntimeConfig();
@@ -164,11 +166,23 @@ const addEvent = async (newEvent) => {
 };
 
 watch([modTitle,modDescription,modDateEnd,modDateBeg], () => {
-  modValid.value = (new Date(modDateBeg.value) < new Date(modDateEnd.value) && 0 < modTitle.value.length < 101 && 0 < modDescription.value.length < 201);
+  modValid.value = (
+    new Date(modDateBeg.value) < new Date(modDateEnd.value) &&
+    modTitle.value.length > 0 &&
+    modTitle.value.length < 101 &&
+    modDescription.value.length > 0 &&
+    modDescription.value.length < 201
+  );
 });
 
 watch([createTitle,createDescription,createDateEnd,createDateBeg], () => {
-  createValid.value = (new Date(createDateBeg.value) < new Date(createDateEnd.value) && 0 < createTitle.value.length < 101 && 0 < createDescription.value.length < 201);
+  createValid.value = (
+    new Date(createDateBeg.value) < new Date(createDateEnd.value) &&
+    createTitle.value.length > 0 &&
+    createTitle.value.length < 101 &&
+    createDescription.value.length > 0 &&
+    createDescription.value.length < 201
+  );
 });
 
 initEvents();

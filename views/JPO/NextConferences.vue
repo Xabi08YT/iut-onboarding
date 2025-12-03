@@ -1,5 +1,7 @@
-<script setup>
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from "vue";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import { Conference } from "../../types/conference";
 
 let refreshInterval;
 

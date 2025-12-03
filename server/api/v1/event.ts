@@ -158,49 +158,41 @@ import {parseCookies, setCookie} from "h3";
  *       410:
  *         description: "This event does not exist."
  */
-async function handler(req) {
-    let body;
-    let token = parseCookies(req)?.onboardingToken
-    if (await verifyToken(token) === false) {
-        return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
-    }
+export default defineEventHandler(async (event) => {
+  const method = event.method
+  const cookies = parseCookies(event)
+  const token = cookies?.onboardingToken
+  let body;
 
-    let roles = await getRole(token);
+  if(await verifyToken(token) === false) {
+    return new Response(JSON.stringify({message:"Invalid token"}), {status: 401});
+  }
 
-    if (roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER") || !roles.includes("ENSEIGNANT"))) {
-        return new Response(JSON.stringify({message: "Permission denied."}), {status: 403});
-    }
-    try {
-        switch (req.method) {
-            case "POST":
-                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
-                }
-                body = await readBody(req);
-                await createEvent(body);
-                return new Response(JSON.stringify({message: "Event created successfully."}), {status: 201});
-            case "PUT":
-                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
-                }
-                body = await readBody(req);
-                await updateEvent(body);
-                return new Response(JSON.stringify({message: null}), {status: 200});
-            case "DELETE":
-                if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
-                    return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
-                }
-                body = await readBody(req);
-                await deleteEvent(body);
-                return new Response(JSON.stringify({message: null}), {status: 200});
-            case "GET":
-                return new Response(JSON.stringify(await getEvents()), {status: 200});
-            default:
-                return new Response(JSON.stringify({message: "Method not allowed. Please read the documentation."}), {status: 405});
-        }
-    } catch (error) {
-        return new Response(JSON.stringify({message: `Internal Server Error: ${error.message}`}), {status: 500});
-    }
-}
+  let roles = await getRole(token);
 
-export default eventHandler(handler);
+  if(roles === -1 || !(roles.includes("ADMIN") || roles.includes("BDE") || roles.includes("MAINTAINER") || !roles.includes("ENSEIGNANT"))) {
+    return new Response(JSON.stringify({message:"Permission denied."}), {status: 403});
+  }
+  try {
+    switch(method) {
+      case "POST":
+        body = await readBody(event);
+        await createEvent(body);
+        return new Response(JSON.stringify({message:"Event created successfully."}), {status: 201});
+      case "PUT":
+        body = await readBody(event);
+        await updateEvent(body);
+        return new Response(JSON.stringify({message:null}), {status: 200});
+      case "DELETE":
+        body = await readBody(event);
+        await deleteEvent(body);
+        return new Response(JSON.stringify({message:null}), {status: 200});
+      case "GET":
+        return new Response(JSON.stringify(await getEvents()), {status: 200});
+      default:
+        return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});
+    }
+  } catch (error: any) {
+    return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
+  }
+});

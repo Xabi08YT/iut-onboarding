@@ -72,13 +72,11 @@ async function handler(req) {
                 body = await readBody(req);
                 let tmp = JSON.parse(body);
                 let data = {key: "dateJpo", value: tmp.value}
-                console.error(data)
                 await updateConfigValue(data);
                 return new Response(JSON.stringify({message:null}), {status: 200});
 
             case "GET":
                 let dateJPO = await getConfigValue("dateJpo");
-                console.log(dateJPO)
                 return new Response(dateJPO.value, {status: 200});
 
             default:

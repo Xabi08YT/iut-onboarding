@@ -11,6 +11,7 @@ let password = "";
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
 const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+const nuxtApp = useNuxtApp();
 
 const login = async () => {
   let res = await fetch(`${rootUrl}/api/v1/session`, {
@@ -23,11 +24,18 @@ const login = async () => {
     let msg = await res.json();
     console.log(msg);
     if(msg.goto == "CHOOSE") {
-      return navigateTo("/waitroom");
+      nuxtApp.runWithContext(() => {
+        navigateTo('/waitroom');
+      });
+      return;
     } else if(msg.goto == "CULTURE") {
-      return navigateTo("/culturepanel");
+      nuxtApp.runWithContext(() => {
+        navigateTo('/culturepanel');
+      });
     }
-    return navigateTo("/admin");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/admin');
+    });
   }
 
   toast({

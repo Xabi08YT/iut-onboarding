@@ -70,13 +70,11 @@ async function handler(req) {
                 body = await readBody(req);
                 let tmp = JSON.parse(body);
                 let data = {key: "lienVideoJpo", value: tmp.value}
-                console.error(data)
                 await updateConfigValue(data);
                 return new Response(JSON.stringify({message: null}), {status: 200});
 
             case "GET":
                 let LienVideoJpo = await getConfigValue("lienVideoJpo");
-                console.log(LienVideoJpo)
                 return new Response(LienVideoJpo.value, {status: 200});
 
             default:

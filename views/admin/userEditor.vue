@@ -72,7 +72,7 @@ const createUser = async (user) => {
  * @returns {Promise<void>}
  */
 const editUser = async (user) => {
-  let res = await fetch(`${rootUrl}/api/v1/user"`, {
+  let res = await fetch(`${rootUrl}/api/v1/user`, {
     method: "PUT",
     body: JSON.stringify(user),
   });
@@ -118,14 +118,6 @@ const deleteUser = async (id) => {
   await initUsers();
 };
 
-/**
- * Initializes the page
- * @returns {Promise<void>}
- */
-const init = async () => {
-  await initUsers();
-};
-
 watch([cUsername, cPassword, cPasswordConfirm, cRoles], () => {
   cValid.value = (cUsername.value !== "" && cPassword.value !== "" && cPassword.value === cPasswordConfirm.value);
 });
@@ -142,7 +134,7 @@ const initModify = (item) => {
   [mUsername.value, mPassword.value, mPasswordConfirm.value,mRoles.value] = [item.username,"", "",item.role];
 };
 
-init();
+initUsers();
 </script>
 
 <template>

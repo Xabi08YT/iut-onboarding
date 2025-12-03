@@ -6,6 +6,7 @@ import {Button} from "~/components/ui/button";
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
 const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+const nuxtApp = useNuxtApp();
 
 let admin = ref(false);
 
@@ -17,11 +18,16 @@ const init = async () => {
   let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
 
   if (!loggedIn.ok) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
+    return
   }
   let {roles} = await loggedIn.json();
   if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("CULTURE")) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
   }
 };
 

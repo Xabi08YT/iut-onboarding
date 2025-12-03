@@ -192,9 +192,7 @@ async function handler(req) {
                 if (await verifyToken(parseCookies(req)?.onboardingToken) === false) {
                     return new Response(JSON.stringify({message: "Invalid token"}), {status: 401});
                 }
-                console.log("a");
                 body = await readBody(req);
-                console.log("b");
                 await createConference(body);
                 return new Response(JSON.stringify({message: "Conference created successfully."}), {status: 201});
 

@@ -10,6 +10,7 @@ import {Button} from "~/components/ui/button";
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
 const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+const nuxtApp = useNuxtApp();
 
 let fullaccess = ref(false);
 let redirect = false;
@@ -32,13 +33,18 @@ const init = async () => {
   if (roles.includes("ADMIN") || roles.includes("MAINTAINER")) {
     fullaccess.value = true;
   } else if (!(roles.includes("BDE") || roles.includes("ENSEIGNANT")) && roles.includes("CULTURE")) {
-    return navigateTo("/culturepanel");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/culturepanel');
+    });
+    return
   } else if (!(roles.includes("BDE") || roles.includes("ENSEIGNANT"))) {
     redirect = true;
   }
 
   if (redirect) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
   }
 };
 

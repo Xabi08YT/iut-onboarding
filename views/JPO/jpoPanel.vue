@@ -10,6 +10,7 @@ import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogT
 import {Input} from "~/components/ui/input";
 import {Label} from "~/components/ui/label";
 import {Textarea} from "~/components/ui/textarea";
+import {Toaster} from "../../app/components/ui/toast";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
@@ -28,39 +29,36 @@ getDateJpo();
 
 let applyDateJpo = async () => {
   let res = await fetch(`${rootUrl}/api/v1/dateJpo`, {method: "PUT", body: JSON.stringify({value: dateJpo.value})});
-  getDateJpo();
   if (res.ok) {
     toast({title: "Date mis à jour avec succès"});
     await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
+    getDateJpo();
   } else {
-    toast({title: "Une erreur est survenue.",
+    toast({title: "An error occured.",
       description:await res.json().then(data => data.message),
       variant:"destructive"});
   }
 
 };
 
-let getvideJpo = () => {
+let getVideoJPO = () => {
   fetch(`${rootUrl}/api/v1/videoJpo`, { method: "GET" }).then(async (res) => videoJpo.value = await res.text())
 };
 
-getvideJpo();
+getVideoJPO();
 
-let applyvideoJpo = async () => {
+let applyVideoJPO = async () => {
   let res = await fetch(`${rootUrl}/api/v1/videoJpo`, {method: "PUT", body: JSON.stringify({value: videoJpo.value})});
-  getDateJpo();
   if (res.ok) {
-    toast({title: "Date mis à jour avec succès"});
+    toast({title: "Video Updated successfully."});
     await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
+    getVideoJPO();
   } else {
-    toast({title: "Une erreur est survenue.",
+    toast({title: "An error occured.",
       description:await res.json().then(data => data.message),
       variant:"destructive"});
   }
-
 };
-
-
 
 // Vars to store user entry for conference modification
 let modNomEnseignant = ref("");
@@ -111,7 +109,6 @@ const initCreateForm = () => {
   createNomEnseignant.value = "";
   createRoom.value = "";
   createDateWhen.value = "";
-
 };
 
 const initModForm = (item) => {
@@ -136,6 +133,7 @@ const createConference = async (newConference) => {
       title: "Conference created successfully",
     });
     await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
+    await initConferences();
   } else {
     let msg = await res.json();
     toast({
@@ -227,6 +225,10 @@ const createAtelier = async (newAtelier) => {
       title: "Atelier created successfully",
     });
     await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
+    await initAtelier();
+    toast({
+      title: "Atelier created successfully",
+    });
   } else {
     let msg = await res.json();
     toast({
@@ -287,20 +289,6 @@ const deleteAtelier = async (id) => {
   }
 };
 
-/**
- * Initializes the page
- * @returns {Promise<void>}
- */
-const init = async () => {
-  let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
-
-  if (!loggedIn.ok) {
-    return navigateTo("/login");
-  }
-  await initAtelier();
-  await initConferences();
-};
-
 watch([modRoom,modNomEnseignant,modDateWhen], () => {
   modValid.value = (modRoom.value.length > 0 && modNomEnseignant.value.length > 0 && new Date(modDateWhen.value) > 0);
 });
@@ -319,7 +307,8 @@ watch([createRoomA, createNameA, createDateWhenAStart, createDateWhenAEnd], () =
       new Date(createDateWhenAStart.value) > 0 && new Date(createDateWhenAEnd.value) > 0);
 });
 
-init();
+await initAtelier();
+await initConferences();
 </script>
 
 <template >
@@ -343,7 +332,7 @@ init();
       </CardHeader>
       <CardContent>
         <Input name="JPO" type="text" v-model="videoJpo" class="w-full" />
-        <Button @click="applyvideoJpo()" class="w-full mt-[10px]">Enregistrer</Button>
+        <Button @click="applyVideoJPO()" class="w-full mt-[10px]">Enregistrer</Button>
       </CardContent>
     </Card>
     <Card>

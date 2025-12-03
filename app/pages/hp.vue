@@ -11,6 +11,7 @@ import {toast} from "../components/ui/toast";
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();
 const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+const nuxtApp = useNuxtApp();
 
 let admin = ref(false);
 let hpVersion = ref("")
@@ -42,11 +43,17 @@ const init = async () => {
   let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
 
   if (!loggedIn.ok) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
+    return
   }
   let {roles} = await loggedIn.json();
   if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("ENSEIGNANT")) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
+    return
   }
   admin.value = roles.includes("ADMIN") || roles.includes("MAINTAINER");
 

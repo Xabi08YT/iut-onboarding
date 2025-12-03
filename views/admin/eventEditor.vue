@@ -158,20 +158,6 @@ const addEvent = async (newEvent) => {
   await initEvents();
 };
 
-/**
- * Initializes the page
- * @returns {Promise<void>}
- */
-const init = async () => {
-  let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
-
-  if (!loggedIn.ok) {
-    return navigateTo("/login");
-  }
-
-  await initEvents();
-};
-
 watch([modTitle,modDescription,modDateEnd,modDateBeg], () => {
   modValid.value = (new Date(modDateBeg.value) < new Date(modDateEnd.value) && 0 < modTitle.value.length < 101 && 0 < modDescription.value.length < 201);
 });
@@ -180,7 +166,7 @@ watch([createTitle,createDescription,createDateEnd,createDateBeg], () => {
   createValid.value = (new Date(createDateBeg.value) < new Date(createDateEnd.value) && 0 < createTitle.value.length < 101 && 0 < createDescription.value.length < 201);
 });
 
-init();
+initEvents();
 </script>
 
 <template>

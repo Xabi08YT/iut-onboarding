@@ -1,29 +1,31 @@
 <template>
   <div class="container">
     <div class="qrCodeContainer">
-      <img :src="`https://api.qrserver.com/v1/create-qr-code/?data=${link}&amp;size=400x400`" class="qrCode"/>
+      <ClientOnly><img :src="`https://api.qrserver.com/v1/create-qr-code/?data=${link}&amp;size=400x400`" class="qrCode"/></ClientOnly>
     </div>
   </div>
 </template>
 
 <script>
 
+import ClientOnly from "../../.output/server/chunks/build/client-only-DR9lpFKm.mjs";
+
 export default {
+  components: {ClientOnly},
   data: () => {
     return {
       interval: null,
-      link: null,
+      link: ref(""),
     }
   },
   methods: {
-    getLink() {
-      console.log("refreshing video JPO link");
-      fetch("api/v1/videoJpo").then(async (res) => this.link = await res.text())
+    updateLink() {
+      fetch(`${useRequestURL()}"api/v1/videoJpo"`).then(async (res) => this.link.value = await res.text())
     }
   },
   mounted() {
-    this.interval = setInterval(this.getLink, 500000);
-    this.getLink();
+    this.interval = setInterval(this.updateLink, 500000);
+    this.updateLink();
   },
   unmounted() {
     clearInterval(this.interval);

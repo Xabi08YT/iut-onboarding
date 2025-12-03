@@ -2,9 +2,9 @@
   <div class="planning-container">
     <!-- eslint-disable vue/no-v-for-template-key -->
     <div
-      class="planning-card"
-      v-for="(group, groupindex) in getGroupsComponent()"
-      :key="groupindex"
+        class="planning-card"
+        v-for="(group, groupindex) in getGroupsComponent()"
+        :key="groupindex"
     >
       <div :style="`background-color: ${classColor}; color: white; border-radius: 21px 21px 0px 0px`" class="card-header">
         <p v-for="(item, index) in getClassNameComponent(group)" :key="index">
@@ -17,12 +17,12 @@
             {{ classType(group === "seconde" ? 1 : 0) }} - {{ data.subject[group === "seconde" ? 1 : 0] }}
           </p>
         </div>
-      <div class="subject-infos" v-if="isSplited">
+        <div class="subject-infos" v-if="isSplited">
           <p class="teacher" :style="`font-size: ${isSplited ? '20px' : '18px'}`">
             {{
               data.teacher[group === "seconde" ? 1 : 0]
-                ? data.teacher[group === "seconde" ? 1 : 0]
-                : "Autonomie"
+                  ? data.teacher[group === "seconde" ? 1 : 0]
+                  : "Autonomie"
             }}
           </p>
         </div>
@@ -58,9 +58,9 @@ export default {
   methods: {
     getGroupsComponent() {
       if (
-        // No class
-        this.data.subject[0] === undefined &&
-        this.data.subject[1] === undefined
+          // No class
+          this.data.subject[0] === undefined &&
+          this.data.subject[1] === undefined
       )
         return [undefined];
       if (this.data.isFullClass) return [""];

@@ -8,13 +8,18 @@ import { ref } from "vue";
 import Input from "../components/ui/input/Input.vue";
 import {toast} from "../components/ui/toast";
 
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+const nuxtApp = useNuxtApp();
+
 let admin = ref(false);
 let hpVersion = ref("")
 let hpIcals = ref("")
 
 const send = async () => {
   let object = {version: hpVersion.value, icals: hpIcals.value};
-  let res = await fetch("api/v1/hyperplanningEndpoint", {method:"PUT",body: JSON.stringify(object)})
+  let res = await fetch(`${rootUrl}/api/v1/hyperplanningEndpoint`, {method:"PUT",body: JSON.stringify(object)})
   if (res.status === 200) {
     toast({title:"Paramètres mis à jour avec succès"});
   } else {
@@ -23,7 +28,7 @@ const send = async () => {
 }
 
 const get = async () => {
-  let res = await fetch("api/v1/hyperplanningEndpoint");
+  let res = await fetch(`${rootUrl}/api/v1/hyperplanningEndpoint`);
   if (!res.ok) {
     toast({title: "Impossible de récuperer les paramètres Hyperplanning", description: await res.json(), variant: "destructive"});
   }
@@ -35,14 +40,20 @@ const get = async () => {
 }
 
 const init = async () => {
-  let loggedIn = await fetch("api/v1/session");
+  let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
 
   if (!loggedIn.ok) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
+    return
   }
   let {roles} = await loggedIn.json();
   if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("ENSEIGNANT")) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
+    return
   }
   admin.value = roles.includes("ADMIN") || roles.includes("MAINTAINER");
 

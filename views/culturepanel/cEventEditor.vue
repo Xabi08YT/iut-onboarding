@@ -12,6 +12,10 @@ import {Label} from "~/components/ui/label";
 import {Textarea} from "~/components/ui/textarea";
 let events = ref([]);
 
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+
 // Vars to store user entry for event modification
 let modTitle = ref("");
 let modDescription = ref("");
@@ -30,29 +34,29 @@ let createDateEvent = ref("");
 let createIMGURL = ref("");
 let createValid = ref(false);
 
-  /**
-   * Format a date to a readable format
-   * @param date date string
-   * @returns string Date in the readable format
-   */
-  const formatDate = (date) => {
-    if(date === undefined || date === null){
-      return "";
-    }
-    let dt = date.split("T");
-    dt[1] = dt[1].replace("Z", "");
-    let dp = dt[0].split("-");
-    let newD = `${dp[2]}/${dp[1]}/${dp[0]} `;
-    let newT = dt[1].split(".")[0];
-    return `${newT} ${newD}`;
-  };
+/**
+ * Format a date to a readable format
+ * @param date date string
+ * @returns string Date in the readable format
+ */
+const formatDate = (date) => {
+  if(date === undefined || date === null){
+    return "";
+  }
+  let dt = date.split("T");
+  dt[1] = dt[1].replace("Z", "");
+  let dp = dt[0].split("-");
+  let newD = `${dp[2]}/${dp[1]}/${dp[0]} `;
+  let newT = dt[1].split(".")[0];
+  return `${newT} ${newD}`;
+};
 
 /**
  * Fill the content related to the events
  * @returns {Promise<void>}
  */
 const initEvents = async () => {
-  let res = await fetch("api/v1/cultureEvents");
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`);
   let data = await res.json();
   events.value = deepObjectClone(data);
 };
@@ -63,7 +67,7 @@ const initEvents = async () => {
  * @returns {Promise<void>}
  */
 const deleteEvent = async (id) => {
-  let res = await fetch("api/v1/cultureEvents", {
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`, {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -71,7 +75,7 @@ const deleteEvent = async (id) => {
     toast({
       title: "Event deleted successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -108,7 +112,7 @@ const initCreateForm = () => {
  * @returns {Promise<void>}
  */
 const editEvent = async (modified) => {
-  let res = await fetch("api/v1/cultureEvents", {
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`, {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modified)
@@ -118,7 +122,7 @@ const editEvent = async (modified) => {
     toast({
       title: "Event Modified successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -137,7 +141,7 @@ const editEvent = async (modified) => {
  * @returns {Promise<void>}
  */
 const addEvent = async (newEvent) => {
-  let res = await fetch("api/v1/cultureEvents", {
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newEvent)
@@ -146,7 +150,7 @@ const addEvent = async (newEvent) => {
     toast({
       title: "Event created successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -154,20 +158,6 @@ const addEvent = async (newEvent) => {
       description: msg.message,
       variant: "destructive",
     });
-  }
-
-  await initEvents();
-};
-
-/**
- * Initializes the page
- * @returns {Promise<void>}
- */
-const init = async () => {
-  let loggedIn = await fetch("api/v1/session");
-
-  if (!loggedIn.ok) {
-    return navigateTo("/login");
   }
 
   await initEvents();
@@ -181,7 +171,7 @@ watch([createTitle,createDescription,createDateEnd,createDateBeg], () => {
   createValid.value = (new Date(createDateBeg.value) < new Date(createDateEnd.value) && 0 < createTitle.value.length < 101 && 0 < createDescription.value.length < 201);
 });
 
-init();
+initEvents();
 </script>
 
 <template>

@@ -1,18 +1,18 @@
 <template>
   <div
-    :style="`background-color: ${colors[currentColor]};`"
-    id="background-container"
+      :style="`background-color: ${colors[currentColor]};`"
+      id="background-container"
   >
     <transition
-      v-for="(deco, index) in decorations[currentDecoration] || []"
-      :key="index"
-      :name="deco.transition"
+        v-for="(deco, index) in decorations[currentDecoration] || []"
+        :key="index"
+        :name="deco.transition"
     >
       <img
-        v-if="deco.show"
-        :src="deco.svg"
-        :style="deco.posStyle"
-        :class="deco.class"
+          v-if="deco.show"
+          :src="deco.svg"
+          :style="deco.posStyle"
+          :class="deco.class"
       />
     </transition>
   </div>
@@ -201,7 +201,7 @@ export default {
         // changing to next style
         const styles = Object.keys(this.decorations);
         this.currentDecoration =
-          styles[styles.indexOf(this.currentDecoration) + 1] || styles[0];
+            styles[styles.indexOf(this.currentDecoration) + 1] || styles[0];
       }
 
       // enable only the desired decoration

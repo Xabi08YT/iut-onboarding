@@ -36,12 +36,12 @@ export default {
   computed: {
     backgroundStyle() {
       return `animation: background-in linear alternate 2 ${
-        this.duration / 2000
+          this.duration / 2000
       }s`;
     },
     imageStyle() {
       return `animation: scale-in cubic-bezier(0.29, 1.68, 0.26, 0.84) alternate 2 ${
-        this.duration / 2000
+          this.duration / 2000
       }s`;
     },
   },

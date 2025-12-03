@@ -9,9 +9,9 @@
     </div>
     <div class="infos-meteo">
       <div
-        class="meteo-timestamp-slot"
-        v-for="(meteo, index) in info_meteo"
-        :key="index"
+          class="meteo-timestamp-slot"
+          v-for="(meteo, index) in info_meteo"
+          :key="index"
       >
         <p>{{ meteo.Heure }}h00</p>
         <img :src="meteo.icone"/>
@@ -35,16 +35,16 @@ export default {
     async fetchWeather() {
       console.log("Refreshing weather");
       await fetch("api/v1/getCurrentWeather")
-      .then((response) => response.json())
-      .then((weatherinfos) => {
-        this.currentTemperature = weatherinfos.temperature;
-        this.currentWeather = weatherinfos.weatherText;
-      });
+          .then((response) => response.json())
+          .then((weatherinfos) => {
+            this.currentTemperature = weatherinfos.temperature;
+            this.currentWeather = weatherinfos.weatherText;
+          });
       await fetch("api/v1/getNext12hWeather")
-      .then((response) => response.json())
-      .then((tab) => {
-        this.info_meteo = tab;
-      });
+          .then((response) => response.json())
+          .then((tab) => {
+            this.info_meteo = tab;
+          });
     },
   },
   mounted() {

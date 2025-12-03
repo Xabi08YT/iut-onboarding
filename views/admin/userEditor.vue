@@ -10,6 +10,10 @@ import {Label} from "~/components/ui/label";
 import {Input} from "~/components/ui/input";
 import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
 
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+
 let users = ref([]);
 
 // Vars to store user entry for account creation
@@ -31,7 +35,7 @@ let mValid = ref(false);
  * @returns {Promise<void>}
  */
 const initUsers = async () => {
-  let res = await fetch("api/v1/user");
+  let res = await fetch(`${rootUrl}/api/v1/user`);
   let data = await res.json();
   users.value = deepObjectClone(data);
 };
@@ -42,7 +46,7 @@ const initUsers = async () => {
  * @returns {Promise<void>}
  */
 const createUser = async (user) => {
-  let res = await fetch("api/v1/user", {
+  let res = await fetch(`${rootUrl}/api/v1/user`, {
     method: "POST",
     body: JSON.stringify(user),
   });
@@ -50,7 +54,7 @@ const createUser = async (user) => {
     toast({
       title: "User created successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     toast({
       title: "Unable to create user",
@@ -68,7 +72,7 @@ const createUser = async (user) => {
  * @returns {Promise<void>}
  */
 const editUser = async (user) => {
-  let res = await fetch("api/v1/user", {
+  let res = await fetch(`${rootUrl}/api/v1/user`, {
     method: "PUT",
     body: JSON.stringify(user),
   });
@@ -76,7 +80,7 @@ const editUser = async (user) => {
     toast({
       title: "User modified successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     toast({
       title: "Unable to modify user",
@@ -94,7 +98,7 @@ const editUser = async (user) => {
  * @returns {Promise<void>}
  */
 const deleteUser = async (id) => {
-  let res = await fetch("api/v1/user", {
+  let res = await fetch(`${rootUrl}/api/v1/user`, {
     method: "DELETE",
     body: id,
   });
@@ -102,7 +106,7 @@ const deleteUser = async (id) => {
     toast({
       title: "User deleted successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     toast({
       title: "Unable to delete user",
@@ -111,14 +115,6 @@ const deleteUser = async (id) => {
     });
   }
 
-  await initUsers();
-};
-
-/**
- * Initializes the page
- * @returns {Promise<void>}
- */
-const init = async () => {
   await initUsers();
 };
 
@@ -138,7 +134,7 @@ const initModify = (item) => {
   [mUsername.value, mPassword.value, mPasswordConfirm.value,mRoles.value] = [item.username,"", "",item.role];
 };
 
-init();
+initUsers();
 </script>
 
 <template>

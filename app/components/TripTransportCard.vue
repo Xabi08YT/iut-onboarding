@@ -2,17 +2,17 @@
   <div class="trip-container">
     <div class="progress-bar">
       <CircleProgress
-        :border-width="23"
-        :border-bg-width="23"
-        :size="200"
-        :percent="remainingPercent"
-        :fill-color="busData.lineColor"
-        empty-color="#ddd"
+          :border-width="23"
+          :border-bg-width="23"
+          :size="200"
+          :percent="remainingPercent"
+          :fill-color="busData.lineColor"
+          empty-color="#ddd"
       />
       <p v-if="this.error == 0">
         {{ msToWaitTime(remainingTime)[0]
         }}<span>m</span
-        >{{ msToWaitTime(remainingTime)[1]
+      >{{ msToWaitTime(remainingTime)[1]
         }}<span>s</span>
       </p>
       <NuxtImg src="assets/Warning.png" height="128px" width="128px" v-if="error === 1"/>
@@ -49,14 +49,14 @@ export default {
   methods: {
     formatDirectionString() {
       return this.lineName
-        .toLowerCase()
-        .replace(".", " ")
-        .split(" ")
-        .map((word) => {
-          if (word.length > 0) return word[0].toUpperCase() + word.substring(1);
-          else return "";
-        })
-        .join(" ");
+          .toLowerCase()
+          .replace(".", " ")
+          .split(" ")
+          .map((word) => {
+            if (word.length > 0) return word[0].toUpperCase() + word.substring(1);
+            else return "";
+          })
+          .join(" ");
     },
     msToWaitTime(ms) {
       let minutes = Math.floor(ms / 60000);
@@ -76,9 +76,9 @@ export default {
     },
     async setTimeRemaining() {
       const params = new URLSearchParams(
-        {
-          stopId: this.busData.stops[this.index]
-        }
+          {
+            stopId: this.busData.stops[this.index]
+          }
       )
       const apiresult = await fetch(`api/v1/getTBM?${params}`);
       const res = await apiresult.json();
@@ -108,7 +108,7 @@ export default {
         this.remainingPercent = 0.1;
       } else {
         this.remainingPercent =
-          ((this.waitInterval - this.remainingTime) / this.waitInterval) * 100;
+            ((this.waitInterval - this.remainingTime) / this.waitInterval) * 100;
       }
     },
   },
@@ -122,15 +122,15 @@ export default {
       lineId: this.busData.lineId
     })
     fetch(`api/v1/getTBM?${params}`)
-    .then(res => res.json())
-    .then(data => {
-      this.waitInterval = data;
-    })
-    .catch(err => {
-      console.error(err);
-      this.waitInterval = 6000000;
-      this.error = 1;
-    });
+        .then(res => res.json())
+        .then(data => {
+          this.waitInterval = data;
+        })
+        .catch(err => {
+          console.error(err);
+          this.waitInterval = 6000000;
+          this.error = 1;
+        });
   },
   unmounted() {
     clearInterval(this.refreshProgressInterval);

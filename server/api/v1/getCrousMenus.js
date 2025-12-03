@@ -6,6 +6,42 @@ const CROUS_RESTAURANT_BASE_URL = "https://www.crous-bordeaux.fr/restaurant/";
 const SIRTAKI_URL = `${CROUS_RESTAURANT_BASE_URL}crous-cafet-le-sirtaki`;
 const SPACE_URL = `${CROUS_RESTAURANT_BASE_URL}space-campus-resto-u-3`;
 
+
+/**
+ * @openapi
+ * /getCrousMenus:
+ *  get:
+ *      tags:
+ *        - Retreive miscellaneous data
+ *      summary: "Get a json data with crous menus from sirtaki and Space Campus"
+ *      responses:
+ *          200:
+ *              description: "Return a JSON array containing every event stored in the database"
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              sirtakiEnabled:
+ *                                  type: boolean
+ *                                  description: "indicate if the sirtaki menu is enabled or not"
+ *                                  example: true
+ *                              spaceEnabled:
+ *                                  type: boolean
+ *                                  description: "indicate if the space menu is enabled or not"
+ *                                  example: true
+ *                              sirtaki:
+ *                                  type: array
+ *                                  items:
+ *                                      type: string
+ *                                      description: "the menu of the sirtaki restaurant"
+ *                              space:
+ *                                  type: array
+ *                                  items:
+ *                                      type: string
+ *                                      description: "the menu of the space restaurant"
+ */
+
 /**
  * Sélectionne tous les plats du menu du jour actuel, sans les entrées ni les desserts
  * @param {string} URL
@@ -13,63 +49,63 @@ const SPACE_URL = `${CROUS_RESTAURANT_BASE_URL}space-campus-resto-u-3`;
  * @return {string[]} un tableau de string correspondant aux plats du site pour le jour actuel
  */
 async function fetchMenu(URL) {
-  const response = await fetch(URL, {
-    method: "GET",
-  });
+    const response = await fetch(URL, {
+        method: "GET",
+    });
 
-  if (!response.ok)
-    return null;
+    if (!response.ok)
+        return null;
 
-  const html = await response.text();
+    const html = await response.text();
 
-  if (html == null)
-    return null;
+    if (html == null)
+        return null;
 
-  let $ = cheerio.load(html);
-  let tabPlats = [];
+    let $ = cheerio.load(html);
+    let tabPlats = [];
 
-  let htmlSelfMenu = $("ul.meal_foodies > li:nth-child(3)");
+    let htmlSelfMenu = $("ul.meal_foodies > li:nth-child(3)");
 
-  if(URL === SPACE_URL) {
-    htmlSelfMenu = $("ul.meal_foodies > li:nth-child(2)");
-  }
-
-  $ = cheerio.load(htmlSelfMenu.html());
-
-  $("li").each((_, htmlPlat) => {
-    let plat = $(htmlPlat).html();
-    // Sans les lignes inutiles
-    if (plat.includes(":") || plat.includes("(") || plat.length === 0)
-      return;
-      // Sans les "Entrées diverses" et "Desserts divers" et sans les salades car on aime pas la salade
-    if (plat.toLowerCase().includes("entrées") || plat.toLowerCase().includes("desserts") || plat.toLowerCase().includes("salade"))
-      return;
-
-    //To remove **** in the sirtaki menu
-    plat = plat.replaceAll('*','');
-
-    //Fix: "<br>" in Space Campus menu
-
-    plat = plat.replaceAll('<br>','');
-    plat = plat.replaceAll('</br>','');
-    plat = plat.replaceAll('<br/>','');
-
-    //Fix - - formatting problem for sirtaki
-    if(URL == SIRTAKI_URL) {
-      plat = plat.replaceAll('-','');
+    if(URL === SPACE_URL) {
+        htmlSelfMenu = $("ul.meal_foodies > li:nth-child(2)");
     }
 
-    if(plat.includes("Plat")) {
-      plat = plat.toUpperCase();
-    }
+    $ = cheerio.load(htmlSelfMenu.html());
 
-    let tmp = plat;
-    tmp = tmp.replaceAll(' ','');
-    if(tmp.length > 0 && !plat.toLowerCase().includes("menu non communiqué"))
-      tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1));
-  });
+    $("li").each((_, htmlPlat) => {
+        let plat = $(htmlPlat).html();
+        // Sans les lignes inutiles
+        if (plat.includes(":") || plat.includes("(") || plat.length === 0)
+            return;
+        // Sans les "Entrées diverses" et "Desserts divers" et sans les salades car on aime pas la salade
+        if (plat.toLowerCase().includes("entrées") || plat.toLowerCase().includes("desserts") || plat.toLowerCase().includes("salade"))
+            return;
 
-  return tabPlats;
+        //To remove **** in the sirtaki menu
+        plat = plat.replaceAll('*','');
+
+        //Fix: "<br>" in Space Campus menu
+
+        plat = plat.replaceAll('<br>','');
+        plat = plat.replaceAll('</br>','');
+        plat = plat.replaceAll('<br/>','');
+
+        //Fix - - formatting problem for sirtaki
+        if(URL == SIRTAKI_URL) {
+            plat = plat.replaceAll('-','');
+        }
+
+        if(plat.includes("Plat")) {
+            plat = plat.toUpperCase();
+        }
+
+        let tmp = plat;
+        tmp = tmp.replaceAll(' ','');
+        if(tmp.length > 0 && !plat.toLowerCase().includes("menu non communiqué"))
+            tabPlats.push(plat.charAt(0).toUpperCase() + plat.slice(1));
+    });
+
+    return tabPlats;
 }
 
 /**
@@ -77,54 +113,54 @@ async function fetchMenu(URL) {
  * @return Un objet contennant les plats des restaurants crous
  */
 export async function getAllRestaurantsMenus() {
-  //Definition des variables
-  let sirtaki;
-  let space;
-  let sirtakiEnabled = true;
-  let spaceEnabled = true;
+    //Definition des variables
+    let sirtaki;
+    let space;
+    let sirtakiEnabled = true;
+    let spaceEnabled = true;
 
-  //Tentative de récupération du menu
-  try {
-    sirtaki = await fetchMenu(SIRTAKI_URL);
-  } catch(error) {
-    // Si échec, marquer la carte comme désactivée.
-    console.error(`Unable to retreive Menu for Sirtaki. Error: ${error}`);
-    sirtakiEnabled = false;
-  }
+    //Tentative de récupération du menu
+    try {
+        sirtaki = await fetchMenu(SIRTAKI_URL);
+    } catch(error) {
+        // Si échec, marquer la carte comme désactivée.
+        console.error(`Unable to retreive Menu for Sirtaki. Error: ${error}`);
+        sirtakiEnabled = false;
+    }
 
-  if(sirtaki.length === 0) {
-    sirtakiEnabled = false;
-  }
+    if(sirtaki.length === 0) {
+        sirtakiEnabled = false;
+    }
 
-  //IDEM
-  try {
-    space = await fetchMenu(SPACE_URL);
-  } catch(error) {
-    console.error(`Unable to retreive Menu for Space. Error: ${error}`);
-    spaceEnabled = false;
-  }
+    //IDEM
+    try {
+        space = await fetchMenu(SPACE_URL);
+    } catch(error) {
+        console.error(`Unable to retreive Menu for Space. Error: ${error}`);
+        spaceEnabled = false;
+    }
 
-  if(space.length === 0) {
-    spaceEnabled = false;
-  }
+    if(space.length === 0) {
+        spaceEnabled = false;
+    }
 
-  //Retour des informations suite à l'exécution
-  return {
-    sirtakiEnabled: sirtakiEnabled,
-    spaceEnabled: spaceEnabled,
-    sirtaki: sirtaki,
-    space: space,
-  };
+    //Retour des informations suite à l'exécution
+    return {
+        sirtakiEnabled: sirtakiEnabled,
+        spaceEnabled: spaceEnabled,
+        sirtaki: sirtaki,
+        space: space,
+    };
 }
 
 
 export default defineEventHandler(async (event) => {
-  if (event.req.method === "GET") {
-    try {
-      const menus = await getAllRestaurantsMenus();
-      return { statusCode: 200, body: JSON.stringify(menus) };
-    } catch (error) {
-      return { statusCode: 500, body: JSON.stringify(error) };
+    if (event.req.method === "GET") {
+        try {
+            const menus = await getAllRestaurantsMenus();
+            return { statusCode: 200, body: JSON.stringify(menus) };
+        } catch (error) {
+            return { statusCode: 500, body: JSON.stringify(error) };
+        }
     }
-  }
 });

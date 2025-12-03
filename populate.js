@@ -20,7 +20,7 @@ const defaultConfigs = [
     {key: "BDEdiscord", value:"Undefined"},
     {key: "HPVersion", value:"2025.5.6"},
     {key: "HPIcals", value:"Undefined"},
-    {key: "dateJpo", value: "bruh" },
+    {key: "dateJpo", value: "2025-01-01" },
     {key: "lienVideoJpo", value: "Undefined" },
 ]
 

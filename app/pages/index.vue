@@ -109,12 +109,6 @@ import CultureClub from "../views/CultureClub.vue";
 const DEVELOPEMENT_MODE = false;
 let jpoDateString = ref("2024-02-15");
 
-let getvideJpo = () => {
-  fetch("api/v1/dateJpo", { method: "GET" }).then(async (res) => jpoDateString.value = await res.text())
-};
-
-getvideJpo();
-
 export default {
   data() {
     return {
@@ -167,23 +161,23 @@ export default {
         */
         lundi: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
-          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 1,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 1 && !this.isJPO(),
         },
         mardi: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
-          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 2,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 2 && !this.isJPO(),
         },
         mercredi: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
-          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 3,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 3 && !this.isJPO(),
         },
         jeudi: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
-          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 4,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 4 && !this.isJPO(),
         },
         vendredi: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.meme.time * 1000,
-          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 5,
+          allowed: () => this.slidesParameters.meme.active && !this.isEndOfDay() && new Date().getDay() === 5 && !this.isJPO(),
         },
         planning: {
           time: () => DEVELOPEMENT_MODE ? 5000 : this.returnTimeForPlanning(),
@@ -191,10 +185,7 @@ export default {
             // 6h to 17h30
             const currentTime =
                 new Date().getHours() * 60 + new Date().getMinutes();
-            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30 &&
-                (new Date().getUTCDate() !== new Date(jpoDateString.value).getUTCDate() ||
-                    new Date().getUTCMonth() !== new Date(jpoDateString.value).getUTCMonth() ||
-                    new Date().getUTCFullYear() !== new Date(jpoDateString.value).getUTCFullYear());
+            return this.slidesParameters.plannings.active && currentTime >= 6 * 60 && currentTime <= 17 * 60 + 30 && !this.isJPO()
           }
         },
         transport: {
@@ -210,55 +201,44 @@ export default {
           allowed: () => {
             // 6h to 14h
             let currentHour = new Date().getHours();
-            return this.slidesParameters.menu.active && currentHour >= 6 && currentHour < 14;
+            return this.slidesParameters.menu.active && currentHour >= 6 && currentHour < 14 && !this.isJPO();
           },
         },
         /* Enable this at the start of each year (The QR code has to be updated)*/
         discord: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.discord.time * 1000,
-          allowed: () => this.slidesParameters.discord.active && (
-              new Date().getUTCDate() !== new Date(jpoDateString.value).getUTCDate() ||
-              new Date().getUTCMonth() !== new Date(jpoDateString.value).getUTCMonth() ||
-              new Date().getUTCFullYear() !== new Date(jpoDateString.value).getUTCFullYear())
+          allowed: () => this.slidesParameters.discord.active && !this.isJPO()
         },
         /* Enable when looking for new maintainers */
         maintainer: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.maintainer.time * 1000,
-          allowed: () => this.slidesParameters.maintainer.active && !this.isEndOfDay(),
+          allowed: () => this.slidesParameters.maintainer.active && !this.isEndOfDay() && !this.isJPO(),
         },
         announcement: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.announcements.time * 1000,
-          allowed: () => this.slidesParameters.announcements.active && !this.isEndOfDay(),
+          allowed: () => this.slidesParameters.announcements.active && !this.isEndOfDay() && !this.isJPO(),
         },
         culture: {
           time: () => DEVELOPEMENT_MODE ? 10000 : this.slidesParameters.culture.time * 1000,
-          allowed: () => this.slidesParameters.culture.active && !this.isEndOfDay(),
+          allowed: () => this.slidesParameters.culture.active && !this.isEndOfDay() && !this.isJPO(),
         },
 
         /*      RESERVED FOR JPO        */
         welcome: {
           time: () => 7 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
+          allowed: () => this.isJPO(),
         },
         nextConference: {
           time: () => 10 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
+          allowed: () => this.isJPO(),
         },
         ateliers: {
           time: () => 10 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
+          allowed: () => this.isJPO(),
         },
         studentPOV: {
           time: () => 10 * 1000,
-          allowed: () => new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
-              new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
-              new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear(),
+          allowed: () => this.isJPO(),
         }
       },
     };
@@ -382,6 +362,20 @@ export default {
     async refreshOngoingCultureEvent() {
       let res = await fetch(`${useRequestURL()}api/v1/getOngoingCultureEvents`).then(res => res.json());
       this.cultureEvents = JSON.parse(res.body);
+    },
+    /**
+     * Gets the date of the JPO from the backend
+     */
+    getDateJPO() {
+      fetch(`${useRequestURL()}api/v1/dateJpo`, { method: "GET" }).then(async (res) => jpoDateString.value = await res.text())
+    },
+    /**
+     * Checks if it is currently the JPO
+     */
+    isJPO() {
+      return (new Date().getUTCDate() === new Date(jpoDateString.value).getUTCDate() &&
+          new Date().getUTCMonth() === new Date(jpoDateString.value).getUTCMonth() &&
+          new Date().getUTCFullYear() === new Date(jpoDateString.value).getUTCFullYear());
     }
   },
   async mounted() {
@@ -390,11 +384,14 @@ export default {
     await this.refreshOngoingCultureEvent();
     this.$refs.background && this.$refs.background.next();
     this.changeView();
+    this.getDateJPO();
     //refreshing every 10 sec
     setInterval(this.refreshEnabledSlides, 10 * 1000);
     //refreshing every 30 sec
     setInterval(this.refreshOngoingEvents, 30 * 1000);
     setInterval(this.refreshOngoingCultureEvent, 30 * 1000);
+    //refreshing every 10 minutes
+    setInterval(this.getDateJPO, 10 * 60 * 1000);
   },
   components: {
     CultureClub,

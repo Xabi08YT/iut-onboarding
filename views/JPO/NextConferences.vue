@@ -4,8 +4,8 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/c
 let refreshInterval;
 
 let conferences = ref([]);
-let getvideJpo = () => {
-  fetch("api/v1/conference", { method: "GET" })
+let getConferece = () => {
+  fetch(`${useRequestURL()}api/v1/conference`, { method: "GET" })
       .then(async (res) => {
         const data = await res.json();
         conferences.value = data.content || [];
@@ -13,7 +13,7 @@ let getvideJpo = () => {
       })
       .catch(error => console.error('Error fetching conferences:', error));
 };
-getvideJpo();
+getConferece();
 
 let nextConferences = ref([]);
 

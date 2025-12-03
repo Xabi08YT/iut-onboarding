@@ -31,7 +31,7 @@ const goToJPO = () => {
 const init = async () => {
     let loggedIn = await fetch("api/v1/session");
     if (!loggedIn.ok) {
-        console.log("issue !!!");
+        return navigateTo("/login");
     }
     let {roles} = await loggedIn.json();
     if (roles.includes("ADMIN")) {
@@ -68,7 +68,7 @@ init();
       </CardHeader>
       <CardFooter>
         <div class="flex flex-row w-full">
-          <Button v-if="admin || maintainer || enseignant || dde" class="mt-[5px] w-full space" @click="goToAdmin">Admin</Button>
+          <Button v-if="admin || maintainer || enseignant || dde || bde" class="mt-[5px] w-full space" @click="goToAdmin">Admin</Button>
           <Button v-if="admin || maintainer || culture" class="mt-[5px] w-full space" @click="goToCulture">Culture club</Button>
           <Button v-if="admin || maintainer || dde" class="mt-[5px] w-full space" @click="goToHP">Hyperplanning setup</Button>
           <Button v-if="admin || maintainer || enseignant || bde" class="mt-[5px] w-full space" @click="goToJPO">JPO setup</Button>

@@ -103,7 +103,6 @@ let nextEventFilter = (event) => {
 
 let getAllPlannings = async () => {
   console.log("Refreshing plannings");
-  // console.log(classes)
   setCurrentHourRange();
   edt.info_but1 = [];
   edt.info_but2 = [];

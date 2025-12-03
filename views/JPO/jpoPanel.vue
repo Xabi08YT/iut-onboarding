@@ -317,12 +317,12 @@ watch([createNomEnseignant,createRoom,createDateWhen], () => {
 
 watch([modRoomA, modNameA, modDateWhenAStart, modDateWhenAEnd], () => {
   modValidA.value = (modRoomA.value.length > 0 && modNameA.value.length > 0 &&
-      new Date(modDateWhenAStart.value) > 0 && new Date(modDateWhenAEnd.value) > 0);
+      new Date(modDateWhenAStart.value).getTime() > 0 && new Date(modDateWhenAEnd.value).getTime() > 0);
 });
 
 watch([createRoomA, createNameA, createDateWhenAStart, createDateWhenAEnd], () => {
   createValidA.value = (createRoomA.value.length > 0 && createNameA.value.length > 0 &&
-      new Date(createDateWhenAStart.value) > 0 && new Date(createDateWhenAEnd.value) > 0);
+      new Date(createDateWhenAStart.value).getTime() > 0 && new Date(createDateWhenAEnd.value).getTime() > 0);
 });
 
 init();

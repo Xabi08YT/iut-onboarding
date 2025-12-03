@@ -6,9 +6,7 @@ import {getCultureOngoingEvents} from "~~/server/database";
  *      get:
  *          tags:
  *              - Culture meetings management
- *          security:
- *              - JWT: []
- *          description: "Get a list containing all cultural events stored in database"
+ *          summary: "Get a list containing all cultural events stored in database"
  *          responses:
  *              200:
  *                  description: "Return the list of ongoing cultural events"
@@ -48,7 +46,7 @@ import {getCultureOngoingEvents} from "~~/server/database";
  *                                      image:
  *                                          type: string
  *                                          description: "link of the image linked to the cultural event"
- *                                          example: "image.png"
+ *                                          example: "https://img.com/event.png"
  */
 
 export default defineEventHandler(async (event) => {

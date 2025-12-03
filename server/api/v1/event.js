@@ -10,7 +10,7 @@ import {parseCookies, setCookie} from "h3";
  *       - Event management
  *     security:
  *       - JWT: []
- *     description: "Get a list containing all the events that are currently stored in the database"
+ *     summary: "Get a list containing all the events that are currently stored in the database"
  *     responses:
  *       200:
  *         description: "Return a JSON array containing every event stored in the database"
@@ -33,7 +33,7 @@ import {parseCookies, setCookie} from "h3";
  *                   endTS:
  *                     type: string
  *                     format: date-time
- *                   eventTS:
+ *                   description:
  *                     type: string
  *                     format: date-time
  *                   image:
@@ -45,7 +45,7 @@ import {parseCookies, setCookie} from "h3";
  *       - Event management
  *     security:
  *       - JWT: []
- *     description: "Create and save a new event to the database"
+ *     summary: "Create and save a new event to the database"
  *     requestBody:
  *       required: true
  *       content:
@@ -63,7 +63,7 @@ import {parseCookies, setCookie} from "h3";
  *               endTS:
  *                 type: string
  *                 format: date-time
- *               eventTS:
+ *               description:
  *                 type: string
  *                 format: date-time
  *               image:
@@ -74,7 +74,7 @@ import {parseCookies, setCookie} from "h3";
  *               - title
  *               - startTS
  *               - endTS
- *               - eventTS
+ *               - description
  *     responses:
  *       201:
  *         description: "The object has been saved"
@@ -88,7 +88,7 @@ import {parseCookies, setCookie} from "h3";
  *       - Event management
  *     security:
  *       - JWT: []
- *     description: "Modify an existing event"
+ *     summary: "Modify an existing event"
  *     requestBody:
  *       required: true
  *       content:
@@ -108,14 +108,17 @@ import {parseCookies, setCookie} from "h3";
  *               endTS:
  *                 type: string
  *                 format: date-time
- *               eventTS:
+ *               description:
  *                 type: string
- *                 format: date-time
  *               image:
  *                 type: string
  *                 description: "image link associated with the event"
  *             required:
  *               - id
+ *               - title
+ *               - startTS
+ *               - endTS
+ *               - description
  *     responses:
  *       200:
  *         description: "Event modified"
@@ -131,7 +134,7 @@ import {parseCookies, setCookie} from "h3";
  *       - Event management
  *     security:
  *       - JWT: []
- *     description: "Deletes an existing event"
+ *     summary: "Deletes an existing event"
  *     requestBody:
  *       required: true
  *       content:

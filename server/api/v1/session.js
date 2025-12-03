@@ -7,7 +7,7 @@ import {createToken, exchangeToken, getRole, verifyToken} from "~~/server/jwt";
  *   get:
  *     tags:
  *      - Session management
- *     description: "Check JWT validity."
+ *     summary: "Check JWT validity."
  *     responses:
  *       200:
  *         description: "JWT is valid."
@@ -24,7 +24,7 @@ import {createToken, exchangeToken, getRole, verifyToken} from "~~/server/jwt";
  *   post:
  *     tags:
  *      - Session management
- *     description: "Create a new JWT."
+ *     summary: "Create a new JWT."
  *     responses:
  *       201:
  *         description: "JWT appplication + message."
@@ -43,7 +43,7 @@ import {createToken, exchangeToken, getRole, verifyToken} from "~~/server/jwt";
  *      - Session management
  *     security:
  *      - JWT: []
- *     description: "Replace the current JWT by a newer one IF VALID"
+ *     summary: "Replace the current JWT by a newer one IF VALID"
  *     responses:
  *       200:
  *         description: "Token modified successfully."
@@ -62,7 +62,7 @@ import {createToken, exchangeToken, getRole, verifyToken} from "~~/server/jwt";
  *      - Session management
  *     security:
  *      - JWT: []
- *     description: "Delete the JWT and return a goodbye message."
+ *     summary: "Delete the JWT and return a goodbye message."
  *     responses:
  *       200:
  *         description: "Goodbye message."

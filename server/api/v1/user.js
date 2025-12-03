@@ -9,7 +9,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *       - User management
  *     security:
  *       - JWT: []
- *     description: "Get a list containing all the users that are currently stored in the database"
+ *     summary: "Get a list containing all the users that are currently stored in the database"
  *     responses:
  *       200:
  *         description: "Returns a JSON array containing every user stored in the database"
@@ -23,19 +23,12 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *                   id:
  *                     type: integer
  *                     example: 1
- *                   firstname:
+ *                   username:
  *                     type: string
  *                     example: "John"
- *                   lastname:
- *                     type: string
- *                     example: "Doe"
- *                   email:
- *                     type: string
- *                     format: email
- *                     example: "john.doe@mail.com"
  *                   role:
  *                     type: string
- *                     example: "ADMIN"
+ *                     example: "['ADMIN','BDE']"
  *       401:
  *         description: "User token has expired"
  *       403:
@@ -46,7 +39,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *       - User management
  *     security:
  *       - JWT: []
- *     description: "Create and save a new user to the database"
+ *     summary: "Create and save a new user to the database"
  *     requestBody:
  *       required: true
  *       content:
@@ -54,21 +47,15 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *           schema:
  *             type: object
  *             properties:
- *               firstname:
+ *               username:
  *                 type: string
- *               lastname:
- *                 type: string
- *               email:
- *                 type: string
- *                 format: email
  *               password:
  *                 type: string
  *                 format: password
  *               role:
  *                 type: string
  *             required:
- *               - firstname
- *               - lastname
+ *               - username
  *               - email
  *               - password
  *     responses:
@@ -86,7 +73,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *       - User management
  *     security:
  *       - JWT: []
- *     description: "Modify an existing user"
+ *     summary: "Modify an existing user"
  *     requestBody:
  *       required: true
  *       content:
@@ -97,17 +84,18 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *               id:
  *                 type: integer
  *                 example: 1
- *               firstname:
+ *               username:
  *                 type: string
- *               lastname:
+ *               password:
  *                 type: string
- *               email:
- *                 type: string
- *                 format: email
+ *                 format: password
  *               role:
  *                 type: string
  *             required:
  *               - id
+ *               - username
+ *               - password
+ *               - role
  *     responses:
  *       200:
  *         description: "User modified successfully"
@@ -125,7 +113,7 @@ import {getRole, verifyToken} from "~~/server/jwt";
  *       - User management
  *     security:
  *       - JWT: []
- *     description: "Delete an existing user"
+ *     summary: "Delete an existing user"
  *     requestBody:
  *       required: true
  *       content:

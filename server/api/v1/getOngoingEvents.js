@@ -7,9 +7,7 @@ import {getOngoingEvents} from "~~/server/database";
  *      get:
  *          tags:
  *              - Event management
- *          security:
- *              - JWT: []
- *          description: "Get a list containing all ongoing events stored in database"
+ *          summary: "Get a list containing all ongoing events stored in database"
  *          responses:
  *              200:
  *                  description: "Return the list of ongoing events"
@@ -49,7 +47,7 @@ import {getOngoingEvents} from "~~/server/database";
  *                                      image:
  *                                          type: string
  *                                          description: "link of the image linked to the event"
- *                                          example: "image.png"
+ *                                          example: "https://img.com/event.png"
  */
 export default defineEventHandler(async (event) => {
     if (event.req.method === "GET") {

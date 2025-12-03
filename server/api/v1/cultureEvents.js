@@ -6,13 +6,13 @@ import {parseCookies, setCookie} from "h3";
 
 /**
  * @openapi
- * /cultureEvent:
+ * /cultureEvents:
  *   get:
  *     tags:
  *       - Culture meetings management
  *     security:
  *       - JWT: []
- *     description: "Get a list containing all the cultural events that are currently stored in the database"
+ *     summary: "Get a list containing all the cultural events that are currently stored in the database"
  *     responses:
  *       200:
  *         description: "Return a JSON array containing every cultural event stored in the database"
@@ -29,6 +29,9 @@ import {parseCookies, setCookie} from "h3";
  *                   title:
  *                     type: string
  *                     example: "Concert classic"
+ *                   description:
+ *                      type: string
+ *                      example: "A concert made by..."
  *                   startTS:
  *                     type: string
  *                     format: date-time
@@ -51,7 +54,7 @@ import {parseCookies, setCookie} from "h3";
  *       - Culture meetings management
  *     security:
  *       - JWT: []
- *     description: "Create and save a new cultural event to the database"
+ *     summary: "Create and save a new cultural event to the database"
  *     requestBody:
  *       required: true
  *       content:
@@ -63,6 +66,10 @@ import {parseCookies, setCookie} from "h3";
  *                 type: string
  *                 description: "event cultural title to add"
  *                 example: "template title"
+ *               description:
+ *                  type: string
+ *                  description: "event description"
+ *                  example: "A super film about..."
  *               startTS:
  *                 type: string
  *                 format: date-time
@@ -87,6 +94,7 @@ import {parseCookies, setCookie} from "h3";
  *               - startTS
  *               - endTS
  *               - eventTS
+ *               - description
  *     responses:
  *       201:
  *         description: "The object has been saved"
@@ -100,7 +108,7 @@ import {parseCookies, setCookie} from "h3";
  *       - Culture meetings management
  *     security:
  *       - JWT: []
- *     description: "Modify an existing cultural event"
+ *     summary: "Modify an existing cultural event"
  *     requestBody:
  *       required: true
  *       content:
@@ -113,6 +121,8 @@ import {parseCookies, setCookie} from "h3";
  *                 description: "id of the cultural event"
  *                 example: 1
  *               title:
+ *                 type: string
+ *               description:
  *                 type: string
  *               startTS:
  *                 type: string
@@ -128,6 +138,11 @@ import {parseCookies, setCookie} from "h3";
  *                 example: "https://img.com/event.png"
  *             required:
  *               - id
+ *               - title
+ *               - description
+ *               - startTS
+ *               - endTS
+ *               - eventTS
  *     responses:
  *       200:
  *         description: "Cultural event modified"
@@ -143,7 +158,7 @@ import {parseCookies, setCookie} from "h3";
  *       - Culture meetings management
  *     security:
  *       - JWT: []
- *     description: "Deletes an existing event"
+ *     summary: "Deletes an existing event"
  *     requestBody:
  *       required: true
  *       content:

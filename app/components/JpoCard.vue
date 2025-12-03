@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     updateLink() {
-      fetch(`${useRequestURL()}"api/v1/videoJpo"`).then(async (res) => this.link.value = await res.text())
+      fetch(`${useRequestURL()}api/v1/videoJpo`).then(async (res) => this.link.value = await res.text())
     }
   },
   mounted() {

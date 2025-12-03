@@ -88,3 +88,5 @@ async function handler(req) {
         return new Response(JSON.stringify({message:`Internal Server Error: ${error.message}`}), {status: 500});
     }
 }
+
+export default eventHandler(handler);

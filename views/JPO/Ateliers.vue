@@ -10,7 +10,7 @@ let refreshInterval;
 let ateliers = ref([]);
 
 let getAterliersJpo = () => {
-  fetch("api/v1/atelier", { method: "GET" })
+  fetch(`${useRequestURL()}api/v1/atelier`, { method: "GET" })
       .then(async (res) => {
         const data = await res.json();
         ateliers.value = data.content || [];

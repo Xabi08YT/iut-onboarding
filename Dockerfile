@@ -3,5 +3,5 @@ WORKDIR /server
 COPY . /server
 RUN apk update && apk add openssl musl zlib libgcc
 RUN bun install
-RUN bun run build
+RUN bun --bun run build
 CMD ["sh","setup.sh"]

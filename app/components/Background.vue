@@ -1,24 +1,25 @@
 <template>
   <div
-    :style="`background-color: ${colors[currentColor]};`"
-    id="background-container"
+      :style="`background-color: ${colors[currentColor]};`"
+      id="background-container"
   >
     <transition
-      v-for="(deco, index) in decorations[currentDecoration] || []"
-      :key="index"
-      :name="deco.transition"
+        v-for="(deco, index) in decorations[currentDecoration] || []"
+        :key="index"
+        :name="deco.transition"
     >
       <img
-        v-if="deco.show"
-        :src="deco.svg"
-        :style="deco.posStyle"
-        :class="deco.class"
+          v-if="deco.show"
+          :src="deco.svg"
+          :style="deco.posStyle"
+          :class="deco.class"
       />
     </transition>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { DecorationItem, DecorationsMap } from "../../types/decoration";
 import circle from "../public/assets/circle.svg";
 import path1 from "../public/assets/path1.svg";
 import path2 from "../public/assets/path2.svg";
@@ -74,7 +75,7 @@ export default {
             show: false,
             class: "full-width",
           },
-        ],
+        ] as DecorationItem[],
         lines: [
           {
             svg: path1,
@@ -97,7 +98,7 @@ export default {
             show: false,
             class: "full-height",
           },
-        ],
+        ] as DecorationItem[],
         waves: [
           {
             svg: wave2,
@@ -127,7 +128,7 @@ export default {
             show: false,
             class: "full-width opaque",
           },
-        ],
+        ] as DecorationItem[],
         snow: [
           {
             svg: snow1,
@@ -150,12 +151,12 @@ export default {
             show: false,
             class: "snow",
           },
-        ],
-      },
+        ] as DecorationItem[],
+      } as DecorationsMap,
     };
   },
   methods: {
-    delay: (t) => new Promise((resolve) => setTimeout(resolve, t)),
+    delay: (t: number) => new Promise((resolve) => setTimeout(resolve, t)),
 
     /**
      * Change the current background color
@@ -163,7 +164,7 @@ export default {
      * @param color color to go to
      * @default null go to next color
      */
-    changeBackgroundColor(color = null) {
+    changeBackgroundColor(color: number|null = null) {
       if (color != null) {
         // If we use a custom color given by the parameter
         this.currentColor = color;
@@ -187,10 +188,10 @@ export default {
      */
     async changeDecoration(style = null) {
       // disable all decorations
-      for (const deco of Object.values(this.decorations)) {
-        for (const item of deco) {
+      for (const deco of Object.values(this.decorations) as DecorationItem[]) {
+        for (const item in deco) {
           await this.delay(Math.random() * 200);
-          item.show = false;
+          deco[item].show = false;
         }
       }
 
@@ -201,11 +202,11 @@ export default {
         // changing to next style
         const styles = Object.keys(this.decorations);
         this.currentDecoration =
-          styles[styles.indexOf(this.currentDecoration) + 1] || styles[0];
+            styles[styles.indexOf(this.currentDecoration) + 1] || styles[0];
       }
 
       // enable only the desired decoration
-      for (const [decoName, deco] of Object.entries(this.decorations)) {
+      for (const [decoName, deco] of Object.entries(this.decorations) as [string, DecorationItem[]][]) {
         for (const item of deco) {
           await this.delay(Math.random() * 200);
           item.show = this.currentDecoration === decoName;

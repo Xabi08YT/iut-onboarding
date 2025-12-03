@@ -1,27 +1,33 @@
-<script setup>
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {Input} from "~/components/ui/input";
-import {Button} from "~/components/ui/button";
-import {toast, Toaster, useToast} from "~/components/ui/toast";
+<script setup lang="ts">
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {Input} from "../../app/components/ui/input";
+import {Button} from "../../app/components/ui/button";
+import {toast, Toaster, useToast} from "../../app/components/ui/toast";
+import { ref } from "vue";
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
+
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL;
 
 let discordLink = ref("");
 
 let applyDiscord = async () => {
-  let res = await fetch("api/v1/discord", {method: "PUT", body: JSON.stringify({link: discordLink.value})});
+  let res = await fetch(`${rootUrl}/api/v1/discord`, {method: "PUT", body: JSON.stringify({link: discordLink.value})});
   getDiscordLink();
   if (res.ok) {
     toast({title: "Lien mis à jour avec succès"});
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     toast({title: "Une erreur est survenue.",
-    description:await res.json().then(data => data.message),
-    variant:"destructive"});
+      description:await res.json().then(data => data.message),
+      variant:"destructive"});
   }
 
 };
 
 let getDiscordLink = () => {
-  fetch("api/v1/discord").then(async (res) => discordLink.value = await res.text())
+  fetch(`${rootUrl}/api/v1/discord`).then(async (res) => discordLink.value = await res.text())
 };
 
 getDiscordLink();

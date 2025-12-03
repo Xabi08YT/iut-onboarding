@@ -1,0 +1,3 @@
+{
+    "include": ["**/*.ts", "**/*.vue", "global.d.ts"]
+}

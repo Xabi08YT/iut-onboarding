@@ -1,47 +1,50 @@
 <template>
   <div class="container">
     <div class="current_infos">
-      <p>{{ this.currentTemperature }}°C</p>
+      <p>{{ currentTemperature }}°C</p>
       <div class="ville-temps">
         <p>Gradignan</p>
-        <p>{{ this.currentWeather }}</p>
+        <p>{{ currentWeather }}</p>
       </div>
     </div>
     <div class="infos-meteo">
       <div
-        class="meteo-timestamp-slot"
-        v-for="(meteo, index) in info_meteo"
-        :key="index"
+          class="meteo-timestamp-slot"
+          v-for="(meteo, index) in info_meteo"
+          :key="index"
       >
         <p>{{ meteo.Heure }}h00</p>
-        <img :src="meteo.icone" />
+        <img :src="meteo.icone"/>
         <p>{{ meteo.Temperature }}°</p>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import * as api from "../api";
+<script lang="ts">
 export default {
   data() {
     return {
-      refreshInterval: undefined,
-      currentWeather: undefined,
-      currentTemperature: undefined,
-      info_meteo: [],
+      refreshInterval: undefined as number | undefined,
+      currentWeather: "" as string,
+      currentTemperature: 0 as number,
+      info_meteo: [] as any[],
     };
   },
   methods: {
-    fetchWeather() {
+    async fetchWeather() {
       console.log("Refreshing weather");
-      api.fetchCurrentWeather().then((weatherinfos) => {
-        this.currentTemperature = weatherinfos.temperature;
-        this.currentWeather = weatherinfos.weatherText;
-      });
-      api.fetch12HoursWeather().then((tab) => {
-        this.info_meteo = tab;
-      });
+      await fetch("api/v1/getCurrentWeather")
+          .then((response) => response.json())
+          .then((weatherinfos) => {
+            this.currentTemperature = weatherinfos.temperature;
+            this.currentWeather = weatherinfos.weatherText;
+          });
+      await fetch("api/v1/getNext12hWeather")
+          .then((response) => response.json())
+          .then((tab) => {
+            this.info_meteo = tab;
+          });
     },
   },
   mounted() {

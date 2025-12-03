@@ -1,5 +1,21 @@
+/**
+ * @openapi
+ * /getLogo:
+ *  get:
+ *      tags:
+ *          - Retreive miscellaneous data
+ *      summary: "Get the url path to fetch for the logo according to special events"
+ *      responses:
+ *          200:
+ *              description: "Return the path where is stored the IUT logo"
+ *              content:
+ *                  text/plain:
+ *                      type: string
+ *                      example: assets/logo_iut.png
+ */
+
 export default defineEventHandler(async (event) => {
-    if (event.req.method === "GET") {
+    if (event.method === "GET") {
         let logo;
         let month = new Date().getMonth().toString();
         switch (month) {

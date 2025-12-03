@@ -1,15 +1,21 @@
-<script setup>
+<script setup lang="ts">
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {ScrollArea} from "~/components/ui/scroll-area";
-import {Button} from "~/components/ui/button";
-import {toast} from "~/components/ui/toast";
-import {deepObjectClone} from "@@/lib/utils";
-import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "~/components/ui/dialog";
-import {Input} from "~/components/ui/input";
-import {Label} from "~/components/ui/label";
-import {Textarea} from "~/components/ui/textarea";
+import { ref, watch } from "vue";
+import { navigateTo, useRequestURL, useRuntimeConfig } from "nuxt/app";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {ScrollArea} from "../../app/components/ui/scroll-area";
+import {Button} from "../../app/components/ui/button";
+import {toast} from "../../app/components/ui/toast";
+import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "../../app/components/ui/dialog";
+import {Input} from "../../app/components/ui/input";
+import {Label} from "../../app/components/ui/label";
+import {Textarea} from "../../app/components/ui/textarea";
+import { deepObjectClone } from "../../lib/utils";
+
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
 
 let events = ref([]);
 
@@ -36,7 +42,7 @@ const channels = ["Etudiant", "Enseignants", "DDE", "Département"];
  * @param date date string
  * @returns string Date in the readable format
  */
-const formatDate = (date) => {
+const formatDate = (date): string => {
   let dt = date.split("T");
   dt[1] = dt[1].replace("Z", "");
   let dp = dt[0].split("-");
@@ -50,7 +56,7 @@ const formatDate = (date) => {
  * @returns {Promise<void>}
  */
 const initEvents = async () => {
-  let res = await fetch("api/v1/event");
+  let res = await fetch(`${rootUrl}/api/v1/event`);
   let data = await res.json();
   events.value = deepObjectClone(data);
 };
@@ -61,7 +67,7 @@ const initEvents = async () => {
  * @returns {Promise<void>}
  */
 const deleteEvent = async (id) => {
-  let res = await fetch("api/v1/event", {
+  let res = await fetch(`${rootUrl}/api/v1/event`, {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -69,7 +75,7 @@ const deleteEvent = async (id) => {
     toast({
       title: "Event deleted successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -104,7 +110,7 @@ const initCreateForm = () => {
  * @returns {Promise<void>}
  */
 const editEvent = async (modified) => {
-  let res = await fetch("api/v1/event", {
+  let res = await fetch(`${rootUrl}/api/v1/event`, {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modified)
@@ -113,7 +119,7 @@ const editEvent = async (modified) => {
     toast({
       title: "Event Modified successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -132,7 +138,7 @@ const editEvent = async (modified) => {
  * @returns {Promise<void>}
  */
 const addEvent = async (newEvent) => {
-  let res = await fetch("api/v1/event", {
+  let res = await fetch(`${rootUrl}/api/v1/event`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newEvent)
@@ -141,7 +147,7 @@ const addEvent = async (newEvent) => {
     toast({
       title: "Event created successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -154,29 +160,27 @@ const addEvent = async (newEvent) => {
   await initEvents();
 };
 
-/**
- * Initializes the page
- * @returns {Promise<void>}
- */
-const init = async () => {
-  let loggedIn = await fetch("api/v1/session");
-
-  if (!loggedIn.ok) {
-    return navigateTo("/login");
-  }
-
-  await initEvents();
-};
-
 watch([modTitle,modDescription,modDateEnd,modDateBeg], () => {
-  modValid.value = (new Date(modDateBeg.value) < new Date(modDateEnd.value) && 0 < modTitle.value.length < 101 && 0 < modDescription.value.length < 201);
+  modValid.value = (
+    new Date(modDateBeg.value) < new Date(modDateEnd.value) &&
+    modTitle.value.length > 0 &&
+    modTitle.value.length < 101 &&
+    modDescription.value.length > 0 &&
+    modDescription.value.length < 201
+  );
 });
 
 watch([createTitle,createDescription,createDateEnd,createDateBeg], () => {
-  createValid.value = (new Date(createDateBeg.value) < new Date(createDateEnd.value) && 0 < createTitle.value.length < 101 && 0 < createDescription.value.length < 201);
+  createValid.value = (
+    new Date(createDateBeg.value) < new Date(createDateEnd.value) &&
+    createTitle.value.length > 0 &&
+    createTitle.value.length < 101 &&
+    createDescription.value.length > 0 &&
+    createDescription.value.length < 201
+  );
 });
 
-init();
+initEvents();
 </script>
 
 <template>
@@ -206,7 +210,7 @@ init();
             <Label for="imageURLEventCreate">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
             <Input id="imageURLEventCreate" type="text" v-model="createIMGURL"/>
             <DialogClose as-child>
-              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.value, channel: 1})">Ajouter</Button>
+              <Button v-show="createValid" @click="addEvent({title:createTitle, description: createDescription, startTS: createDateBeg, endTS: createDateEnd, image: createIMGURL.valueOf(), channel: 1})">Ajouter</Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -255,7 +259,7 @@ init();
                     <Label for="imageURLEventModify">URL d'une image (Hébergée sur IMGUR par exemple)</Label>
                     <Input id="imageURLEventModify" type="text" v-model="modIMGURL"/>
                     <DialogClose as-child>
-                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.value, channel: 1})">Appliquer</Button>
+                      <Button v-show="modValid" @click="editEvent({id:item.id, title:modTitle, description: modDescription, startts: modDateBeg, endts: modDateEnd, image: modIMGURL.valueOf(), channel: 1})">Appliquer</Button>
                     </DialogClose>
                   </DialogContent>
                 </Dialog>

@@ -1,18 +1,21 @@
-<script setup>
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from "vue";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import { Conference } from "../../types/conference";
 
 let refreshInterval;
 
-const conferences = [
-  {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T09:15:00+01:00")},
-  {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T10:45:00+01:00")},
-  {room: "006", who: "Mme DUTOUR", when: new Date("2025-02-15T11:30:00+01:00")},
-  {room: "006", who: "Mme DUTOUR", when: new Date("2025-02-15T10:00:00+01:00")},
-  {room: "001", who: "Mme DUTOUR", when: new Date("2025-02-15T12:15:00+01:00")},
-  {room: "105", who: "M. JOURNET", when: new Date("2025-02-15T09:30:00+01:00")},
-  {room: "105", who: "M. JOURNET", when: new Date("2025-02-15T10:30:00+01:00")},
-  {room: "105", who: "M. JOURNET", when: new Date("2025-02-15T11:45:00+01:00")},
-].sort((a,b) => a.when - b.when );
+let conferences = ref([]);
+let getConferece = () => {
+  fetch(`${useRequestURL()}api/v1/conference`, { method: "GET" })
+      .then(async (res) => {
+        const data = await res.json();
+        conferences.value = data.content || [];
+        nextConferences.value = [...conferences.value.filter((e) => new Date(e.when) >= new Date())];
+      })
+      .catch(error => console.error('Error fetching conferences:', error));
+};
+getConferece();
 
 let nextConferences = ref([]);
 
@@ -21,8 +24,9 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  nextConferences.value = [...conferences.filter((e) => e.when >= new Date())];
-  refreshInterval = setInterval((refresh) => nextConferences.value = [...conferences.filter((e) => e.when >= new Date())], 10000);
+  refreshInterval = setInterval(() => {
+    nextConferences.value = [...conferences.value.filter((e) => new Date(e.when) >= new Date())];
+  }, 10000);
 });
 
 onUnmounted(() => clearInterval(refreshInterval));
@@ -50,7 +54,7 @@ onUnmounted(() => clearInterval(refreshInterval));
         <TableBody>
           <TableRow v-for="(item) in nextConferences" class="Spaced">
             <TableCell class="tableTitle">
-              {{ item.when.toString().split(" ")[4] }}
+              {{ item.when.toString().split("T")[1].split(":")[0] + "h " + item.when.toString().split("T")[1].split(":")[1]}}
             </TableCell>
             <TableCell class="tableTitle names">
               {{ item.who }}

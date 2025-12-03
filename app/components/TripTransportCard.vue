@@ -2,20 +2,20 @@
   <div class="trip-container">
     <div class="progress-bar">
       <CircleProgress
-        :border-width="23"
-        :border-bg-width="23"
-        :size="200"
-        :percent="remainingPercent"
-        :fill-color="busData.lineColor"
-        empty-color="#ddd"
+          :border-width="23"
+          :border-bg-width="23"
+          :size="200"
+          :percent="remainingPercent"
+          :fill-color="busData.lineColor"
+          empty-color="#ddd"
       />
-      <p v-if="this.error == 0">
+      <p v-if="error === 0">
         {{ msToWaitTime(remainingTime)[0]
         }}<span>m</span
-        >{{ msToWaitTime(remainingTime)[1]
+      >{{ msToWaitTime(remainingTime)[1]
         }}<span>s</span>
       </p>
-      <img src="@@/public/assets/Warning.png" height="128px" width="128px" v-if="error == 1"/>
+      <NuxtImg src="assets/Warning.png" height="128px" width="128px" v-if="error === 1"/>
     </div>
     <p class="infos" v-if="error == 0">{{ formatDirectionString() }}</p>
     <p class="infos" v-if="error == 1">Impossible de récuperer les informations pour cet arrêt.</p>
@@ -23,8 +23,7 @@
 </template>
 
 
-<script>
-import * as api from "@@/api";
+<script lang="ts">
 import CircleProgress from "vue3-circle-progress";
 
 export default {
@@ -32,53 +31,67 @@ export default {
     CircleProgress,
   },
   props: {
-    busData: Object,
-    index: Number,
+    busData: {
+      type: Object as () => {
+        stops: string[];
+        lineId: string;
+        lineColor: string;
+      },
+      required: true
+    },
+    index: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
-      refreshProgressInterval: undefined,
-      timeRemainingInterval: undefined,
-      updatedAt: undefined,
-      remainingPercent: 0,
-      remainingTime: 0,
-      lineName: "",
-      waitInterval: 60000,
-      error: 0
+      refreshProgressInterval: undefined as any,
+      timeRemainingInterval: undefined as any,
+      updatedAt: undefined as Date | undefined,
+      remainingPercent: 0 as number,
+      remainingTime: 0 as number,
+      lineName: "" as string,
+      waitInterval: 60000 as number,
+      error: 0 as number
     };
   },
   methods: {
     formatDirectionString() {
       return this.lineName
-        .toLowerCase()
-        .replace(".", " ")
-        .split(" ")
-        .map((word) => {
-          if (word.length > 0) return word[0].toUpperCase() + word.substring(1);
-          else return "";
-        })
-        .join(" ");
+          .toLowerCase()
+          .replace(".", " ")
+          .split(" ")
+          .map((word) => {
+            if (word.length > 0) return word[0].toUpperCase() + word.substring(1);
+            else return "";
+          })
+          .join(" ");
     },
-    msToWaitTime(ms) {
+    msToWaitTime(ms: number): [string, string] {
       let minutes = Math.floor(ms / 60000);
-      let seconds = ((ms % 60000) / 1000).toFixed(0);
+      let seconds = Number(((ms % 60000) / 1000).toFixed(0));
+
       minutes = Math.round(minutes);
       seconds = Math.round(seconds);
-      if (seconds < 10) {
-        seconds = `0${seconds}`;
-      }
-      if (minutes < 10) {
-        minutes = `0${minutes}`;
-      }
-      return [minutes, seconds];
+
+      const s = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      const m = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+      return [m, s];
     },
     waitTimeStringToMs(src) {
-      return Math.abs(Date.now() - new Date(src));
+      return Math.abs(Date.now() - new Date(src).getTime());
     },
     async setTimeRemaining() {
-      const res = await api.fetchTBM(
-        this.busData.stops[this.index],
-      );
+      const params = new URLSearchParams(
+          {
+            stopId: this.busData.stops[this.index]
+          }
+      )
+      const apiresult = await fetch(`api/v1/getTBM?${params}`);
+      const res = await apiresult.json();
+
       let found = false;
       let i = 0;
       while (!found && i < res.length) {
@@ -104,7 +117,7 @@ export default {
         this.remainingPercent = 0.1;
       } else {
         this.remainingPercent =
-          ((this.waitInterval - this.remainingTime) / this.waitInterval) * 100;
+            ((this.waitInterval - this.remainingTime) / this.waitInterval) * 100;
       }
     },
   },
@@ -112,17 +125,21 @@ export default {
     this.setTimeRemaining();
     this.timeRemainingInterval = setInterval(this.setTimeRemaining, 5000);
     this.refreshProgressInterval = setInterval(this.refreshProgressBar, 1000);
-    api
-      .getTBMLineWaitInterval(
-        this.busData.stops[this.index],
-        this.busData.lineId
-      ).then((time) => {
-        this.waitInterval = time;
-      }).catch((err) => {
-        console.error(err);
-        this.waitInterval = 6000000;
-        this.error = 1;
-      });
+
+    const params = new URLSearchParams({
+      stopId: this.busData.stops[this.index],
+      lineId: this.busData.lineId
+    })
+    fetch(`api/v1/getTBM?${params}`)
+        .then(res => res.json())
+        .then(data => {
+          this.waitInterval = data;
+        })
+        .catch(err => {
+          console.error(err);
+          this.waitInterval = 6000000;
+          this.error = 1;
+        });
   },
   unmounted() {
     clearInterval(this.refreshProgressInterval);

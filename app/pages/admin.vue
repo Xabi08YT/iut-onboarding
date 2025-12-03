@@ -5,7 +5,12 @@ import EventEditor from "~~/views/admin/eventEditor.vue";
 import UserEditor from "~~/views/admin/userEditor.vue";
 import DiscordEditor from "~~/views/admin/discordEditor.vue";
 import { navigateTo } from "nuxt/app";
-import {Button} from "~/components/ui/button";
+import AdminTopBar from "../components/AdminTopBar.vue";
+
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+const nuxtApp = useNuxtApp();
 
 let fullaccess = ref(false);
 let redirect = false;
@@ -16,7 +21,7 @@ let bde = ref(false);
  * @returns {Promise<void>}
  */
 const init = async () => {
-  let loggedIn = await fetch("api/v1/session");
+  let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
 
   if (!loggedIn.ok) {
     return navigateTo("/login");
@@ -28,18 +33,19 @@ const init = async () => {
   if (roles.includes("ADMIN") || roles.includes("MAINTAINER")) {
     fullaccess.value = true;
   } else if (!(roles.includes("BDE") || roles.includes("ENSEIGNANT")) && roles.includes("CULTURE")) {
-    return navigateTo("/culturepanel");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/culturepanel');
+    });
+    return
   } else if (!(roles.includes("BDE") || roles.includes("ENSEIGNANT"))) {
     redirect = true;
   }
 
   if (redirect) {
-    return navigateTo("/login");
+    nuxtApp.runWithContext(() => {
+      navigateTo('/login');
+    });
   }
-};
-
-const goToCulture = () => {
-  return navigateTo("/culturepanel");
 };
 
 init();
@@ -47,9 +53,7 @@ init();
 </script>
 
 <template>
-  <div v-if="fullaccess" class="flex justify-center m-2">
-    <Button class="px-4 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200" @click="goToCulture()">Culture Panel</Button>
-  </div>
+  <AdminTopBar/>
   <div id="container"
        class="w-screen min-h-screen lg:h-dvh lg:max-h-dvh flex flex-col lg:flex-row p-[25px] justify-center items-center">
     <Toaster/>

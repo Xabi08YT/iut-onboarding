@@ -2,9 +2,9 @@
   <div class="planning-container">
     <!-- eslint-disable vue/no-v-for-template-key -->
     <div
-      class="planning-card"
-      v-for="(group, groupindex) in getGroupsComponent()"
-      :key="groupindex"
+        class="planning-card"
+        v-for="(group, groupindex) in getGroupsComponent()"
+        :key="groupindex"
     >
       <div :style="`background-color: ${classColor}; color: white; border-radius: 21px 21px 0px 0px`" class="card-header">
         <p v-for="(item, index) in getClassNameComponent(group)" :key="index">
@@ -17,12 +17,12 @@
             {{ classType(group === "seconde" ? 1 : 0) }} - {{ data.subject[group === "seconde" ? 1 : 0] }}
           </p>
         </div>
-      <div class="subject-infos" v-if="isSplited">
+        <div class="subject-infos" v-if="isSplited">
           <p class="teacher" :style="`font-size: ${isSplited ? '20px' : '18px'}`">
             {{
               data.teacher[group === "seconde" ? 1 : 0]
-                ? data.teacher[group === "seconde" ? 1 : 0]
-                : "Autonomie"
+                  ? data.teacher[group === "seconde" ? 1 : 0]
+                  : "Autonomie"
             }}
           </p>
         </div>
@@ -34,7 +34,7 @@
       </div>
       <div v-else style="opacity: 0.5" class="data-container">
         <div class="subject-info">
-          <img style="width: 35%; margin-left: 33.5%" :src="noClassLogo" />
+          <NuxtImg style="width: 35%; margin-left: 33.5%" src="assets/robot.png" loading="lazy" />
           <p>Pas cours</p>
         </div>
       </div>
@@ -42,8 +42,7 @@
   </div>
 </template>
 
-<script>
-import robot from "~~/public/assets/robot.png";
+<script lang="ts">
 export default {
   props: {
     data: {
@@ -56,17 +55,12 @@ export default {
       required: false,
     }
   },
-  data() {
-    return {
-      noClassLogo: robot,
-    };
-  },
   methods: {
     getGroupsComponent() {
       if (
-        // No class
-        this.data.subject[0] === undefined &&
-        this.data.subject[1] === undefined
+          // No class
+          this.data.subject[0] === undefined &&
+          this.data.subject[1] === undefined
       )
         return [undefined];
       if (this.data.isFullClass) return [""];
@@ -194,7 +188,7 @@ export default {
 .room {
   color: rgb(41, 154, 189);
   /* font-size: 35px; */
-  font-weight: 900;
+  font-weight: 400;
 }
 
 .teacher {

@@ -3,7 +3,7 @@
     <p id="title">
       {{ busData.lineName }}
       <span :style="`color: ${busData.lineColor} ; font-size : 1.7em`">{{
-        busData.lineId
+          busData.lineId
         }}</span>
     </p>
     <TripTransportCard :busData="busData" :index="0" />
@@ -11,7 +11,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { BusData } from "../../types/bus-data";
 import TripTransportCard from "./TripTransportCard.vue";
 
 export default {
@@ -19,7 +20,10 @@ export default {
     TripTransportCard,
   },
   props: {
-    busData: Object,
+    busData: {
+      type: Object as () => BusData,
+      required: true,
+    },
   },
 };
 </script>

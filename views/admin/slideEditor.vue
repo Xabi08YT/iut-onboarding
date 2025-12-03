@@ -1,22 +1,28 @@
-<script setup>
+<script setup lang="ts">
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "~/components/ui/table";
-import {Input} from "~/components/ui/input";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
-import {Switch} from "~/components/ui/switch";
-import {ScrollArea} from "~/components/ui/scroll-area";
-import {toast} from "~/components/ui/toast";
-import {deepObjectClone} from "@@/lib/utils";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
+import {Input} from "../../app/components/ui/input";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
+import {Switch} from "../../app/components/ui/switch";
+import {ScrollArea} from "../../app/components/ui/scroll-area";
+import {toast} from "../../app/components/ui/toast";
+import {deepObjectClone} from "../../lib/utils";
+import { ref, watch } from "vue";
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
 
 let slides = ref([]);
 let compareSlidesUser = ref([]);
+
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
 
 /**
  * Fill the content related to the slides
  * @returns {Promise<void>}
  */
 const initSlides = async () => {
-  let res = await fetch("api/v1/slide");
+  let res = await fetch(`${rootUrl}/api/v1/slide`);
   let data = await res.json();
   slides.value = deepObjectClone(data);
   compareSlidesUser.value = [...deepObjectClone(slides.value)];
@@ -32,7 +38,7 @@ const init = async () => {
     for (let s of compareSlidesUser.value) {
       if (!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
         slides.value[s.id - 1] = deepObjectClone(s);
-        let res = await fetch("api/v1/slide", {
+        let res = await fetch(`${rootUrl}/api/v1/slide`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(s)
@@ -41,7 +47,7 @@ const init = async () => {
           toast({
             title: "Slide updated successfully",
           });
-          await fetch("api/v1/session", {method: "PUT"});
+          await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
         } else {
           toast({
             title: "Slide was not updated",

@@ -2,11 +2,13 @@
   <div id="header">
     <p>{{ currentDate }}</p>
     <p>{{ currentTime }}</p>
-    <img style="width: 150px; margin-left: 150px;" :src="logoLink" />
+    <NuxtImg style="width: 150px; margin-left: 150px;" :src="logoLink" loading="eager"/>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { ref } from 'vue';
+
 export default {
   data() {
     return {

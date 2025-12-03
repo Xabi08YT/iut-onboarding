@@ -381,9 +381,7 @@ export async function getCultureEvents() {
  */
 export async function getConfigValue(key) {
     client.$connect();
-    console.log("dkjagzjbrhcegzhrb ", key)
     let results = await client.config.findFirst({where: {key}});
-    console.log("lmao ", results)
     client.$disconnect();
     return results;
 }

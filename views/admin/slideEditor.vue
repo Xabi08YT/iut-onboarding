@@ -8,6 +8,7 @@ import {ScrollArea} from "../../app/components/ui/scroll-area";
 import {toast} from "../../app/components/ui/toast";
 import {deepObjectClone} from "../../lib/utils";
 import { ref, watch } from "vue";
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
 
 let slides = ref([]);
 let compareSlidesUser = ref([]);

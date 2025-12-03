@@ -4,6 +4,7 @@ import {Input} from "../../app/components/ui/input";
 import {Button} from "../../app/components/ui/button";
 import {toast, Toaster, useToast} from "../../app/components/ui/toast";
 import { ref } from "vue";
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();

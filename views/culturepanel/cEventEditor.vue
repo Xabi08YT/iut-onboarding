@@ -11,7 +11,7 @@ import {Input} from "../../app/components/ui/input";
 import {Label} from "../../app/components/ui/label";
 import {Textarea} from "../../app/components/ui/textarea";
 import { ref, watch } from "vue";
-import { navigateTo } from "nuxt/app";
+import { navigateTo, useRequestURL, useRuntimeConfig } from "nuxt/app";
 let events = ref([]);
 
 const runtimeConfig = useRuntimeConfig();

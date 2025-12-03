@@ -10,6 +10,7 @@ import {Label} from "../../app/components/ui/label";
 import {Input} from "../../app/components/ui/input";
 import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription} from "../../app/components/ui/dialog";
 import { ref, watch } from "vue";
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
 
 const runtimeConfig = useRuntimeConfig();
 const requestURL = useRequestURL();

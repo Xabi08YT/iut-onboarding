@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { ref, watch } from "vue";
-import { navigateTo } from "nuxt/app";
+import { navigateTo, useRequestURL, useRuntimeConfig } from "nuxt/app";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../app/components/ui/table";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../app/components/ui/card";
 import {ScrollArea} from "../../app/components/ui/scroll-area";

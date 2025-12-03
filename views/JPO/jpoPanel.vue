@@ -292,6 +292,27 @@ const deleteAtelier = async (id) => {
   }
 };
 
+
+let getvideJpo = () => {
+  fetch("api/v1/videoJpo", { method: "GET" }).then(async (res) => videoJpo.value = await res.text())
+};
+
+getvideJpo(); 
+
+let applyvideoJpo = async () => {
+  let res = await fetch("api/v1/videoJpo", {method: "PUT", body: JSON.stringify({value: videoJpo.value})});
+  getDateJpo();
+  if (res.ok) {
+    toast({title: "Date mis à jour avec succès"});
+    await fetch("api/v1/session", {method: "PUT"});
+  } else {
+    toast({title: "Une erreur est survenue.",
+    description:await res.json().then(data => data.message),
+    variant:"destructive"});
+  }
+
+};
+
 /**
  * Initializes the page
  * @returns {Promise<void>}
@@ -328,213 +349,214 @@ watch([createRoomA, createNameA, createDateWhenAStart, createDateWhenAEnd], () =
 init();
 </script>
 
-<template >
-  <div class="grid gap-y-4">
-    <Card class="flex flex-col">
-      <Toaster />
-      <CardHeader>
-        <CardTitle>Editer la date de la JPO</CardTitle>
-        <CardDescription>Ici vous pouvez editer la date de la JPO.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Input name="JPO" type="date" v-model="dateJpo" class="w-full" />
-        <Button @click="applyDateJpo()" class="w-full mt-[10px]">Enregistrer</Button>
-      </CardContent>
-    </Card>
-    <Card class="flex flex-col">
-      <Toaster />
-      <CardHeader>
-        <CardTitle>Editer le lien de la video de la jpo</CardTitle>
-        <CardDescription>Ici vous pouvez editer le lien de la vidéo de la JPO.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Input name="JPO" type="text" v-model="videoJpo" class="w-full" />
-        <Button @click="applyVideoJPO()" class="w-full mt-[10px]">Enregistrer</Button>
-      </CardContent>
-    </Card>
-    <Card>
-      <CardHeader>
-        <CardTitle class="flex justify-between">
-          <div>Editeur des conférences</div>
-          <Dialog>
-            <DialogTrigger>
-              <Button @click="initCreateForm">
-                <LucideCirclePlus/>
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Ajouter une conférence</DialogTitle>
-                <DialogDescription>Ici vous pouvez ajouter une nouvelle conférence.</DialogDescription>
-              </DialogHeader>
-              <Label for="titleEventModify">Salle ({{createRoom.length}}/3)</Label>
-              <Input id="titleEventModify" v-model="createRoom"/>
+<template>
+  <div class="flex gap-4">
+  <!-- 1st column -->
+    <div class="space-y-4">
+      <Card class="flex flex-col">
+        <Toaster />
+        <CardHeader>
+          <CardTitle>Editer la date de la JPO</CardTitle>
+          <CardDescription>Ici vous pouvez editer la date de la JPO.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Input name="JPO" type="date" v-model="dateJpo" class="w-full" />
+          <Button @click="applyDateJpo()" class="w-full mt-[10px]">Enregistrer</Button>
+        </CardContent>
+      </Card>
 
-              <Label for="descriptionEventModify">Nom Enseignant ({{createNomEnseignant.length}}/30)</Label>
-              <Textarea id="descriptionEventModify" v-model="createNomEnseignant"/>
-
-              <Label for="beginEventModify">Date</Label>
-              <Input id="beginEventModify" type="datetime-local" v-model="createDateWhen" />
-
-
-              <DialogClose as-child>
-                <Button v-show="createValid" @click="createConference({room:createRoom, who: createNomEnseignant , when: createDateWhen.toString()})">Ajouter</Button>
-              </DialogClose>
-            </DialogContent>
-          </Dialog>
-        </CardTitle>
-        <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des conférences à afficher.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ScrollArea class="h-[250px] sm:h-[250px] md:h-[250px] lg:h-[200px] xl:h-[300px] 2xl:h-[300px]">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead class="text-center">Salle</TableHead>
-                <TableHead class="text-center">Nom Enseignant</TableHead>
-                <TableHead class="text-center">Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow v-for="(item, index) in conferences " :key="index">
-                <TableCell class="text-center">{{ item.room }}</TableCell>
-                <TableCell class="text-center">{{ item.who }}</TableCell>
-                <TableCell class="text-center">{{ formatDate(item.when) }}</TableCell>
-                <TableCell class="text-center flex justify-center">
-                  <Dialog>
-                    <DialogTrigger>
-                      <Button @click="initModForm(item)">
-                        <LucidePen/>
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Modifier une conférence</DialogTitle>
-                        <DialogDescription>Ici vous pouvez editer une conférence existante. <br/> Note: Les changements doivent être appliqués.</DialogDescription>
-                      </DialogHeader>
-                      <Label for="titleEventModify">Room ({{modRoom.length}}/3)</Label>
-                      <Input id="titleEventModify" v-model="modRoom"/>
-
-                      <Label for="descriptionEventModify">Nom Enseignant ({{modNomEnseignant.length}}/30)</Label>
-                      <Textarea id="descriptionEventModify" v-model="modNomEnseignant"/>
-
-                      <Label for="beginEventModify">When</Label>
-                      <Input id="beginEventModify" type="datetime-local" v-model="modDateWhen" />
-                      <DialogClose as-child>
-                        <Button v-show="modValid" @click="editConference({id:item.id, room:modRoom, who: modNomEnseignant, when: modDateWhen})">Appliquer</Button>
-                      </DialogClose>
-                    </DialogContent>
-                  </Dialog>
-                  <Button variant="destructive" @click=deleteConference(item.id)>
-                    <LucideTrash2/>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle class="flex justify-between">
+            <div>Editeur des conférences</div>
+            <Dialog>
+              <DialogTrigger>
+                <Button @click="initCreateForm">
+                  <LucideCirclePlus/>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Ajouter une conférence</DialogTitle>
+                  <DialogDescription>Ici vous pouvez ajouter une nouvelle conférence.</DialogDescription>
+                </DialogHeader>
+                <Label for="titleEventModify">Salle ({{createRoom.length}}/3)</Label>
+                <Input id="titleEventModify" v-model="createRoom"/>
 
                 <Label for="descriptionEventModify">Nom Enseignant ({{createNomEnseignant.length}}/30)</Label>
                 <Textarea id="descriptionEventModify" v-model="createNomEnseignant"/>
 
+                <Label for="beginEventModify">Date</Label>
+                <Input id="beginEventModify" type="datetime-local" v-model="createDateWhen" />
+            
+                
+                <DialogClose as-child>
+                  <Button v-show="createValid" @click="createConference({room:createRoom, who: createNomEnseignant , when: createDateWhen.toString()})">Ajouter</Button>
+                </DialogClose>
+              </DialogContent>
+            </Dialog>
+          </CardTitle>
+          <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des conférences à afficher.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ScrollArea class="h-[250px] sm:h-[250px] md:h-[250px] lg:h-[200px] xl:h-[300px] 2xl:h-[300px]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead class="text-center">Salle</TableHead>
+                  <TableHead class="text-center">Nom Enseignant</TableHead>
+                  <TableHead class="text-center">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow v-for="(item, index) in conferences " :key="index">
+                  <TableCell class="text-center">{{ item.room }}</TableCell>
+                  <TableCell class="text-center">{{ item.who }}</TableCell>
+                  <TableCell class="text-center">{{ formatDate(item.when) }}</TableCell>
+                  <TableCell class="text-center flex justify-center">
+                    <Dialog>
+                      <DialogTrigger>
+                        <Button @click="initModForm(item)">
+                          <LucidePen/>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Modifier une conférence</DialogTitle>
+                          <DialogDescription>Ici vous pouvez editer une conférence existante. <br/> Note: Les changements doivent être appliqués.</DialogDescription>
+                        </DialogHeader>
+                            <Label for="titleEventModify">Room ({{modRoom.length}}/3)</Label>
+                            <Input id="titleEventModify" v-model="modRoom"/>
 
+                            <Label for="descriptionEventModify">Nom Enseignant ({{modNomEnseignant.length}}/30)</Label>
+                            <Textarea id="descriptionEventModify" v-model="modNomEnseignant"/>
 
+                            <Label for="beginEventModify">When</Label>
+                            <Input id="beginEventModify" type="datetime-local" v-model="modDateWhen" />
+                        <DialogClose as-child>
+                          <Button v-show="modValid" @click="editConference({id:item.id, room:modRoom, who: modNomEnseignant, when: modDateWhen})">Appliquer</Button>
+                        </DialogClose>
+                      </DialogContent>
+                    </Dialog>
+                    <Button variant="destructive" @click=deleteConference(item.id)>
+                      <LucideTrash2/>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+    </div>
+    <!-- 2nd column -->
+    <div class="space-y-4">
+      <Card class="flex flex-col">
+        <Toaster />
+        <CardHeader>
+          <CardTitle>Editer le lien de la video de la jpo</CardTitle>
+          <CardDescription>Ici vous pouvez editer le lien de la vidéo de la JPO.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Input name="JPO" type="text" v-model="videoJpo" class="w-full" />
+          <Button @click="applyvideoJpo()" class="w-full mt-[10px]">Enregistrer</Button>
+        </CardContent>
+      </Card>
 
-    <Card class="w-full">
-      <CardHeader>
-        <CardTitle class="flex justify-between">
-          <div>Editeur d'ateliers</div>
-          <Dialog>
-            <DialogTrigger>
-              <Button @click="initCreateFormAtelier">
-                <LucideCirclePlus/>
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Ajouter un atelier</DialogTitle>
-                <DialogDescription>Ici vous pouvez ajouter un nouvel atelier.</DialogDescription>
-              </DialogHeader>
-              <Label for="titleEventModify">Salle ({{createRoomA.length}}/3)</Label>
-              <Input id="titleEventModify" v-model="createRoomA"/>
+      <Card class="w-full">
+        <CardHeader>
+          <CardTitle class="flex justify-between">
+            <div>Editeur d'ateliers</div>
+            <Dialog>
+              <DialogTrigger>
+                <Button @click="initCreateFormAtelier">
+                  <LucideCirclePlus/>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Ajouter un atelier</DialogTitle>
+                  <DialogDescription>Ici vous pouvez ajouter un nouvel atelier.</DialogDescription>
+                </DialogHeader>
+                <Label for="titleEventModify">Salle ({{createRoomA.length}}/3)</Label>
+                <Input id="titleEventModify" v-model="createRoomA"/>
 
-              <Label for="descriptionEventModify">Nom de l'atelier ({{createNameA.length}}/30)</Label>
-              <Textarea id="descriptionEventModify" v-model="createNameA"/>
+                <Label for="descriptionEventModify">Nom Enseignant ({{createNameA.length}}/30)</Label>
+                <Textarea id="descriptionEventModify" v-model="createNameA"/>
 
-              <Label for="beginEventModify">Date Debut</Label>
-              <Input id="beginEventModify" type="datetime-local" v-model="createDateWhenAStart" />
+                <Label for="beginEventModify">Date Debut</Label>
+                <Input id="beginEventModify" type="datetime-local" v-model="createDateWhenAStart" />
 
-              <Label for="beginEventModify">Date FIN</Label>
-              <Input id="beginEventModify" type="datetime-local" v-model="createDateWhenAEnd" />
+                <Label for="beginEventModify">Date FIN</Label>
+                <Input id="beginEventModify" type="datetime-local" v-model="createDateWhenAEnd" />
+            
+                
+                <DialogClose as-child>
+                  <Button v-show="createValidA" @click="createAtelier({room:createRoomA, name: createNameA , start: createDateWhenAStart, end:createDateWhenAEnd})">Ajouter</Button>
+                </DialogClose>
+              </DialogContent>
+            </Dialog>
+          </CardTitle>
+          <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des ateliers à afficher.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ScrollArea class="h-[250px] sm:h-[250px] md:h-[250px] lg:h-[200px] xl:h-[300px] 2xl:h-[300px]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead class="text-center">Salle</TableHead>
+                  <TableHead class="text-center">Nom Enseignant</TableHead>
+                  <TableHead class="text-center">Date Debut</TableHead>
+                  <TableHead class="text-center">Date Fin</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow v-for="(item, index) in ateliers " :key="index">
+                  <TableCell class="text-center">{{ item.room }}</TableCell>
+                  <TableCell class="text-center">{{ item.name }}</TableCell>
+                  <TableCell class="text-center">{{ formatDate(item.start) }}</TableCell>
+                  <TableCell class="text-center">{{ formatDate(item.end) }}</TableCell>
+                  <TableCell class="text-center flex justify-center">
+                    <Dialog>
+                      <DialogTrigger>
+                        <Button @click="initModFormAtelier(item)">
+                          <LucidePen/>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Modifier un atelier</DialogTitle>
+                          <DialogDescription>Ici vous pouvez editer un atelier existant. <br/> Note: Les changements doivent être appliqués.</DialogDescription>
+                        </DialogHeader>
+                            <Label for="titleEventModify">Room ({{modRoomA.length}}/3)</Label>
+                            <Input id="titleEventModify" v-model="modRoomA"/>
 
+                            <Label for="descriptionEventModify">Nom Enseignant ({{modNameA.length}}/30)</Label>
+                            <Textarea id="descriptionEventModify" v-model="modNameA"/>
 
-              <DialogClose as-child>
-                <Button v-show="createValidA" @click="createAtelier({room:createRoomA, name: createNameA , start: createDateWhenAStart, end:createDateWhenAEnd})">Ajouter</Button>
-              </DialogClose>
-            </DialogContent>
-          </Dialog>
-        </CardTitle>
-        <CardDescription class="text-left">Ici vous pouvez ajouter, supprimer ou éditer des ateliers à afficher.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ScrollArea class="h-[250px] sm:h-[250px] md:h-[250px] lg:h-[200px] xl:h-[300px] 2xl:h-[300px]">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead class="text-center">Salle</TableHead>
-                <TableHead class="text-center">Nom de l'atelier</TableHead>
-                <TableHead class="text-center">Date Debut</TableHead>
-                <TableHead class="text-center">Date Fin</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow v-for="(item, index) in ateliers " :key="index">
-                <TableCell class="text-center">{{ item.room }}</TableCell>
-                <TableCell class="text-center">{{ item.name }}</TableCell>
-                <TableCell class="text-center">{{ formatDate(item.start) }}</TableCell>
-                <TableCell class="text-center">{{ formatDate(item.end) }}</TableCell>
-                <TableCell class="text-center flex justify-center">
-                  <Dialog>
-                    <DialogTrigger>
-                      <Button @click="initModFormAtelier(item)">
-                        <LucidePen/>
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Modifier un atelier</DialogTitle>
-                        <DialogDescription>Ici vous pouvez editer un atelier existant. <br/> Note: Les changements doivent être appliqués.</DialogDescription>
-                      </DialogHeader>
-                      <Label for="titleEventModify">Room ({{modRoomA.length}}/3)</Label>
-                      <Input id="titleEventModify" v-model="modRoomA"/>
+                            <Label for="beginEventModify">When Start</Label>
+                            <Input id="beginEventModify" type="datetime-local" v-model="modDateWhenAStart" />
 
-                      <Label for="descriptionEventModify">Nom de l'atelier ({{modNameA.length}}/30)</Label>
-                      <Textarea id="descriptionEventModify" v-model="modNameA"/>
+                            <Label for="beginEventModify">When End</Label>
+                            <Input id="beginEventModify" type="datetime-local" v-model="modDateWhenAEnd" />
 
-                      <Label for="beginEventModify">Date et heure d'ouverture</Label>
-                      <Input id="beginEventModify" type="datetime-local" v-model="modDateWhenAStart" />
-
-                      <Label for="beginEventModify">Date et heure de fermeture</Label>
-                      <Input id="beginEventModify" type="datetime-local" v-model="modDateWhenAEnd" />
-
-                      <DialogClose as-child>
-                        <Button v-show="modValidA" @click="editAtelier({id:item.id, room:modRoomA, name: modNameA, start: modDateWhenAStart, end:modDateWhenAEnd})">Appliquer</Button>
-                      </DialogClose>
-                    </DialogContent>
-                  </Dialog>
-                  <Button variant="destructive" @click=deleteAtelier(item.id)>
-                    <LucideTrash2/>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+                        <DialogClose as-child>
+                          <Button v-show="modValidA" @click="editAtelier({id:item.id, room:modRoomA, name: modNameA, start: modDateWhenAStart, end:modDateWhenAEnd})">Appliquer</Button>
+                        </DialogClose>
+                      </DialogContent>
+                    </Dialog>
+                    <Button variant="destructive" @click=deleteAtelier(item.id)>
+                      <LucideTrash2/>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+    </div>
   </div>
 </template>

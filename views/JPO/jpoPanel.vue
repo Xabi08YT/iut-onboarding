@@ -10,23 +10,28 @@ import {DialogClose, DialogHeader, DialogTrigger, Dialog, DialogContent, DialogT
 import {Input} from "~/components/ui/input";
 import {Label} from "~/components/ui/label";
 import {Textarea} from "~/components/ui/textarea";
-let conférences = ref([]);
+
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+
+let conferences = ref([]);
 let ateliers = ref([]);
 let dateJpo = ref("");
 let videoJpo = ref("");
 
 let getDateJpo = () => {
-  fetch("api/v1/dateJpo", { method: "GET" }).then(async (res) => dateJpo.value = await res.text())
+  fetch(`${rootUrl}/api/v1/dateJpo`, { method: "GET" }).then(async (res) => dateJpo.value = await res.text())
 };
 
 getDateJpo();
 
 let applyDateJpo = async () => {
-  let res = await fetch("api/v1/dateJpo", {method: "PUT", body: JSON.stringify({value: dateJpo.value})});
+  let res = await fetch(`${rootUrl}/api/v1/dateJpo`, {method: "PUT", body: JSON.stringify({value: dateJpo.value})});
   getDateJpo();
   if (res.ok) {
     toast({title: "Date mis à jour avec succès"});
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     toast({title: "Une erreur est survenue.",
       description:await res.json().then(data => data.message),
@@ -36,17 +41,17 @@ let applyDateJpo = async () => {
 };
 
 let getvideJpo = () => {
-  fetch("api/v1/videoJpo", { method: "GET" }).then(async (res) => videoJpo.value = await res.text())
+  fetch(`${rootUrl}/api/v1/videoJpo`, { method: "GET" }).then(async (res) => videoJpo.value = await res.text())
 };
 
 getvideJpo();
 
 let applyvideoJpo = async () => {
-  let res = await fetch("api/v1/videoJpo", {method: "PUT", body: JSON.stringify({value: videoJpo.value})});
+  let res = await fetch(`${rootUrl}/api/v1/videoJpo`, {method: "PUT", body: JSON.stringify({value: videoJpo.value})});
   getDateJpo();
   if (res.ok) {
     toast({title: "Date mis à jour avec succès"});
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     toast({title: "Une erreur est survenue.",
       description:await res.json().then(data => data.message),
@@ -121,7 +126,7 @@ const initModForm = (item) => {
  * @returns {Promise<void>}
  */
 const createConference = async (newConference) => {
-  let res = await fetch("api/v1/conference", {
+  let res = await fetch(`${rootUrl}/api/v1/conference`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newConference)
@@ -130,7 +135,7 @@ const createConference = async (newConference) => {
     toast({
       title: "Conference created successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -145,13 +150,13 @@ const createConference = async (newConference) => {
  * @returns {Promise<void>}
  */
 const initConferences = async () => {
-  let res = await fetch("api/v1/conference", { method: "GET" });
+  let res = await fetch(`${rootUrl}/api/v1/conference`, { method: "GET" });
   let data = await res.json();
-  conférences.value = data.content;
+  conferences.value = data.content;
 };
 
 const editConference = async (modifiedEvent) => {
-  let res = await fetch("api/v1/conference", {
+  let res = await fetch(`${rootUrl}/api/v1/conference`, {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modifiedEvent)
@@ -172,7 +177,7 @@ const editConference = async (modifiedEvent) => {
 };
 
 const deleteConference = async (id) => {
-  let res = await fetch(`api/v1/conference`, {
+  let res = await fetch(`${rootUrl}/api/v1/conference`, {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -212,7 +217,7 @@ const initModFormAtelier = (item) => {
  * @returns {Promise<void>}
  */
 const createAtelier = async (newAtelier) => {
-  let res = await fetch("api/v1/atelier", {
+  let res = await fetch(`${rootUrl}/api/v1/atelier`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newAtelier)
@@ -221,7 +226,7 @@ const createAtelier = async (newAtelier) => {
     toast({
       title: "Atelier created successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -236,13 +241,13 @@ const createAtelier = async (newAtelier) => {
  * @returns {Promise<void>}
  */
 const initAtelier = async () => {
-  let res = await fetch("api/v1/atelier", { method: "GET" });
+  let res = await fetch(`${rootUrl}/api/v1/atelier`, { method: "GET" });
   let data = await res.json();
   ateliers.value = data.content;
 };
 
 const editAtelier = async (modifiedAtelier) => {
-  let res = await fetch("api/v1/atelier", {
+  let res = await fetch(`${rootUrl}/api/v1/atelier`, {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modifiedAtelier)
@@ -263,7 +268,7 @@ const editAtelier = async (modifiedAtelier) => {
 };
 
 const deleteAtelier = async (id) => {
-  let res = await fetch(`api/v1/atelier`, {
+  let res = await fetch(`${rootUrl}/api/v1/atelier`, {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -287,7 +292,7 @@ const deleteAtelier = async (id) => {
  * @returns {Promise<void>}
  */
 const init = async () => {
-  let loggedIn = await fetch("api/v1/session");
+  let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
 
   if (!loggedIn.ok) {
     return navigateTo("/login");
@@ -386,7 +391,7 @@ init();
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow v-for="(item, index) in conférences " :key="index">
+              <TableRow v-for="(item, index) in conferences " :key="index">
                 <TableCell class="text-center">{{ item.room }}</TableCell>
                 <TableCell class="text-center">{{ item.who }}</TableCell>
                 <TableCell class="text-center">{{ formatDate(item.when) }}</TableCell>
@@ -448,7 +453,7 @@ init();
               <Label for="titleEventModify">Salle ({{createRoomA.length}}/3)</Label>
               <Input id="titleEventModify" v-model="createRoomA"/>
 
-              <Label for="descriptionEventModify">Nom Enseignant ({{createNameA.length}}/30)</Label>
+              <Label for="descriptionEventModify">Nom de l'atelier ({{createNameA.length}}/30)</Label>
               <Textarea id="descriptionEventModify" v-model="createNameA"/>
 
               <Label for="beginEventModify">Date Debut</Label>
@@ -473,7 +478,7 @@ init();
             <TableHeader>
               <TableRow>
                 <TableHead class="text-center">Salle</TableHead>
-                <TableHead class="text-center">Nom Enseignant</TableHead>
+                <TableHead class="text-center">Nom de l'atelier</TableHead>
                 <TableHead class="text-center">Date Debut</TableHead>
                 <TableHead class="text-center">Date Fin</TableHead>
               </TableRow>
@@ -499,13 +504,13 @@ init();
                       <Label for="titleEventModify">Room ({{modRoomA.length}}/3)</Label>
                       <Input id="titleEventModify" v-model="modRoomA"/>
 
-                      <Label for="descriptionEventModify">Nom Enseignant ({{modNameA.length}}/30)</Label>
+                      <Label for="descriptionEventModify">Nom de l'atelier ({{modNameA.length}}/30)</Label>
                       <Textarea id="descriptionEventModify" v-model="modNameA"/>
 
-                      <Label for="beginEventModify">When Start</Label>
+                      <Label for="beginEventModify">Date et heure d'ouverture</Label>
                       <Input id="beginEventModify" type="datetime-local" v-model="modDateWhenAStart" />
 
-                      <Label for="beginEventModify">When End</Label>
+                      <Label for="beginEventModify">Date et heure de fermeture</Label>
                       <Input id="beginEventModify" type="datetime-local" v-model="modDateWhenAEnd" />
 
                       <DialogClose as-child>

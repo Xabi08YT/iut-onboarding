@@ -25,19 +25,24 @@ export async function exchangeToken(token) {
 }
 
 export async function verifyToken(token) {
-    try {
-        // verify token
-        const {payload, protectedHeader} = await jose.jwtVerify(token, secretKey, {
-            issuer: cfg.parsed.JWT_ISSUER, // issuer
-            audience: cfg.parsed.JWT_AUDIENCE, // audience
-        });
-        return payload;
-    } catch (e) {
-        // token verification failed
-        console.log("Token is invalid");
-        console.error(e);
+    if (typeof token !== 'string' || token.length === 0) {
         return false;
     }
+
+    let payload = null;
+    try {
+        const result = await jose.jwtVerify(token, secretKey, {
+            issuer: cfg.parsed.JWT_ISSUER,
+            audience: cfg.parsed.JWT_AUDIENCE,
+        });
+        payload = result.payload;
+    } catch (err) {
+        console.error("JWT Verification failed:", err);
+        return false;
+    }
+
+    if (!payload) return false;
+    return payload;
 }
 
 export async function getUID(token) {

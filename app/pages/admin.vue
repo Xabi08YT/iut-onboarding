@@ -7,6 +7,10 @@ import DiscordEditor from "~~/views/admin/discordEditor.vue";
 import { navigateTo } from "nuxt/app";
 import {Button} from "~/components/ui/button";
 
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+
 let fullaccess = ref(false);
 let redirect = false;
 let bde = ref(false);
@@ -16,7 +20,7 @@ let bde = ref(false);
  * @returns {Promise<void>}
  */
 const init = async () => {
-  let loggedIn = await fetch("api/v1/session");
+  let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
 
   if (!loggedIn.ok) {
     return navigateTo("/login");

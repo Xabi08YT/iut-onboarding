@@ -12,6 +12,10 @@ import {Label} from "~/components/ui/label";
 import {Textarea} from "~/components/ui/textarea";
 let events = ref([]);
 
+const runtimeConfig = useRuntimeConfig();
+const requestURL = useRequestURL();
+const rootUrl = requestURL.origin + runtimeConfig.app.baseURL.slice(0,-1);
+
 // Vars to store user entry for event modification
 let modTitle = ref("");
 let modDescription = ref("");
@@ -52,7 +56,7 @@ const formatDate = (date) => {
  * @returns {Promise<void>}
  */
 const initEvents = async () => {
-  let res = await fetch("api/v1/cultureEvents");
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`);
   let data = await res.json();
   events.value = deepObjectClone(data);
 };
@@ -63,7 +67,7 @@ const initEvents = async () => {
  * @returns {Promise<void>}
  */
 const deleteEvent = async (id) => {
-  let res = await fetch("api/v1/cultureEvents", {
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`, {
     method: "DELETE",
     body: JSON.stringify(id)
   });
@@ -71,7 +75,7 @@ const deleteEvent = async (id) => {
     toast({
       title: "Event deleted successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -108,7 +112,7 @@ const initCreateForm = () => {
  * @returns {Promise<void>}
  */
 const editEvent = async (modified) => {
-  let res = await fetch("api/v1/cultureEvents", {
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`, {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(modified)
@@ -118,7 +122,7 @@ const editEvent = async (modified) => {
     toast({
       title: "Event Modified successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -137,7 +141,7 @@ const editEvent = async (modified) => {
  * @returns {Promise<void>}
  */
 const addEvent = async (newEvent) => {
-  let res = await fetch("api/v1/cultureEvents", {
+  let res = await fetch(`${rootUrl}/api/v1/cultureEvents`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(newEvent)
@@ -146,7 +150,7 @@ const addEvent = async (newEvent) => {
     toast({
       title: "Event created successfully",
     });
-    await fetch("api/v1/session", {method: "PUT"});
+    await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
   } else {
     let msg = await res.json();
     toast({
@@ -164,7 +168,7 @@ const addEvent = async (newEvent) => {
  * @returns {Promise<void>}
  */
 const init = async () => {
-  let loggedIn = await fetch("api/v1/session");
+  let loggedIn = await fetch(`${rootUrl}/api/v1/session`);
 
   if (!loggedIn.ok) {
     return navigateTo("/login");

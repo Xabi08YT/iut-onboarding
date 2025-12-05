@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRequestURL, useRuntimeConfig } from "nuxt/app";
 import { SwaggerUIBundle } from "swagger-ui-dist";
 import {onMounted} from "vue";
 
@@ -7,7 +8,7 @@ const requestURL = useRequestURL();
 const rootUrl = requestURL.origin + runtimeConfig.app.baseURL;
 
 onMounted(async () => {
-  let specs = await fetch(`${rootUrl}/api/v1/doc`);
+  let specs = await fetch(`${rootUrl}api/v1/doc`);
   specs = await specs.json();
   console.log(specs);
   SwaggerUIBundle({

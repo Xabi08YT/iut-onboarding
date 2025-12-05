@@ -15,21 +15,20 @@ export default defineEventHandler(async (event) => {
     components: {
       securitySchemes: {
         JWT: {
-          type: "apiKey",
-          description: "JWT authorization of an API",
-          name: "Authorization",
-          in: "header",
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
       },
     },
-    security: {
-      JWT: [],
-    },
+    security: [
+      { JWT: [] }
+    ],
   };
 
   const options = {
-    swaggerDefinition,
-    apis: ["server/api/**/*.js"],
+    definition: swaggerDefinition,
+    apis: ["server/api/**/*.{js,ts}"],
   };
 
   return swaggerJSDoc(options);

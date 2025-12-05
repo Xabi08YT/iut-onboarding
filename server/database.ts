@@ -422,10 +422,10 @@ export async function deleteCultureEvent(id: string) {
 
 /**
  * Get all ongoing Culture Events
- * @returns {Promise<unknown>}
+ * @returns {Promise<CultureEvent[]>}
  */
 export async function getCultureOngoingEvents(): Promise<CultureEvent[]> {
-  const cachedData = cache.get<CultureEvent[]>("events");
+  const cachedData = cache.get<CultureEvent[]>("cevents");
 
   if (!cachedData || cachedData.length === 0) {
     client.$connect();

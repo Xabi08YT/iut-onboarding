@@ -8,7 +8,6 @@ dotenv.config();
 
 const client = new PrismaClient();
 const saltRounds = process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10;
-const salt = bcrypt.genSaltSync(saltRounds);
 // Setting a cache with a 10 mn TTL for each item
 const cache = new NodeCache({stdTTL: 10 * 60});
 
@@ -91,7 +90,7 @@ export async function login(username: string, password: string): Promise<LoginRe
     return { ok: false, user: null };
   }
 
-  const isValid = await bcrypt.compare(password, user.password);
+  const isValid = await Bun.password.verify(password, user.password);
   if (!isValid) {
     return { ok: false, user: null };
   }
@@ -174,7 +173,7 @@ export async function getUsers(): Promise<PanelUser[]> {
  * @returns {Promise<void>}
  */
 export async function createUser(data: any): Promise<void> {
-  data.password = await bcrypt.hash(data.password, salt);
+  data.password = await Bun.password.hash(data.password, {algorithm: "bcrypt", cost: 4})
   client.$connect();
   await client.user.create({data});
   client.$disconnect();
@@ -186,7 +185,7 @@ export async function createUser(data: any): Promise<void> {
  * @returns {Promise<void>}
  */
 export async function updateUser(data: any): Promise<void> {
-  data.password = await bcrypt.hash(data.password, salt);
+  data.password = await Bun.password.hash(data.password, {algorithm: "bcrypt", cost: 4})
   client.$connect();
   await client.user.update({
     where: {id: parseInt(data.id)},
@@ -422,10 +421,10 @@ export async function deleteCultureEvent(id: string) {
 
 /**
  * Get all ongoing Culture Events
- * @returns {Promise<unknown>}
+ * @returns {Promise<CultureEvent[]>}
  */
 export async function getCultureOngoingEvents(): Promise<CultureEvent[]> {
-  const cachedData = cache.get<CultureEvent[]>("events");
+  const cachedData = cache.get<CultureEvent[]>("cevents");
 
   if (!cachedData || cachedData.length === 0) {
     client.$connect();

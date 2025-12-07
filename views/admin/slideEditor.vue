@@ -34,19 +34,19 @@ const init = async () => {
   /**
    * Seeking for any changes
    */
-  watch(compareSlidesUser.value, async () => {
+  watch(compareSlidesUser, async () => {
     for (let s of compareSlidesUser.value) {
       if (!JSON.stringify(slides.value).includes(JSON.stringify(s))) {
         slides.value[s.id - 1] = deepObjectClone(s);
+
         let res = await fetch(`${rootUrl}/api/v1/slide`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(s)
+          body: JSON.stringify(s),
         });
+
         if (res.ok) {
-          toast({
-            title: "Slide updated successfully",
-          });
+          toast({title: "Slide updated successfully"});
           await fetch(`${rootUrl}/api/v1/session`, {method: "PUT"});
         } else {
           toast({
@@ -57,7 +57,7 @@ const init = async () => {
         }
       }
     }
-  });
+  }, { deep: true });
 };
 
 init();

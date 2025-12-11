@@ -21,6 +21,15 @@ const props = defineProps({
   isActive: Boolean,
 });
 
+function truncateRoomNames(name: string) {
+  let toTruncate = ["Salle de Controle","Room Without Borders","Classe mobile","Salle des Conseils", "BUT3A", "BUT3B", "BUT3C","Salle Projet"]
+  for(let s of toTruncate) {
+    name = name.replaceAll(s,"")
+  }
+  name = name.replaceAll(",", ", ")
+  return name;
+}
+
 function setCurrentHourRange() {
   const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
   if (currentTime < 9 * 60 + 45) {
@@ -158,11 +167,11 @@ let getAllPlannings = async () => {
             room: [
               primeEvent
                   ? primeEvent.locations
-                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? truncateRoomNames(primeEvent.locations.toString()) : ""
                   : undefined,
               secondeEvent
                   ? secondeEvent.locations
-                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? truncateRoomNames(secondeEvent.locations.toString()) : ""
                   : undefined,
             ],
           });
@@ -192,11 +201,11 @@ let getAllPlannings = async () => {
             room: [
               primeEvent
                   ? primeEvent.locations
-                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? truncateRoomNames(primeEvent.locations.toString()) : ""
                   : undefined,
               secondeEvent
                   ? secondeEvent.locations
-                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? truncateRoomNames(secondeEvent.locations.toString()) : ""
                   : undefined,
             ],
           });
@@ -233,11 +242,11 @@ let getAllPlannings = async () => {
             room: [
               primeEvent
                   ? primeEvent.locations
-                      ? primeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? truncateRoomNames(primeEvent.locations.toString()) : ""
                   : undefined,
               secondeEvent
                   ? secondeEvent.locations
-                      ? secondeEvent.locations.toString().replaceAll("Salle de Controle","").replaceAll(",",", ").replaceAll("Room Without Borders","").replaceAll("Classe mobile","").replaceAll("Salle des Conseils","") : ""
+                      ? truncateRoomNames(secondeEvent.locations.toString()) : ""
                   : undefined,
             ],
           });

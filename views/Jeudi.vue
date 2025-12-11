@@ -1,7 +1,7 @@
 <template>
   <div class="view-container" v-show="isActive">
     <div class="view-content">
-      <NuxtImg class="image" src="@@/public/assets/Jeudi.png" alt="Maintainer" loading="lazy" />
+      <NuxtImg class="image" src="assets/Jeudi.png" alt="Jeudi" loading="lazy" />
     </div>
   </div>
 </template>

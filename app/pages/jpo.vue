@@ -24,7 +24,7 @@ const init = async () => {
     return
   }
   let {roles} = await loggedIn.json();
-  if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("CULTURE")) {
+  if (!roles.includes("ADMIN") && !roles.includes("MAINTAINER") && !roles.includes("ENSEIGNANT")) {
     nuxtApp.runWithContext(() => {
       navigateTo('/login');
     });

@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
             case "GET":
                 let LienVideoJpo = await getConfigValue("lienVideoJpo");
                 if (!LienVideoJpo) return new Response(JSON.stringify({message:`LienVideoJpo not found`}), {status: 404});
-                return new Response(JSON.stringify({lien:LienVideoJpo.value}), {status: 200});
+                return new Response(LienVideoJpo.value, {status: 200});
             
             default:
                 return new Response(JSON.stringify({message:"Method not allowed. Please read the documentation."}), {status: 405});

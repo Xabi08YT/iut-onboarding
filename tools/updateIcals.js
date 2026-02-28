@@ -10,7 +10,7 @@ const HEADLESS = true;
 
 // Identifiant de promo  à récupérer  sur hyperplanning pour ce semestre
 // L'odre est important
-const PROMOTIONS = ["INFO_BUT_S1", "INFO_BUT_S3", "INFO_BUT_S5"];
+const PROMOTIONS = ["INFO_BUT_S2", "INFO_BUT_S4", "INFO_BUT_S6"];
 
 (async () => {
   const result = [];

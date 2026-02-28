@@ -14,12 +14,12 @@ export default {
   data: () => {
     return {
       interval: null,
-      link: ref(""),
+      link: null,
     }
   },
   methods: {
     updateLink() {
-      fetch(`${useRequestURL()}api/v1/videoJpo`).then(async (res) => this.link.value = await res.text())
+      fetch("api/v1/videoJpo").then(async (res) => this.link = await res.text())
     }
   },
   mounted() {
